@@ -11,7 +11,7 @@
 <main>
   <header class="site"><a href="/">iMoney</a><span>Privacy Policy</span></header>
   <h1>Privacy Policy</h1>
-  <p class="updated">Last updated: July 30, 2026</p>
+  <p class="updated">Last updated: August 8, 2026</p>
 
   <p class="lede">This is the privacy policy for <strong>iMoney</strong>, a
   personal expense-tracking app. It explains exactly what data we collect, why
@@ -23,7 +23,7 @@
   <div class="card">
     <table>
       <tr><th>Who runs iMoney</th><td>A small independent team. Contact: upappco@gmail.com</td></tr>
-      <tr><th>What we collect</th><td>Your name + email (from Apple or Google), the transactions you log, optional receipt photos, your friend list, your monthly budget</td></tr>
+      <tr><th>What we collect</th><td>Your name + email (from Apple or Google), the transactions you log, your friend list, your monthly budget</td></tr>
       <tr><th>What we DON'T collect</th><td>Contacts, location, browsing history, device identifiers for tracking, real bank accounts, anything from third-party financial services</td></tr>
       <tr><th>Who sees it</th><td>You. Friends you explicitly tag on a split see those specific shared splits. Nobody else.</td></tr>
       <tr><th>Where it lives</th><td>Supabase (PostgreSQL + storage), encrypted in transit and at rest</td></tr>
@@ -49,7 +49,6 @@
   <ul>
     <li><strong>Transactions</strong> — the amount, currency, category, date, payment method, and optional note you enter for each log</li>
     <li><strong>Income entries</strong> — amounts and sources you optionally log. Always private; never visible to friends</li>
-    <li><strong>Receipt photos</strong> — only if you choose to attach one to a transaction</li>
     <li><strong>Profile avatar</strong> — only if you upload one</li>
     <li><strong>Profile basics</strong> — your @handle, monthly budget, default currency, payment-method labels</li>
     <li><strong>Friend graph</strong> — the friends you've added, friend requests sent and received, debts owed between you and friends, group events you're part of</li>
@@ -96,7 +95,7 @@
     <tr><td><strong>Supabase</strong></td><td>Everything in section 2</td><td>Database + file storage + auth</td></tr>
     <tr><td><strong>Apple</strong> (Sign in with Apple)</td><td>Your Apple ID auth token</td><td>Sign-in</td></tr>
     <tr><td><strong>Google</strong> (Sign in with Google)</td><td>Your Google auth token</td><td>Sign-in (optional)</td></tr>
-    <tr><td><strong>Anthropic</strong> (Claude API)</td><td>Only the <strong>description text</strong> you type on a new transaction (e.g. "starbucks latte")</td><td>Suggests a category. No amount, no friend names, no receipts.</td></tr>
+    <tr><td><strong>Anthropic</strong> (Claude API)</td><td>Only the <strong>description text</strong> you type on a new transaction (e.g. "starbucks latte")</td><td>Suggests a category. No amount, no friend names.</td></tr>
     <tr><td><strong>Apple Push Notification Service (APNs)</strong></td><td>Notification text + your device token</td><td>Delivering pushes to your phone</td></tr>
   </table>
   <p>Each of these has its own privacy policy, all of which are public. We
@@ -106,8 +105,7 @@
   <ul>
     <li>All data lives in <strong>Supabase</strong> (PostgreSQL + object storage). Supabase databases sit on AWS infrastructure in the US East region.</li>
     <li>Data is <strong>encrypted in transit</strong> (HTTPS / TLS for every request) and <strong>encrypted at rest</strong> by the underlying storage.</li>
-    <li><strong>Row-level security</strong> is enforced in the database: a user can only read their own profile, their own transactions, their own receipts. Friend-graph rows are visible to both ends of the friendship, by design.</li>
-    <li>Receipt images live in a private bucket, served via short-lived signed URLs that only you can request.</li>
+    <li><strong>Row-level security</strong> is enforced in the database: a user can only read their own profile and their own transactions. Friend-graph rows are visible to both ends of the friendship, by design.</li>
     <li>The Anthropic API key is held server-side as a Supabase secret. It never ships in the app binary.</li>
   </ul>
 
@@ -140,7 +138,7 @@
   <h2>10. How long we keep your data</h2>
   <ul>
     <li><strong>Active accounts</strong>: data is kept as long as your account exists.</li>
-    <li><strong>Deleted accounts</strong>: when you tap Settings → Delete account, we immediately remove your profile, transactions, receipts, friends, and budgets from the live database. <strong>Encrypted backups may take up to 30 days to roll off</strong> — after which everything is gone for good.</li>
+    <li><strong>Deleted accounts</strong>: when you tap Settings → Delete account, we immediately remove your profile, transactions, friends, and budgets from the live database. <strong>Encrypted backups may take up to 30 days to roll off</strong> — after which everything is gone for good.</li>
   </ul>
 
   <h2>11. Your rights</h2>
