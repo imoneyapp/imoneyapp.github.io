@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add me on iMoney</title>
+  <meta name="description" content="A friend invited you to build better money habits together on iMoney.">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .invite { text-align: center; padding-top: 8vh; }
+    .invite .handle { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; margin: 18px 0 6px; }
+    .invite .sub { color: var(--bone-dim); margin-bottom: 36px; }
+    .invite .open {
+      display: inline-block; padding: 14px 34px; border-radius: 999px;
+      background: var(--bone); color: #10110F; font-weight: 700; text-decoration: none;
+      font-size: 17px;
+    }
+    .invite .fallback { display: block; margin-top: 22px; color: var(--bone-dim); font-size: 14px; }
+    .invite .fallback a { color: var(--bone); }
+    .invite .mark { font-size: 40px; }
+  </style>
+</head>
+<body>
+<main>
+  <header class="site"><a href="/">iMoney</a><span>Invitation</span></header>
+  <div class="invite">
+    <div class="mark">💸</div>
+    <div class="handle" id="handle">@friend</div>
+    <p class="sub" id="line">invites you to build better money habits together.</p>
+    <a class="open" id="open" href="#">Open in iMoney</a>
+    <span class="fallback" id="fallback">
+      Don't have the app yet? <a href="/">Get iMoney</a> — then tap this link again.
+    </span>
+  </div>
+  <script>
+    (function () {
+      var u = new URLSearchParams(location.search).get("u") || "";
+      // Handles are app-validated; keep only safe characters anyway.
+      u = u.replace(/[^A-Za-z0-9_.]/g, "").slice(0, 30);
+      if (u) document.getElementById("handle").textContent = "@" + u;
+      var deep = "co.up.imoney://add?handle=" + encodeURIComponent(u);
+      var open = document.getElementById("open");
+      open.href = deep;
+      if ((navigator.language || "").toLowerCase().indexOf("zh") === 0) {
+        document.getElementById("line").textContent = "邀請你一起養成更好的記帳習慣。";
+        open.textContent = "在 iMoney 中開啟";
+        document.getElementById("fallback").innerHTML =
+          '還沒有 App 嗎？<a href="/">下載 iMoney</a>，再點一次這個連結。';
+      }
+    })();
+  </script>
+  <footer>© 2026 iMoney · <a href="../privacy/">Privacy</a> · <a href="../support/">Support</a></footer>
+</main>
+</body>
+</html>
