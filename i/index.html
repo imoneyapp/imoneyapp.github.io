@@ -27,6 +27,11 @@
     .invite .fallback { display: block; margin-top: 22px; color: var(--bone-dim); font-size: 14px; }
     .invite .fallback a { color: var(--bone); }
     .invite .mark { height: 84px; width: auto; }
+    .invite .avatar {
+      width: 96px; height: 96px; border-radius: 50%; object-fit: cover;
+      display: none; margin: 26px auto 0;
+      border: 1.5px solid rgba(246,244,238,0.35);
+    }
   </style>
 </head>
 <body>
@@ -34,11 +39,12 @@
   <header class="site"><a href="/">iMoney</a><span>Invitation</span></header>
   <div class="invite">
     <img class="mark" src="../assets/logo-mark.png" alt="iMoney">
+    <img class="avatar" id="avatar" alt="">
     <div class="handle" id="handle">@friend</div>
     <p class="sub" id="line">invites you to build better money habits together.</p>
     <a class="open" id="open" href="#">Open in iMoney</a>
     <span class="fallback" id="fallback">
-      Don't have the app yet? <a href="/">Get iMoney</a> — then tap this link again.
+      Don't have the app yet? <a href="/">Get iMoney</a>
     </span>
   </div>
   <script>
@@ -47,6 +53,14 @@
       // Handles are app-validated; keep only safe characters anyway.
       u = u.replace(/[^A-Za-z0-9_.]/g, "").slice(0, 30);
       if (u) document.getElementById("handle").textContent = "@" + u;
+      // Optional avatar: the app embeds its storage path as ?a= so the
+      // page can show the inviter's face without any backend call.
+      var a = new URLSearchParams(location.search).get("a") || "";
+      if (a && /^[A-Za-z0-9_\/.\-]{1,120}$/.test(a)) {
+        var img = document.getElementById("avatar");
+        img.src = "https://cpsdkarncveeemrfmkll.supabase.co/storage/v1/object/public/avatars/" + a;
+        img.onload = function () { img.style.display = "block"; };
+      }
       var deep = "co.up.imoney://add?handle=" + encodeURIComponent(u);
       var open = document.getElementById("open");
       open.href = deep;
@@ -54,7 +68,7 @@
         document.getElementById("line").textContent = "邀請你一起養成更好的記帳習慣。";
         open.textContent = "在 iMoney 中開啟";
         document.getElementById("fallback").innerHTML =
-          '還沒有 App 嗎？<a href="/">下載 iMoney</a>，再點一次這個連結。';
+          '還沒有 App 嗎？<a href="/">下載 iMoney</a>';
       }
     })();
   </script>
