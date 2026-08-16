@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reserve your @handle — iMoney</title>
+  <meta name="description" content="Claim your name on iMoney before it launches. Sign in once; it'll be waiting when the app arrives.">
+  <meta property="og:title" content="Reserve your @handle on iMoney">
+  <meta property="og:description" content="Claim your name before it launches.">
+  <meta property="og:image" content="https://imoneyapp.github.io/assets/appicon.png">
+  <style>
+    /* Palette mirrors the app: ink ground, bone type, the gold accent. */
+    :root {
+      --ink: #0b0b0c; --ink-raised: #161617; --bone: #f4f1ea;
+      --bone-dim: #a8a49c; --bone-faint: #6f6c66;
+      --accent: #d9b36a; --negative: #e64a3c; --positive: #4caf7d;
+      --hairline: rgba(244,241,234,.12);
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0; min-height: 100svh; background: var(--ink); color: var(--bone);
+      font: 16px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 28px 20px; text-align: center;
+    }
+    .wrap { width: 100%; max-width: 420px; }
+    h1 { font-size: 27px; font-weight: 700; margin: 22px 0 6px; letter-spacing: -.3px; }
+    p.sub { color: var(--bone-dim); font-size: 14px; margin: 0 0 26px; }
+    .mark { width: 54px; height: 54px; }
+
+    /* The member card — same anatomy as the one in the app. */
+    .card {
+      position: relative; width: 100%; aspect-ratio: 1.586;
+      border-radius: 22px; overflow: hidden; text-align: left;
+      border: 1px solid rgba(217,179,106,.35);
+      box-shadow: 0 18px 40px rgba(0,0,0,.55);
+      background:
+        linear-gradient(135deg, rgba(217,179,106,.30), rgba(217,179,106,.06)), var(--ink);
+      transform: rotateY(-9deg) rotate(-1.5deg); transform-style: preserve-3d;
+      transition: transform .5s cubic-bezier(.2,.8,.2,1);
+    }
+    .card::after {                    /* the travelling light seam */
+      content: ""; position: absolute; inset: -30%;
+      background: linear-gradient(105deg, transparent 38%, rgba(217,179,106,.55) 48%,
+                  rgba(244,241,234,.22) 53%, transparent 62%);
+      animation: sweep 7s ease-in-out infinite;
+    }
+    @keyframes sweep { 0%,100% { transform: translateX(-22%); } 50% { transform: translateX(22%); } }
+    .card > * { position: relative; z-index: 1; }
+    .card-inner { position: absolute; inset: 0; padding: 6.2%; display: flex; flex-direction: column; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; }
+    .card-top img { height: 8.5%; min-height: 22px; }
+    .card-date { font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+                 color: rgba(11,11,12,.55); letter-spacing: .8px; }
+    .card-handle { font-size: clamp(26px, 12.5vw, 46px); font-weight: 700; color: var(--ink);
+                   margin: auto 0; letter-spacing: -1px; overflow: hidden; text-overflow: ellipsis;
+                   white-space: nowrap; }
+    .card-foot { font-size: 11px; color: rgba(11,11,12,.62); }
+    .card-foot span { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1.2px;
+                      text-transform: uppercase; color: rgba(11,11,12,.4); margin-bottom: 2px; }
+
+    .row { display: flex; gap: 8px; margin-top: 26px; }
+    input {
+      flex: 1; min-width: 0; background: var(--ink-raised); color: var(--bone);
+      border: 1px solid var(--hairline); border-radius: 14px; padding: 14px 16px;
+      font-size: 16px; font-family: inherit; outline: none;
+    }
+    input:focus { border-color: var(--accent); }
+    button {
+      background: var(--bone); color: var(--ink); border: 0; border-radius: 14px;
+      padding: 14px 22px; font: 600 15px/1 inherit; cursor: pointer; font-family: inherit;
+    }
+    button:disabled { opacity: .4; cursor: default; }
+    button.ghost { background: transparent; color: var(--bone-dim); padding: 10px; font-weight: 500; }
+    .google { display: inline-flex; align-items: center; gap: 10px; justify-content: center; width: 100%; }
+    .note { font-size: 13px; color: var(--bone-faint); margin-top: 14px; }
+    .msg { font-size: 13px; margin-top: 12px; min-height: 18px; }
+    .msg.bad { color: var(--negative); } .msg.good { color: var(--positive); }
+    .hidden { display: none !important; }
+    .at { color: var(--bone-faint); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <img class="mark" src="../assets/appicon.png" alt="iMoney">
+
+    <!-- 1. Signed out -->
+    <section id="step-in">
+      <h1>Reserve your @handle</h1>
+      <p class="sub">iMoney isn't out yet. Claim your name now — it'll be waiting when it lands.</p>
+      <button class="google" id="google">Continue with Google</button>
+      <p class="note">We only use this to hold your name. Nothing is charged, nothing is posted.</p>
+    </section>
+
+    <!-- 2. Signed in, choosing -->
+    <section id="step-pick" class="hidden">
+      <h1>Pick your name</h1>
+      <p class="sub">3–20 characters. Letters, numbers and underscores.</p>
+      <div class="row">
+        <input id="handle" placeholder="handle" autocapitalize="none" autocorrect="off"
+               spellcheck="false" maxlength="20" inputmode="latin">
+        <button id="claim">Reserve</button>
+      </div>
+      <p class="msg" id="msg"></p>
+      <button class="ghost" id="signout">Sign out</button>
+    </section>
+
+    <!-- 3. Done -->
+    <section id="step-done" class="hidden">
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-top">
+            <img src="../assets/logo-ink-star.png" alt="iMoney">
+            <div class="card-date" id="card-date"></div>
+          </div>
+          <div class="card-handle" id="card-handle">@you</div>
+          <div class="card-foot">
+            <span>Member</span>
+            <div>Reserved</div>
+          </div>
+        </div>
+      </div>
+      <h1 id="done-handle">@you</h1>
+      <p class="sub">is yours.</p>
+      <p class="note">Spending is the art of knowing yourself.</p>
+      <button class="ghost" id="change">Change my name</button>
+    </section>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
+
+    // Anon key — public by design. Every table this page can reach is behind
+    // RLS, and reserving goes through a SECURITY DEFINER function that checks
+    // availability server-side.
+    const sb = createClient(
+      'https://cpsdkarncveeemrfmkll.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc2RrYXJuY3ZlZWVtcmZta2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NzQ3NzAsImV4cCI6MjA5NjE1MDc3MH0.zzHVArTaz2OdW1pYEzMIlrgcyuXWm4MNnR-bizyRhdY'
+    );
+
+    const $ = id => document.getElementById(id);
+    const show = name => ['in','pick','done'].forEach(s =>
+      $('step-' + s).classList.toggle('hidden', s !== name));
+    const say = (text, kind) => { $('msg').textContent = text; $('msg').className = 'msg ' + (kind || ''); };
+
+    function renderCard(handle) {
+      $('card-handle').textContent = '@' + handle;
+      $('done-handle').textContent = '@' + handle;
+      $('card-date').textContent =
+        new Date().toLocaleDateString(undefined, { month: 'short', year: 'numeric' }).toUpperCase();
+    }
+
+    async function refresh() {
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) { show('in'); return; }
+      const { data } = await sb.rpc('my_handle_reservation');
+      if (data) { renderCard(data); show('done'); } else { show('pick'); }
+    }
+
+    $('google').onclick = () => sb.auth.signInWithOAuth({
+      provider: 'google',
+      // Back to this exact page. Must also be listed under Supabase →
+      // Authentication → URL Configuration → Redirect URLs.
+      options: { redirectTo: window.location.href.split('#')[0] }
+    });
+
+    $('signout').onclick = async () => { await sb.auth.signOut(); show('in'); };
+    $('change').onclick = () => { $('handle').value = ''; show('pick'); say(''); };
+
+    $('claim').onclick = async () => {
+      const handle = $('handle').value.trim().toLowerCase().replace(/^@/, '');
+      if (!/^[a-z0-9_]{3,20}$/.test(handle)) {
+        return say('3–20 characters, letters, numbers and underscores only.', 'bad');
+      }
+      $('claim').disabled = true; say('Checking…');
+      const { data, error } = await sb.rpc('reserve_handle', { p_handle: handle });
+      $('claim').disabled = false;
+      if (error) {
+        const taken = /handle_taken/.test(error.message);
+        return say(taken ? 'That one’s gone. Try another?' : 'Couldn’t reserve that. Try again?', 'bad');
+      }
+      renderCard(data);
+      show('done');
+    };
+
+    $('handle').addEventListener('keydown', e => { if (e.key === 'Enter') $('claim').click(); });
+
+    // Fires on load AND after the OAuth redirect drops the session in.
+    sb.auth.onAuthStateChange(() => refresh());
+    refresh();
+  </script>
+</body>
+</html>
