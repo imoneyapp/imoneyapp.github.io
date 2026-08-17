@@ -1,23 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Reserve @yourname — iMoney</title>
-  <meta name="description" content="Spending is the art of knowing yourself. Claim your name on iMoney before it launches.">
-  <meta property="og:title" content="Reserve @yourname on iMoney">
-  <meta property="og:description" content="Spending is the art of knowing yourself.">
+  <title>預約 @yourname — iMoney</title>
+  <meta name="description" content="花錢，是一門認識自己的藝術。在 iMoney 上線前，先把你的名字預約起來。">
+  <meta property="og:title" content="在 iMoney 預約 @yourname">
+  <meta property="og:description" content="花錢，是一門認識自己的藝術。">
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" type="image/png" href="assets/appicon.png">
-  <link rel="apple-touch-icon" href="assets/appicon.png">
-  <link rel="stylesheet" href="assets/card.css">
+  <link rel="icon" type="image/png" href="/assets/appicon.png">
+  <link rel="apple-touch-icon" href="/assets/appicon.png">
+  <link rel="stylesheet" href="/assets/card.css">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       margin: 0; min-height: 100svh; background: var(--ink); color: var(--bone);
-      font: 17px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+      font: 17px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC",
+            "Noto Sans TC", "Segoe UI", system-ui, sans-serif;
       display: flex; flex-direction: column; align-items: center;
       padding: 28px 24px 0; text-align: center;
     }
@@ -36,7 +37,7 @@
     .scene { margin: min(6vh, 46px) auto 0;
              max-width: min(100%, 680px, calc((100svh - 400px) * 1.586)); }
 
-    h1 { font-size: clamp(32px, 5.6vw, 54px); font-weight: 700; letter-spacing: -1.5px;
+    h1 { font-size: clamp(30px, 5.2vw, 50px); font-weight: 700; letter-spacing: -.5px;
          margin: clamp(30px, 4.6vh, 52px) 0 10px; }
     .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px); margin: 0 0 28px; }
 
@@ -69,7 +70,7 @@
 <body>
   <div class="wrap">
     <header>
-      <img src="assets/logo-mark.png" alt="">
+      <img src="/assets/logo-mark.png" alt="">
       <b>iMoney</b>
     </header>
 
@@ -82,45 +83,45 @@
           <div class="face front">
             <div class="card-inner">
               <div class="card-top">
-                <img src="assets/logo-ink-star.png" alt="iMoney">
+                <img src="/assets/logo-ink-star.png" alt="iMoney">
                 <div class="card-meta engraved">EST.<br>2026</div>
               </div>
               <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
               <div class="card-foot">
-                <div class="engraved"><span>Issued to</span>Reserved before launch</div>
+                <div class="engraved"><span>發給</span>上線前預約</div>
                 <div class="right engraved" id="card-url">withimoney.com</div>
               </div>
             </div>
           </div>
-          <div class="face back"><img src="assets/logo-ink-star.png" alt=""></div>
+          <div class="face back"><img src="/assets/logo-ink-star.png" alt=""></div>
         </div>
       </div>
     </div>
 
-    <h1 id="headline">Reserve <span id="head-handle">@yourname</span></h1>
-    <p class="slogan">Spending is the art of knowing yourself.</p>
+    <h1 id="headline">預約 <span id="head-handle">@yourname</span></h1>
+    <p class="slogan">花錢，是一門認識自己的藝術。</p>
 
     <form class="row" id="form">
       <label class="field">
         <span>@</span>
         <input id="handle" placeholder="yourname" autocapitalize="none" autocorrect="off"
-               spellcheck="false" maxlength="20" aria-label="Your handle">
+               spellcheck="false" maxlength="20" aria-label="你的帳號代號">
       </label>
-      <button id="go" type="submit" disabled>Reserve</button>
+      <button id="go" type="submit" disabled>預約</button>
     </form>
     <p class="status" id="status"></p>
 
     <ul class="creed">
-      <li>Simply better than Notes.</li>
-      <li>There's AI in here. It's not the point.</li>
-      <li>Minimal. Social. Weirdly addictive.</li>
+      <li>就是比備忘錄好用。</li>
+      <li>裡面有 AI，但那不是重點。</li>
+      <li>極簡。社交。還有點上癮。</li>
     </ul>
 
     <footer>
-      <div class="lang"><a href="/zh/">繁體中文</a></div>
-      <a href="/privacy/">Privacy</a><span class="sep">·</span>
-      <a href="/support/">Support</a><span class="sep">·</span>
-      <a href="mailto:upappco@gmail.com">Contact</a>
+      <div class="lang"><a href="/">English</a></div>
+      <a href="/privacy/zh/">隱私權政策</a><span class="sep">·</span>
+      <a href="/support/">支援</a><span class="sep">·</span>
+      <a href="mailto:upappco@gmail.com">聯絡我們</a>
     </footer>
   </div>
 
@@ -146,7 +147,7 @@
       go.disabled = h.length < 3;
       // Only nag once they've typed enough to have an opinion about.
       status.className = 'status';
-      status.textContent = h.length && h.length < 3 ? 'At least 3 characters.' : DEFAULT;
+      status.textContent = h.length && h.length < 3 ? '至少 3 個字元。' : DEFAULT;
     });
 
     // Auth lives on /reserve — one place, one set of redirect URLs. The
@@ -155,7 +156,7 @@
       e.preventDefault();
       const h = clean(input.value);
       if (h.length < 3) return;
-      location.href = '/reserve/?h=' + encodeURIComponent(h);
+      location.href = '/reserve/?lang=zh&h=' + encodeURIComponent(h);
     });
   </script>
 </body>

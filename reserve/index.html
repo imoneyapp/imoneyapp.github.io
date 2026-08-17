@@ -197,6 +197,27 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc2RrYXJuY3ZlZWVtcmZta2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NzQ3NzAsImV4cCI6MjA5NjE1MDc3MH0.zzHVArTaz2OdW1pYEzMIlrgcyuXWm4MNnR-bizyRhdY'
     );
 
+    // One reserve page, two languages. A second copy of this file would
+    // have to keep its auth logic in sync forever; a dictionary can't drift.
+    // ?lang wins (the landing pages pass it), otherwise the browser decides.
+    const param = new URLSearchParams(location.search).get('lang');
+    const ZH = param ? param.startsWith('zh')
+                     : (navigator.language || '').toLowerCase().startsWith('zh');
+    const T = ZH ? {
+      title: '預約你的 @帳號', pickTitle: '選一個名字',
+      inTitle: '預約你的 @帳號',
+      inSub: 'iMoney 還沒上線。現在把名字定下來 —— 上線時它就在那裡等你。',
+      pickSub: '3–20 個字元，可用英文字母、數字與底線。',
+      privacy: '只有 iMoney 團隊看得到。若在 Lab 中獲得回覆，也永遠不會顯示你的名字。',
+      apple: '用 Apple 繼續', google: '用 Google 繼續',
+      reserve: '預約', cancel: '取消', signout: '登出',
+      change: '換一個名字', share: '分享我的卡片',
+      isYours: '是你的了。', slogan: '花錢，是一門認識自己的藝術。',
+      bad: '3–20 個字元，只能是英文字母、數字與底線。',
+      taken: '這個名字已經有人用了，換一個？',
+      failed: '預約失敗，再試一次？', checking: '檢查中…'
+    } : null;
+
     const $ = id => document.getElementById(id);
     const show = name => ['in','pick','done'].forEach(s =>
       $('step-' + s).classList.toggle('hidden', s !== name));
@@ -237,14 +258,15 @@
     $('claim').onclick = async () => {
       const handle = $('handle').value.trim().toLowerCase().replace(/^@/, '');
       if (!/^[a-z0-9_]{3,20}$/.test(handle)) {
-        return say('3–20 characters, letters, numbers and underscores only.', 'bad');
+        return say(T ? T.bad : '3–20 characters, letters, numbers and underscores only.', 'bad');
       }
-      $('claim').disabled = true; say('Checking…');
+      $('claim').disabled = true; say(T ? T.checking : 'Checking…');
       const { data, error } = await sb.rpc('reserve_handle', { p_handle: handle });
       $('claim').disabled = false;
       if (error) {
         const taken = /handle_taken/.test(error.message);
-        return say(taken ? 'That one’s gone. Try another?' : 'Couldn’t reserve that. Try again?', 'bad');
+        return say(taken ? (T ? T.taken : 'That one’s gone. Try another?')
+                         : (T ? T.failed : 'Couldn’t reserve that. Try again?'), 'bad');
       }
       renderCard(data);
       show('done');
@@ -358,6 +380,26 @@
       a.click();
       URL.revokeObjectURL(a.href);
     };
+
+    if (T) {
+      document.documentElement.lang = 'zh-Hant';
+      document.title = T.title + ' — iMoney';
+      const set = (sel, txt) => { const el = document.querySelector(sel); if (el) el.textContent = txt; };
+      set('#step-in h1', T.inTitle);
+      set('#step-in .sub', T.inSub);
+      set('#step-pick h1', T.pickTitle);
+      set('#step-pick .sub', T.pickSub);
+      set('#step-in .note', T.privacy);
+      $('apple').lastChild.textContent = ' ' + T.apple;
+      $('google').lastChild.textContent = ' ' + T.google;
+      set('#claim', T.reserve);
+      set('#signout', T.signout);
+      set('#change', T.change);
+      set('#share', T.share);
+      set('#step-done .sub', T.isYours);
+      set('#step-done .note', T.slogan);
+      $('handle').placeholder = 'yourname';
+    }
 
     // Fires on load AND after the OAuth redirect drops the session in.
     sb.auth.onAuthStateChange(() => refresh());
