@@ -132,7 +132,12 @@
     .status.bad { color: var(--negative); }
     .status.good { color: var(--positive); }
 
-    footer { flex: 0 0 auto; padding: 0 0 26px; font-size: 13px; color: var(--bone-faint); }
+    /* The status line lands right under the button, so the footer needs
+       real air above it or the two read as one block. Padding rather than a
+       margin on .status, so the gap is there whether or not the status has
+       anything to say. */
+    footer { flex: 0 0 auto; padding: clamp(30px, 6vh, 78px) 0 30px;
+             font-size: 13px; color: var(--bone-faint); }
     footer a { color: var(--bone-faint); text-decoration: none; }
     footer a:hover { color: var(--bone-dim); }
     footer .sep { opacity: .4; margin: 0 8px; }
@@ -240,7 +245,7 @@
           const taken = await res.json();
           if (checking !== h || clean(input.value) !== h) return;   // stale
           status.className = 'status' + (taken ? ' bad' : ' good');
-          status.textContent = (taken ? '@%s is taken. Try another?' : '@%s can be yours.').replace('%s', h);
+          status.textContent = (taken ? '@%s already has an owner. Try another.' : '@%s can be yours.').replace('%s', h);
           go.disabled = !!taken;
         } catch {
           // Never claim "taken" on a network blip — let them try to reserve
