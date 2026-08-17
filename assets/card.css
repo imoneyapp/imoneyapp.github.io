@@ -35,7 +35,9 @@
 @media (hover: none) {
   .scene { perspective: none; }
   .card { transform: none; transform-style: flat; transition: transform .18s ease; }
-  .card:active { transform: scale(.965); }
+  /* .pressed is the scripted press: iOS never runs :active on a plain
+     div, so the page toggles the class from touch events instead. */
+  .card:active, .card.pressed { transform: scale(.965); }
 }
 
 /* The plate: one line on a desktop card, two on a phone card. The <br>

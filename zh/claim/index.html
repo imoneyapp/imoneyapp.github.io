@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=31">
+  <link rel="stylesheet" href="/assets/card.css?v=32">
   <style>
     /* ---- The planet hero. One page again: the CTA scrolls to #reserve,
        and when a clean loop video exists it can sit here scroll-scrubbed —
@@ -189,7 +189,7 @@
                 </div>
                 <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
                 <div class="card-foot">
-                  <div class="quote engraved">極簡。私密。屬於你。</div>
+                  <div class="quote engraved">極簡。私密。生活。</div>
                   <div class="card-meta engraved">開放<br class="plate-br">預留</div>
                 </div>
               </div>
@@ -339,6 +339,18 @@
       inp.addEventListener('focus', () => {
         setTimeout(() => document.getElementById('reserve').scrollIntoView({ behavior: 'smooth' }), 60);
       });
+    })();
+  </script>
+  <script>
+    // The press. iOS won't run :active on a non-interactive element, so
+    // the squeeze is scripted: finger down squeezes, up or cancel lets go.
+    (() => {
+      const card = document.querySelector('.card');
+      if (!card || matchMedia('(hover: hover)').matches) return;
+      const off = () => card.classList.remove('pressed');
+      card.addEventListener('touchstart', () => card.classList.add('pressed'), { passive: true });
+      card.addEventListener('touchend', off);
+      card.addEventListener('touchcancel', off);
     })();
   </script>
 </body>
