@@ -47,6 +47,13 @@
     .cosmos-cta { display: flex; align-items: center; gap: 10px;
                   white-space: nowrap; }
     .cosmos-cta:hover { opacity: 1; }
+    /* The caret lives only while typing; the enter key waits for the last
+       character before it fades in. */
+    .cosmos-cta.typing .cta-text::after { content: "|"; margin-left: 2px;
+      color: var(--bone-dim); animation: cta-caret 1s steps(1) infinite; }
+    @keyframes cta-caret { 50% { opacity: 0; } }
+    .cosmos-cta .cta-enter { opacity: 0; transition: opacity .45s; }
+    .cosmos-cta.typed .cta-enter { opacity: 1; }
     .cta-enter {
       width: 24px; height: 24px; border-radius: 50%; flex: 0 0 auto;
       border: 1px solid rgba(244,241,234,.35);
@@ -72,9 +79,32 @@
   <section class="cosmos" aria-label="iMoney">
     <div class="cosmos-inner">
       <img class="cosmos-mark" src="/assets/logo-mark.png" alt="">
-      <a class="cosmos-cta" href="/zh/claim/">預約 @yourname<span class="cta-enter" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v5a2 2 0 0 1-2 2H3.5"/><path d="M6 7 3 10l3 3"/></svg></span></a>
+      <a class="cosmos-cta" href="/zh/claim/"><span class="cta-text">預約 @yourname</span><span class="cta-enter" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v5a2 2 0 0 1-2 2H3.5"/><path d="M6 7 3 10l3 3"/></svg></span></a>
     </div>
   </section>
 
+  <script>
+    // The line types itself. The full text is already in the markup for
+    // anyone without JS; with it, we clear and replay — and skip the whole
+    // act for reduced-motion, where the key just appears with the words.
+    (() => {
+      const cta = document.querySelector('.cosmos-cta');
+      const el = cta && cta.querySelector('.cta-text');
+      if (!el) return;
+      const text = el.textContent;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        cta.classList.add('typed'); return;
+      }
+      el.textContent = '';
+      cta.classList.add('typing');
+      let i = 0;
+      const tick = () => {
+        el.textContent = text.slice(0, ++i);
+        if (i < text.length) setTimeout(tick, 62 + Math.random() * 48);
+        else { cta.classList.remove('typing'); cta.classList.add('typed'); }
+      };
+      setTimeout(tick, 500);
+    })();
+  </script>
 </body>
 </html>
