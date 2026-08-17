@@ -3,37 +3,132 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>iMoney — Money Tracker</title>
-  <meta name="description" content="iMoney — the money tracker that's easy, and enough. Log in five seconds, split with friends, see your month at a glance.">
-  <!-- Link-preview card, same treatment as the invite page: pasting the
-       marketing URL into iMessage / IG DMs / LINE shows the app icon. -->
-  <meta property="og:title" content="iMoney — Money Tracker">
-  <meta property="og:description" content="Less is more. Log in five seconds, split with friends, see your month at a glance.">
+  <title>iMoney — secure your @handle</title>
+  <meta name="description" content="Spending is the art of knowing yourself. Claim your name on iMoney before it launches.">
+  <meta property="og:title" content="Secure your @handle on iMoney">
+  <meta property="og:description" content="Spending is the art of knowing yourself.">
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="assets/appicon.png">
   <link rel="apple-touch-icon" href="assets/appicon.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/card.css">
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0; min-height: 100svh; background: var(--ink); color: var(--bone);
+      font: 16px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 22px 20px 0; text-align: center;
+    }
+    .wrap { width: 100%; max-width: 400px; flex: 1; display: flex; flex-direction: column; }
+
+    header { display: flex; align-items: center; gap: 8px; align-self: flex-start; }
+    header img { height: 22px; }
+    header b { font-size: 15px; font-weight: 600; letter-spacing: -.2px; }
+
+    .scene { margin: min(11vh, 74px) 0 0; }
+
+    h1 { font-size: clamp(30px, 9vw, 38px); font-weight: 700; letter-spacing: -.8px;
+         margin: 40px 0 10px; }
+    .slogan { color: var(--bone-dim); font-size: 15px; margin: 0 0 28px; }
+
+    .row { display: flex; gap: 8px; }
+    .field { flex: 1; display: flex; align-items: center; gap: 2px; background: var(--ink-raised);
+             border: 1px solid var(--hairline); border-radius: 14px; padding: 0 14px; }
+    .field:focus-within { border-color: var(--accent); }
+    .field span { color: var(--bone-faint); }
+    input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--bone);
+            font: 16px/1 inherit; padding: 15px 0; }
+    button { background: var(--bone); color: var(--ink); border: 0; border-radius: 14px;
+             padding: 15px 20px; font: 600 15px/1 inherit; cursor: pointer; white-space: nowrap; }
+    button:disabled { opacity: .4; cursor: default; }
+
+    .status { font-size: 13px; color: var(--bone-faint); margin-top: 14px; min-height: 18px; }
+    .status.bad { color: var(--negative); }
+
+    footer { margin-top: auto; padding: 40px 0 24px; font-size: 12px; color: var(--bone-faint); }
+    footer a { color: var(--bone-faint); text-decoration: none; }
+    footer a:hover { color: var(--bone-dim); }
+    footer .sep { opacity: .4; margin: 0 8px; }
+  </style>
 </head>
 <body>
-<main>
-  <header class="site"><a href="/">iMoney</a><span>Money Tracker</span></header>
-  <h1>Less is more.</h1>
-  <p class="lede">iMoney is the money tracker that's easy — and enough. Log an
-  expense in five seconds, split bills with friends, let trips settle
-  themselves, and see your month at a glance.</p>
-  <div class="card">
-    <img src="assets/appicon.png" alt="iMoney app icon" width="88" height="88"
-         style="border-radius: 20px; display: block; margin-bottom: 12px;">
-    <p><strong>iMoney for iPhone</strong><br>Coming to the App Store.</p>
+  <div class="wrap">
+    <header>
+      <img src="assets/logo-mark.png" alt="">
+      <b>iMoney</b>
+    </header>
+
+    <!-- The card is the whole page. It carries the mark, and the handle
+         appears on it live as you type — you watch your name land on the
+         object before you commit to anything. -->
+    <div class="scene">
+      <div class="float">
+        <div class="card">
+          <div class="face front">
+            <div class="card-inner">
+              <div class="card-top">
+                <img src="assets/logo-ink-star.png" alt="iMoney">
+                <div class="card-date">SOON</div>
+              </div>
+              <div class="card-handle placeholder" id="card-handle">@yourname</div>
+              <div class="card-foot"><span>Member</span><div>Reserved</div></div>
+            </div>
+          </div>
+          <div class="face back"><img src="assets/logo-ink-star.png" alt=""></div>
+        </div>
+      </div>
+    </div>
+
+    <h1>Secure your @handle.</h1>
+    <p class="slogan">Spending is the art of knowing yourself.</p>
+
+    <form class="row" id="form">
+      <label class="field">
+        <span>@</span>
+        <input id="handle" placeholder="yourname" autocapitalize="none" autocorrect="off"
+               spellcheck="false" maxlength="20" aria-label="Your handle">
+      </label>
+      <button id="go" type="submit" disabled>Reserve</button>
+    </form>
+    <p class="status" id="status">On the App Store soon — in review now.</p>
+
+    <footer>
+      <a href="/privacy/">Privacy</a><span class="sep">·</span>
+      <a href="/support/">Support</a><span class="sep">·</span>
+      <a href="mailto:upappco@gmail.com">Contact</a>
+    </footer>
   </div>
-  <h2>Links</h2>
-  <ul>
-    <li><a href="privacy/">Privacy Policy</a> — plain language, no fine print.</li>
-    <li><a href="support/">Support</a> — get help, ask anything.</li>
-  </ul>
-  <footer>© 2026 iMoney · <a href="privacy/">Privacy</a> · <a href="support/">Support</a></footer>
-</main>
+
+  <script>
+    const input = document.getElementById('handle');
+    const card  = document.getElementById('card-handle');
+    const go    = document.getElementById('go');
+    const status = document.getElementById('status');
+    const DEFAULT = 'On the App Store soon — in review now.';
+
+    const clean = v => v.trim().toLowerCase().replace(/^@/, '').replace(/[^a-z0-9_]/g, '');
+
+    input.addEventListener('input', () => {
+      const h = clean(input.value);
+      if (h !== input.value.trim().toLowerCase().replace(/^@/, '')) input.value = h;
+      card.textContent = '@' + (h || 'yourname');
+      card.classList.toggle('placeholder', !h);
+      go.disabled = h.length < 3;
+      // Only nag once they've typed enough to have an opinion about.
+      status.className = 'status';
+      status.textContent = h.length && h.length < 3 ? 'At least 3 characters.' : DEFAULT;
+    });
+
+    // Auth lives on /reserve — one place, one set of redirect URLs. The
+    // handle rides along so nobody has to type it twice.
+    document.getElementById('form').addEventListener('submit', e => {
+      e.preventDefault();
+      const h = clean(input.value);
+      if (h.length < 3) return;
+      location.href = '/reserve/?h=' + encodeURIComponent(h);
+    });
+  </script>
 </body>
 </html>

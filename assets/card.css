@@ -1,0 +1,62 @@
+/* The member card, shared by the landing page and /reserve.
+   Extracted rather than duplicated: the card is the brand's one object, and
+   two copies of it would drift the first time either page is touched. */
+:root {
+  --ink: #0b0b0c; --ink-raised: #161617; --bone: #f4f1ea;
+  --bone-dim: #a8a49c; --bone-faint: #6f6c66;
+  --accent: #d9b36a; --negative: #e64a3c; --positive: #4caf7d;
+  --hairline: rgba(244,241,234,.12);
+}
+
+/* Two nested wrappers: one element can't run a bob and a spin on `transform`
+   without them fighting. .float owns the drift, .card owns the rotation. */
+.scene { perspective: 1400px; width: 100%; }
+.float { animation: bob 7s ease-in-out infinite; }
+.card  { position: relative; width: 100%; aspect-ratio: 1.586;
+         transform-style: preserve-3d; animation: spin 26s linear infinite; }
+.card:hover, .card:active { animation-play-state: paused; }
+@keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+@keyframes bob  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+.face {
+  position: absolute; inset: 0; border-radius: 22px; overflow: hidden;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border: 1px solid rgba(217,179,106,.35);
+  box-shadow: 0 18px 40px rgba(0,0,0,.55);
+  background: linear-gradient(135deg, rgba(217,179,106,.62), rgba(217,179,106,.24)), var(--ink);
+}
+.face.back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
+.face.back img { width: 34%; opacity: .55; }
+.face::after {                     /* travelling light seam */
+  content: ""; position: absolute; inset: -30%;
+  background: linear-gradient(105deg, transparent 38%, rgba(217,179,106,.55) 48%,
+              rgba(244,241,234,.22) 53%, transparent 62%);
+  animation: sweep 7s ease-in-out infinite;
+}
+@keyframes sweep { 0%,100% { transform: translateX(-22%); } 50% { transform: translateX(22%); } }
+
+/* text-align:left matters — these pages are centred, and without it the
+   handle and footer centre themselves and stop matching the app. */
+.card-inner { position: absolute; inset: 0; padding: 6.2%; display: flex;
+              flex-direction: column; z-index: 1; text-align: left; }
+.card-top { display: flex; align-items: flex-start; justify-content: space-between; flex: 0 0 auto; }
+/* NOT a percentage height: a % against an indefinite parent makes the image
+   contribute its intrinsic 612px to the row while painting small, which
+   crushes everything below it to zero. */
+.card-top img { height: clamp(22px, 8vw, 34px); width: auto; }
+.card-date { font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+             color: rgba(11,11,12,.55); letter-spacing: .8px; }
+.card-handle { font-size: clamp(26px, 12.5vw, 46px); font-weight: 700; color: var(--ink);
+               margin: auto 0; letter-spacing: -1px; overflow: hidden;
+               text-overflow: ellipsis; white-space: nowrap; }
+.card-handle.placeholder { color: rgba(11,11,12,.35); }
+.card-foot { font-size: 11px; color: rgba(11,11,12,.62); }
+.card-foot span { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1.2px;
+                  text-transform: uppercase; color: rgba(11,11,12,.4); margin-bottom: 2px; }
+.card-handle, .card-foot { flex: 0 0 auto; min-height: 0; }
+
+/* Decoration, not information — nobody needs it spinning to understand it. */
+@media (prefers-reduced-motion: reduce) {
+  .float, .card, .face::after { animation: none; }
+  .card { transform: rotateY(-9deg); }
+}
