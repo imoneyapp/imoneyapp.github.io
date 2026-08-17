@@ -72,6 +72,11 @@
     /* The width cap has to be expressed as a height too, or the box stays
        at its vh height while the card inside it is only 92vw/1.586 — dead
        space under the card on a phone that reads as a spacing mistake. */
+    /* Phones: the card gets air above and below — at small sizes the flex
+       gaps alone leave it shoulder-to-shoulder with the headline. */
+    @media (max-width: 640px) {
+      .scene { margin: clamp(18px, 4vh, 36px) 0; }
+    }
     .scene { height: var(--card-h);
              aspect-ratio: 1.586; width: auto;
              flex: 0 1 auto;
