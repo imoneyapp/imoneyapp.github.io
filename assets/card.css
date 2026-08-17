@@ -66,7 +66,11 @@
   text-shadow: 0 -1px 0 rgba(0,0,0,.32), 0 1px 0 rgba(255,255,255,.34);
 }
 
-.card-top { display: flex; align-items: flex-start; justify-content: space-between; flex: 0 0 auto; }
+/* The mark is ~68px and the date is two small lines, so flex-start left
+   the date hanging off the top of a tall row and the pair read as ragged.
+   They share a centreline instead — the same idea as the foot, where the
+   two items share a baseline. */
+.card-top { display: flex; align-items: center; justify-content: space-between; flex: 0 0 auto; }
 /* NEVER a percentage height on card art: a % against an indefinite parent
    makes the image contribute its intrinsic height to the flex row and
    crushes everything below it. cq units resolve against a definite width. */

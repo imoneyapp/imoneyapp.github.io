@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=9">
+  <link rel="stylesheet" href="/assets/card.css?v=10">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     /* One column, vertically centred between a pinned header and a pinned
@@ -240,7 +240,7 @@
           const taken = await res.json();
           if (checking !== h || clean(input.value) !== h) return;   // stale
           status.className = 'status' + (taken ? ' bad' : ' good');
-          status.textContent = (taken ? '@%s is taken. Try another?' : '@%s is free.').replace('%s', h);
+          status.textContent = (taken ? '@%s is taken. Try another?' : '@%s can be yours.').replace('%s', h);
           go.disabled = !!taken;
         } catch {
           // Never claim "taken" on a network blip — let them try to reserve
@@ -262,7 +262,7 @@
       location.href = '/reserve/?h=' + encodeURIComponent(h);
     });
   </script>
-  <script src="/assets/still.js?v=9"></script>
+  <script src="/assets/still.js?v=10"></script>
   <script>
     (() => {
       // The ghost types itself. An empty field says "type something"; a
