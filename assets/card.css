@@ -91,7 +91,15 @@
                text-overflow: ellipsis; white-space: nowrap; }
 .card-handle.placeholder { color: rgba(11,11,12,.32); }
 
-.card-foot { display: flex; align-items: flex-end; justify-content: space-between;
+/* `flex-end` lines up the BOXES, and the two have different type sizes and
+   line-heights, so their baselines landed ~2px apart — enough to see on a
+   card this big. `last baseline` lines up the text itself, and the "last"
+   matters because the line wraps to two on a phone: it's the bottom line
+   that has to sit level with RESERVED, not the first. flex-end stays above
+   it as the fallback. */
+.card-foot { display: flex; justify-content: space-between;
+             align-items: flex-end;
+             align-items: last baseline;
              gap: 14px; flex: 0 0 auto; min-height: 0; }
 /* A line worth reading, not a form field. It gets the room a caption
    would have wasted on a label nobody needed. */
