@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=24">
+  <link rel="stylesheet" href="/assets/card.css?v=25">
   <style>
     /* ---- The planet hero. One page again: the CTA scrolls to #reserve,
        and when a clean loop video exists it can sit here scroll-scrubbed —
@@ -96,7 +96,12 @@
                 card too small to carry a name isn't worth showing. */
              min-height: 150px; }
 
+    /* The headline wears the card's metal: a restrained vertical sheen,
+       bone into worn silver — kinship, not rainbow. */
     h1 { font-size: clamp(24px, 2.8vw, 34px); font-weight: 700; letter-spacing: -.9px;
+         background: linear-gradient(180deg, #f8f6f0 20%, #b9b5ac 100%);
+         -webkit-background-clip: text; background-clip: text;
+         -webkit-text-fill-color: transparent; color: #f4f1ea;
          margin: 0; }
     .say h1 { margin: 0; }
     .slogan { color: var(--bone-dim); font-size: clamp(13px, 1.3vw, 15px);
@@ -178,7 +183,7 @@
                 </div>
                 <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
                 <div class="card-foot">
-                  <div class="quote engraved">為取代你的直覺而設計</div>
+                  <div class="quote engraved">給自己更好的金錢生活</div>
                   <div class="card-meta engraved">開放<br class="plate-br">預留</div>
                 </div>
               </div>

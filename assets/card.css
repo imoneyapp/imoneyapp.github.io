@@ -86,8 +86,11 @@
 /* Engraving. Everything on a real card is stamped INTO the surface: a dark
    edge where the tool bit, a light edge where the metal catches. One shared
    rule so nothing on the card looks printed on top of it. */
+/* Letterpress into metal: the tool's dark bite above the stroke, the lit
+   lower edge where the metal catches — both stronger than before so the
+   engraving reads at a glance on brushed silver. */
 .engraved {
-  text-shadow: 0 -1px 0 rgba(0,0,0,.32), 0 1px 0 rgba(255,255,255,.34);
+  text-shadow: 0 -1px 1px rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.65);
 }
 
 /* The mark is ~68px and the date is two small lines, so flex-start left
@@ -100,7 +103,7 @@
    crushes everything below it. cq units resolve against a definite width. */
 
 .card-meta { font: 700 clamp(9px, 1.6cqw, 12px)/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
-             color: rgba(11,11,12,.5); letter-spacing: 1.4px; text-align: right;
+             color: rgba(11,11,12,.66); letter-spacing: 1.4px; text-align: right;
              text-transform: uppercase; }
 .card-meta.left { text-align: left; }
 .card-foot .card-meta { white-space: nowrap; flex: 0 0 auto; }
@@ -115,10 +118,10 @@
              filter: drop-shadow(0 1px 0 rgba(255,255,255,.34))
                      drop-shadow(0 -1px 0 rgba(0,0,0,.26)); }
 
-.card-handle { font-size: clamp(30px, 11cqw, 84px); font-weight: 700; color: rgba(11,11,12,.92);
+.card-handle { font-size: clamp(30px, 11cqw, 84px); font-weight: 700; color: rgba(16,16,18,.98);
                margin: auto 0; letter-spacing: -2px; overflow: hidden;
                text-overflow: ellipsis; white-space: nowrap; }
-.card-handle.placeholder { color: rgba(11,11,12,.32); }
+.card-handle.placeholder { color: rgba(11,11,12,.48); }
 
 /* `flex-end` lines up the BOXES, and the two have different type sizes and
    line-heights, so their baselines landed ~2px apart — enough to see on a
@@ -141,7 +144,7 @@
    an invalid shorthand browsers discard entirely. */
 .card-foot .quote { font-weight: 600; font-size: clamp(10px, 1.85cqw, 14px);
                     line-height: 1.5; font-family: inherit;
-                    color: rgba(11,11,12,.6); max-width: 62%; }
+                    color: rgba(11,11,12,.74); max-width: 62%; }
 .card-foot .right { text-align: right; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
                     font-size: clamp(9px, 1.55cqw, 12.5px); color: rgba(11,11,12,.55);
                     white-space: nowrap; }
