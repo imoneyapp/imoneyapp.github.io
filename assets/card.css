@@ -1,6 +1,6 @@
 /* The member card, shared by the landing page and /reserve.
    Extracted rather than duplicated: the card is the brand's one object, and
-   two copies of it would drift the first time either page is touched. */
+   two copies would drift the first time either page was touched. */
 :root {
   --ink: #0b0b0c; --ink-raised: #161617; --bone: #f4f1ea;
   --bone-dim: #a8a49c; --bone-faint: #6f6c66;
@@ -10,23 +10,32 @@
 
 /* Two nested wrappers: one element can't run a bob and a spin on `transform`
    without them fighting. .float owns the drift, .card owns the rotation. */
-.scene { perspective: 1400px; width: 100%; }
+.scene { perspective: 1600px; width: 100%; }
 .float { animation: bob 7s ease-in-out infinite; }
-.card  { position: relative; width: 100%; aspect-ratio: 1.586;
-         transform-style: preserve-3d; animation: spin 26s linear infinite; }
-.card:hover, .card:active { animation-play-state: paused; }
+
+/* Still by default, tilted just off-square. Before you've claimed anything
+   the card's job is to show YOUR name — turning it away mid-read is the one
+   thing it must not do. Rotation is earned. */
+.card {
+  position: relative; width: 100%; aspect-ratio: 1.586;
+  transform-style: preserve-3d; transform: rotateY(-9deg) rotate(-1deg);
+  transition: transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.card.turning { animation: spin 26s linear infinite; transform: none; }
+.card.turning:hover, .card.turning:active { animation-play-state: paused; }
 @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
-@keyframes bob  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes bob  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
 .face {
-  position: absolute; inset: 0; border-radius: 22px; overflow: hidden;
+  position: absolute; inset: 0; border-radius: 4.4%/7%; overflow: hidden;
   backface-visibility: hidden; -webkit-backface-visibility: hidden;
   border: 1px solid rgba(217,179,106,.35);
-  box-shadow: 0 18px 40px rgba(0,0,0,.55);
+  box-shadow: 0 26px 60px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.12) inset;
   background: linear-gradient(135deg, rgba(217,179,106,.62), rgba(217,179,106,.24)), var(--ink);
 }
 .face.back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
-.face.back img { width: 34%; opacity: .55; }
+.face.back img { width: 34%; opacity: .5;
+                 filter: drop-shadow(0 1px 0 rgba(255,255,255,.25)); }
 .face::after {                     /* travelling light seam */
   content: ""; position: absolute; inset: -30%;
   background: linear-gradient(105deg, transparent 38%, rgba(217,179,106,.55) 48%,
@@ -37,26 +46,46 @@
 
 /* text-align:left matters — these pages are centred, and without it the
    handle and footer centre themselves and stop matching the app. */
-.card-inner { position: absolute; inset: 0; padding: 6.2%; display: flex;
+.card-inner { position: absolute; inset: 0; padding: 6%; display: flex;
               flex-direction: column; z-index: 1; text-align: left; }
+
+/* Engraving. Everything on a real card is stamped INTO the surface: a dark
+   edge where the tool bit, a light edge where the metal catches. One shared
+   rule so nothing on the card looks printed on top of it. */
+.engraved {
+  text-shadow: 0 -1px 0 rgba(0,0,0,.32), 0 1px 0 rgba(255,255,255,.34);
+}
+
 .card-top { display: flex; align-items: flex-start; justify-content: space-between; flex: 0 0 auto; }
-/* NOT a percentage height: a % against an indefinite parent makes the image
-   contribute its intrinsic 612px to the row while painting small, which
-   crushes everything below it to zero. */
-.card-top img { height: clamp(22px, 8vw, 34px); width: auto; }
-.card-date { font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-             color: rgba(11,11,12,.55); letter-spacing: .8px; }
-.card-handle { font-size: clamp(26px, 12.5vw, 46px); font-weight: 700; color: var(--ink);
-               margin: auto 0; letter-spacing: -1px; overflow: hidden;
+/* NEVER a percentage height here. A % against an indefinite parent makes the
+   image contribute its intrinsic 612px to the flex row while painting small,
+   which crushes the handle and footer to zero. Container-query units resolve
+   against .scene's width, which is definite, so they're safe. */
+.card-top img { height: clamp(24px, 4.4cqw, 46px); width: auto;
+                filter: drop-shadow(0 1px 0 rgba(255,255,255,.30)); }
+.card-meta { font: 700 clamp(9px, 1.6cqw, 12px)/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+             color: rgba(11,11,12,.5); letter-spacing: 1.4px; text-align: right; }
+
+.card-handle { font-size: clamp(30px, 11cqw, 84px); font-weight: 700; color: rgba(11,11,12,.92);
+               margin: auto 0; letter-spacing: -2px; overflow: hidden;
                text-overflow: ellipsis; white-space: nowrap; }
-.card-handle.placeholder { color: rgba(11,11,12,.35); }
-.card-foot { font-size: 11px; color: rgba(11,11,12,.62); }
-.card-foot span { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1.2px;
-                  text-transform: uppercase; color: rgba(11,11,12,.4); margin-bottom: 2px; }
-.card-handle, .card-foot { flex: 0 0 auto; min-height: 0; }
+.card-handle.placeholder { color: rgba(11,11,12,.32); }
+
+.card-foot { display: flex; align-items: flex-end; justify-content: space-between;
+             gap: 12px; flex: 0 0 auto; min-height: 0; }
+.card-foot div { font: 600 clamp(10px, 2cqw, 15px)/1.35 inherit; color: rgba(11,11,12,.62); }
+.card-foot span { display: block; font: 700 clamp(8px, 1.4cqw, 11px)/1.4 inherit;
+                  letter-spacing: 1.3px; text-transform: uppercase;
+                  color: rgba(11,11,12,.38); margin-bottom: 1px; }
+.card-foot .right { text-align: right; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+                    font-size: clamp(9px, 1.6cqw, 13px); }
+
+/* Container queries so type scales with the CARD, not the viewport — the
+   card is much wider than the page on desktop and vw units broke that. */
+.scene { container-type: inline-size; }
 
 /* Decoration, not information — nobody needs it spinning to understand it. */
 @media (prefers-reduced-motion: reduce) {
-  .float, .card, .face::after { animation: none; }
-  .card { transform: rotateY(-9deg); }
+  .float, .card.turning, .face::after { animation: none; }
+  .card.turning { transform: rotateY(-9deg); }
 }

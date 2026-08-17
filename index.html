@@ -17,37 +17,44 @@
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       margin: 0; min-height: 100svh; background: var(--ink); color: var(--bone);
-      font: 16px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+      font: 17px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
       display: flex; flex-direction: column; align-items: center;
-      padding: 22px 20px 0; text-align: center;
+      padding: 28px 24px 0; text-align: center;
     }
-    .wrap { width: 100%; max-width: 400px; flex: 1; display: flex; flex-direction: column; }
+    /* Wide. The card is the page, so the column is sized to give the card
+       room rather than to keep a paragraph readable. */
+    .wrap { width: 100%; max-width: 760px; flex: 1; display: flex; flex-direction: column; }
 
-    header { display: flex; align-items: center; gap: 8px; align-self: flex-start; }
-    header img { height: 22px; }
-    header b { font-size: 15px; font-weight: 600; letter-spacing: -.2px; }
+    header { display: flex; align-items: center; gap: 9px; align-self: flex-start; }
+    header img { height: 26px; }
+    header b { font-size: 17px; font-weight: 600; letter-spacing: -.2px; }
 
-    .scene { margin: min(11vh, 74px) 0 0; }
+    /* The card is the hero, but the field is the only thing to DO here —
+       so the card is sized from the height left over rather than a fixed
+       cap. Tall screen: big card. Laptop: it gives way so the form stays
+       above the fold. 1.586 is the card's aspect ratio. */
+    .scene { margin: min(6vh, 46px) auto 0;
+             max-width: min(100%, 680px, calc((100svh - 400px) * 1.586)); }
 
-    h1 { font-size: clamp(30px, 9vw, 38px); font-weight: 700; letter-spacing: -.8px;
-         margin: 40px 0 10px; }
-    .slogan { color: var(--bone-dim); font-size: 15px; margin: 0 0 28px; }
+    h1 { font-size: clamp(32px, 5.6vw, 54px); font-weight: 700; letter-spacing: -1.5px;
+         margin: clamp(30px, 4.6vh, 52px) 0 10px; }
+    .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px); margin: 0 0 28px; }
 
-    .row { display: flex; gap: 8px; }
-    .field { flex: 1; display: flex; align-items: center; gap: 2px; background: var(--ink-raised);
-             border: 1px solid var(--hairline); border-radius: 14px; padding: 0 14px; }
+    .row { display: flex; gap: 10px; max-width: 520px; width: 100%; margin: 0 auto; }
+    .field { flex: 1; display: flex; align-items: center; gap: 3px; background: var(--ink-raised);
+             border: 1px solid var(--hairline); border-radius: 16px; padding: 0 18px; }
     .field:focus-within { border-color: var(--accent); }
-    .field span { color: var(--bone-faint); }
+    .field span { color: var(--bone-faint); font-size: 18px; }
     input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--bone);
-            font: 16px/1 inherit; padding: 15px 0; }
-    button { background: var(--bone); color: var(--ink); border: 0; border-radius: 14px;
-             padding: 15px 20px; font: 600 15px/1 inherit; cursor: pointer; white-space: nowrap; }
+            font: 18px/1 inherit; padding: 18px 0; }
+    button { background: var(--bone); color: var(--ink); border: 0; border-radius: 16px;
+             padding: 18px 26px; font: 600 17px/1 inherit; cursor: pointer; white-space: nowrap; }
     button:disabled { opacity: .4; cursor: default; }
 
-    .status { font-size: 13px; color: var(--bone-faint); margin-top: 14px; min-height: 18px; }
+    .status { font-size: 14px; color: var(--bone-faint); margin-top: 16px; min-height: 20px; }
     .status.bad { color: var(--negative); }
 
-    footer { margin-top: auto; padding: 40px 0 24px; font-size: 12px; color: var(--bone-faint); }
+    footer { margin-top: auto; padding: 34px 0 24px; font-size: 13px; color: var(--bone-faint); }
     footer a { color: var(--bone-faint); text-decoration: none; }
     footer a:hover { color: var(--bone-dim); }
     footer .sep { opacity: .4; margin: 0 8px; }
@@ -70,10 +77,13 @@
             <div class="card-inner">
               <div class="card-top">
                 <img src="assets/logo-ink-star.png" alt="iMoney">
-                <div class="card-date">SOON</div>
+                <div class="card-meta engraved">FOUNDING<br>MEMBER</div>
               </div>
-              <div class="card-handle placeholder" id="card-handle">@yourname</div>
-              <div class="card-foot"><span>Member</span><div>Reserved</div></div>
+              <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
+              <div class="card-foot">
+                <div class="engraved"><span>Issued to</span>Reserved before launch</div>
+                <div class="right engraved" id="card-url">withimoney.com</div>
+              </div>
             </div>
           </div>
           <div class="face back"><img src="assets/logo-ink-star.png" alt=""></div>
@@ -92,7 +102,7 @@
       </label>
       <button id="go" type="submit" disabled>Reserve</button>
     </form>
-    <p class="status" id="status">On the App Store soon — in review now.</p>
+    <p class="status" id="status"></p>
 
     <footer>
       <a href="/privacy/">Privacy</a><span class="sep">·</span>
@@ -106,7 +116,7 @@
     const card  = document.getElementById('card-handle');
     const go    = document.getElementById('go');
     const status = document.getElementById('status');
-    const DEFAULT = 'On the App Store soon — in review now.';
+    const DEFAULT = '';
 
     const clean = v => v.trim().toLowerCase().replace(/^@/, '').replace(/[^a-z0-9_]/g, '');
 
@@ -115,6 +125,9 @@
       if (h !== input.value.trim().toLowerCase().replace(/^@/, '')) input.value = h;
       card.textContent = '@' + (h || 'yourname');
       card.classList.toggle('placeholder', !h);
+      // The URL line reads as the address the name will actually live at.
+      document.getElementById('card-url').textContent =
+        h ? 'withimoney.com/@' + h : 'withimoney.com';
       go.disabled = h.length < 3;
       // Only nag once they've typed enough to have an opinion about.
       status.className = 'status';
