@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=8">
+  <link rel="stylesheet" href="/assets/card.css?v=9">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     /* One column, vertically centred between a pinned header and a pinned
@@ -90,6 +90,11 @@
     .say h1 { margin: 0; }
     .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px);
               margin: 10px 0 0; }
+
+    /* The whole line turns on one word, so that word gets the page's full
+       ink while the rest stays dim. Weight and colour rather than a rule or
+       a highlighter — it has to read as emphasis, not as a marker pen. */
+    .slogan em { font-style: normal; font-weight: 700; color: var(--bone); }
 
     .row { display: flex; gap: 9px; max-width: 330px; width: 100%; margin: 0 auto; }
     /* A lit well rather than a dark box. The old field was the same value as
@@ -172,7 +177,7 @@
 
       <div class="say">
         <h1 id="headline">Reserve <span id="head-handle">@yourname</span></h1>
-        <p class="slogan">A money app that does NOT read your bank.</p>
+        <p class="slogan">A money app that does <em>NOT</em> read your bank.</p>
       </div>
 
       <form class="row" id="form">
@@ -257,7 +262,7 @@
       location.href = '/reserve/?h=' + encodeURIComponent(h);
     });
   </script>
-  <script src="/assets/still.js?v=8"></script>
+  <script src="/assets/still.js?v=9"></script>
   <script>
     (() => {
       // The ghost types itself. An empty field says "type something"; a
