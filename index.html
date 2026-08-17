@@ -33,14 +33,6 @@
       position: relative; width: 100%; height: 100svh;
       background: #000 url(/assets/planet.jpg) right center / cover no-repeat;
     }
-    @media (max-width: 700px) {
-      /* The portrait crop, made for this: cover from the centre so the
-         photo owns every pixel — no borders, no bars. The mark and the
-         line sit dead centre of the screen. */
-      .cosmos { background-image: url(/assets/planet-vertical.jpg);
-                background-position: center; }
-      .cosmos-inner { left: 50%; transform: translate(-50%, -50%); }
-    }
     .cosmos-inner {
       position: absolute; top: 50%; left: clamp(24px, 12vw, 220px);
       transform: translateY(-50%);
@@ -67,6 +59,14 @@
       opacity: .85; transition: opacity .25s;
     }
     .cosmos-cta:hover { opacity: 1; }
+    @media (max-width: 700px) {
+      /* The portrait crop, made for this: cover from the centre so the
+         photo owns every pixel — no borders, no bars. The mark and the
+         line sit dead centre of the screen. */
+      .cosmos { background-image: url(/assets/planet-vertical.jpg);
+                background-position: center; }
+      .cosmos-inner { left: 50%; transform: translate(-50%, -50%); }
+    }
     @media (prefers-reduced-motion: reduce) { .cosmos-mark { animation: none; } }
   </style>
 </head>
