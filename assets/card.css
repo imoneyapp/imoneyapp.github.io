@@ -22,14 +22,16 @@
   transform-style: preserve-3d;
   transition: transform .55s cubic-bezier(.2,.8,.2,1);
 }
-/* Level at rest, tilts toward you on hover. The angle is a response to
-   being touched rather than a pose it holds — a card that's permanently
-   askew reads as a mockup, and it costs legibility on the handle, which
-   is the only line that matters here. No hover on touch, so phones just
-   get the level card. */
-@media (hover: hover) {
-  .card:not(.turning):hover { transform: rotateX(6deg) rotateY(-11deg) scale(1.03); }
-}
+/* Level at rest. The tilt is driven by pointer position (assets/card.js) so
+   each corner leans a different way — a single hover state made all four
+   corners feel identical, which is the opposite of holding an object. The
+   transition below is what makes it settle back rather than snap. */
+.card.tilting { transition: none; }
+
+/* Tap: one full turn, landing on the face it started from. You get to see
+   the back without losing your place. */
+.card.flipping { animation: flip .9s cubic-bezier(.4,0,.2,1); }
+@keyframes flip { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
 .card.turning { animation: spin 26s linear infinite; transform: none; }
 .card.turning:hover, .card.turning:active { animation-play-state: paused; }
 @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
@@ -66,12 +68,32 @@
 }
 
 .card-top { display: flex; align-items: flex-start; justify-content: space-between; flex: 0 0 auto; }
-/* NEVER a percentage height here. A % against an indefinite parent makes the
-   image contribute its intrinsic 612px to the flex row while painting small,
-   which crushes the handle and footer to zero. Container-query units resolve
-   against .scene's width, which is definite, so they're safe. */
-.card-top img { height: clamp(24px, 4.4cqw, 46px); width: auto;
-                filter: drop-shadow(0 1px 0 rgba(255,255,255,.30)); }
+/* The mark, engraved. The silhouette is a MASK filled with dark gold rather
+   than a black PNG laid on top — black ink reads as printed, a tinted recess
+   reads as cut into the metal. Same two-edge shadow as .engraved text.
+   NEVER a percentage height here: a % against an indefinite parent makes the
+   image contribute its intrinsic 612px to the flex row and crushes the
+   handle and footer to zero. cq units resolve against a definite width. */
+.mark {
+  position: relative; flex: 0 0 auto;
+  width: clamp(22px, 3.9cqw, 40px); height: clamp(27px, 5cqw, 51px);
+}
+.mark::before {
+  content: ""; position: absolute; inset: 0;
+  background: rgba(11,11,12,.74);
+  -webkit-mask: url("logo-mark.png") center/contain no-repeat;
+          mask: url("logo-mark.png") center/contain no-repeat;
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.34)) drop-shadow(0 -1px 0 rgba(0,0,0,.30));
+}
+/* The star stays real metal — it's the one part of the lockup that catches
+   light rather than absorbing it, and flattening it into the recess would
+   lose the only highlight on the mark. */
+.mark::after {
+  content: ""; position: absolute; left: 50%; top: 50%;
+  width: 46%; aspect-ratio: 169/176; transform: translate(-50%, -50%);
+  background: url("star.png") center/contain no-repeat;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.35));
+}
 .card-meta { font: 700 clamp(9px, 1.6cqw, 12px)/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
              color: rgba(11,11,12,.5); letter-spacing: 1.4px; text-align: right; }
 
