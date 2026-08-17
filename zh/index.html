@@ -143,17 +143,17 @@
       el.textContent = '';
       const typeOut = (add, i, next) => {
         el.textContent = add.slice(0, ++i);
-        if (i < add.length) setTimeout(() => typeOut(add, i, next), 58 + Math.random() * 46);
+        if (i < add.length) setTimeout(() => typeOut(add, i, next), 95 + Math.random() * 70);
         else next();
       };
       const erase = (next) => {
         el.textContent = el.textContent.slice(0, -1);
-        if (el.textContent) setTimeout(() => erase(next), 34);
+        if (el.textContent) setTimeout(() => erase(next), 52);
         else next();
       };
       const act = (i) => typeOut(ACTS[i], 0, () => {
         if (i === ACTS.length - 1) return done();
-        setTimeout(() => erase(() => setTimeout(() => act(i + 1), 260)), 950);
+        setTimeout(() => erase(() => setTimeout(() => act(i + 1), 420)), 1250);
       });
       setTimeout(() => act(0), 500);
     })();
