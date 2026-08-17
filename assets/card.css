@@ -103,13 +103,14 @@
 .card-handle.placeholder { color: rgba(11,11,12,.32); }
 
 .card-foot { display: flex; align-items: flex-end; justify-content: space-between;
-             gap: 12px; flex: 0 0 auto; min-height: 0; }
-.card-foot div { font: 600 clamp(10px, 2cqw, 15px)/1.35 inherit; color: rgba(11,11,12,.62); }
-.card-foot span { display: block; font: 700 clamp(8px, 1.4cqw, 11px)/1.4 inherit;
-                  letter-spacing: 1.3px; text-transform: uppercase;
-                  color: rgba(11,11,12,.38); margin-bottom: 1px; }
+             gap: 14px; flex: 0 0 auto; min-height: 0; }
+/* A line worth reading, not a form field. It gets the room a caption
+   would have wasted on a label nobody needed. */
+.card-foot .quote { font: 500 clamp(10px, 1.95cqw, 15px)/1.4 inherit;
+                    color: rgba(11,11,12,.6); max-width: 62%; }
 .card-foot .right { text-align: right; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-                    font-size: clamp(9px, 1.6cqw, 13px); }
+                    font-size: clamp(9px, 1.55cqw, 12.5px); color: rgba(11,11,12,.55);
+                    white-space: nowrap; }
 
 /* Container queries so type scales with the CARD, not the viewport — the
    card is much wider than the page on desktop and vw units broke that. */

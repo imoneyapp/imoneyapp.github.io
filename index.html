@@ -87,7 +87,7 @@
               </div>
               <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
               <div class="card-foot">
-                <div class="engraved"><span>Issued to</span>Reserved before launch</div>
+                <div class="quote engraved" id="card-quote"></div>
                 <div class="right engraved" id="card-url">withimoney.com</div>
               </div>
             </div>
@@ -125,6 +125,15 @@
   </div>
 
   <script>
+    const QUOTES = [
+      'Simply better than your notebook.',
+      'A better relationship with your money.',
+      'Spending is the art of knowing yourself.',
+      'Minimal. Social. Weirdly addictive.'
+    ];
+    document.getElementById('card-quote').textContent =
+      QUOTES[Math.floor(Math.random() * QUOTES.length)];
+
     const input = document.getElementById('handle');
     const card  = document.getElementById('card-handle');
     const go    = document.getElementById('go');
