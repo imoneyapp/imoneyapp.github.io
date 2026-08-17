@@ -53,7 +53,7 @@
        character before it fades in. */
     /* The box holds the finished line's width from the first frame, so
        the column never reflows and the mark above stays nailed down. */
-    .cta-text { display: inline-block; text-align: left; }
+    .cta-text { display: inline-block; text-align: center; }
     .cosmos-cta.typing .cta-text::after { content: "|"; margin-left: 2px;
       color: var(--bone-dim); animation: cta-caret 1s steps(1) infinite; }
     @keyframes cta-caret { 50% { opacity: 0; } }
@@ -62,7 +62,7 @@
     .cta-enter {
       position: absolute; left: calc(100% + 9px); top: 50%;
       transform: translateY(-50%);
-      width: 20px; height: 20px; border-radius: 50%;
+      width: 1.15em; height: 1.15em; border-radius: 50%;
       border: 1px solid rgba(244,241,234,.35);
       display: flex; align-items: center; justify-content: center;
       transition: border-color .25s, background .25s, color .25s;
@@ -74,7 +74,7 @@
        the finger or button is down. */
     .cosmos-cta:active .cta-enter { background: var(--bone); color: #0b0b0c;
                                     border-color: var(--bone); }
-    .cta-enter svg { width: 9px; height: 9px; display: block; }
+    .cta-enter svg { width: .52em; height: .52em; display: block; }
     @media (max-width: 700px) {
       .cosmos { background: #000 url(/assets/planetfull.jpg) center / cover no-repeat; }
       .cosmos-inner { left: 50%; transform: translate(-50%, -50%); }
@@ -92,18 +92,18 @@
   </section>
 
   <script>
-    // The act: "預約 @yourname" — a beat — the name comes off, and the line
-    // lands on "現在就預約". The box holds the widest line during the act
-    // and glides down to the ending's width as the key fades in: one soft
-    // settle at the finale, never per-keystroke jitter.
+    // "預約 @yourname" — a beat — the name lifts off, and the line finishes
+    // "在 @iMoney 預約". The box is frozen at the widest line with the text
+    // centred inside it, so the column never changes width and the mark
+    // above cannot move: not per keystroke, not at the finale.
     (() => {
       const cta = document.querySelector('.cosmos-cta');
       const el = cta && cta.querySelector('.cta-text');
       if (!el) return;
-      const P1 = '預約 @yourname', DEL = 12, P2 = '現在就預約', FINAL = '現在就預約';
+      const P1 = '預約 @yourname', DEL = 12, P2 = '在 @iMoney 預約', FINAL = '在 @iMoney 預約';
+      const done = () => { cta.classList.remove('typing'); cta.classList.add('typed'); };
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        el.textContent = FINAL;
-        cta.classList.add('typed'); return;
+        el.textContent = FINAL; done(); return;
       }
       const w1 = el.getBoundingClientRect().width;
       el.textContent = FINAL;
@@ -111,12 +111,6 @@
       el.style.minWidth = Math.ceil(Math.max(w1, w2)) + 'px';
       el.textContent = '';
       cta.classList.add('typing');
-      const done = () => {
-        cta.classList.remove('typing');
-        el.style.transition = 'min-width .38s cubic-bezier(.2,.8,.2,1)';
-        el.style.minWidth = Math.ceil(w2) + 'px';
-        cta.classList.add('typed');
-      };
       const typeOut = (base, add, i, next) => {
         el.textContent = base + add.slice(0, ++i);
         if (i < add.length) setTimeout(() => typeOut(base, add, i, next), 58 + Math.random() * 46);
