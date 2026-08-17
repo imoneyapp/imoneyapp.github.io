@@ -41,15 +41,25 @@
          margin: clamp(30px, 4.6vh, 52px) 0 10px; }
     .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px); margin: 0 0 28px; }
 
-    .row { display: flex; gap: 10px; max-width: 520px; width: 100%; margin: 0 auto; }
-    .field { flex: 1; display: flex; align-items: center; gap: 3px; background: var(--ink-raised);
-             border: 1px solid var(--hairline); border-radius: 16px; padding: 0 18px; }
-    .field:focus-within { border-color: var(--accent); }
-    .field span { color: var(--bone-faint); font-size: 18px; }
+    .row { display: flex; gap: 10px; max-width: 560px; width: 100%; margin: 0 auto; }
+    /* A lit well rather than a dark box. The old field was the same value as
+       the page, so it read as decoration — this one is glass over ink, with
+       a brighter rim, so it's obvious it's the thing you fill in. */
+    .field { flex: 1; display: flex; align-items: center; gap: 4px;
+             background: rgba(244,241,234,.055);
+             border: 1px solid rgba(244,241,234,.20); border-radius: 18px; padding: 0 22px;
+             box-shadow: inset 0 1px 0 rgba(244,241,234,.06);
+             transition: border-color .2s, background .2s; }
+    .field:hover { background: rgba(244,241,234,.075); }
+    .field:focus-within { border-color: var(--accent); background: rgba(244,241,234,.09); }
+    .field span { color: var(--bone-dim); font-size: 21px; }
     input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--bone);
-            font: 18px/1 inherit; padding: 18px 0; }
-    button { background: var(--bone); color: var(--ink); border: 0; border-radius: 16px;
-             padding: 18px 26px; font: 600 17px/1 inherit; cursor: pointer; white-space: nowrap; }
+            font: 21px/1 inherit; padding: 23px 0; }
+    /* The placeholder is the instruction — dim to the point of invisible
+       was the reason the field didn't read as a field. */
+    input::placeholder { color: var(--bone-faint); opacity: 1; }
+    button { background: var(--bone); color: var(--ink); border: 0; border-radius: 18px;
+             padding: 23px 30px; font: 600 18px/1 inherit; cursor: pointer; white-space: nowrap; }
     button:disabled { opacity: .4; cursor: default; }
 
     .status { font-size: 14px; color: var(--bone-faint); margin-top: 16px; min-height: 20px; }
