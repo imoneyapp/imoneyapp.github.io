@@ -37,14 +37,14 @@
 .face {
   position: absolute; inset: 0; border-radius: 4.4%/7%; overflow: hidden;
   backface-visibility: hidden; -webkit-backface-visibility: hidden;
-  border: 1px solid rgba(168,216,210,.35);
-  box-shadow: 0 26px 60px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.12) inset;
-  /* The planet's own light, run across the card: teal at the top of the
-     sweep through lavender and pink to the deep blue the nightside falls
-     into. Sampled from the photograph, not invented. */
+  border: 1px solid rgba(244,241,234,.28);
+  box-shadow: 0 26px 60px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.18) inset;
+  /* Brushed silver: neutral greys with one cool bright band, the way sheet
+     metal catches a single light. Neutral so the engraving carries the
+     card, and it sits quietly against both the planet and the ink page. */
   background: linear-gradient(128deg,
-    #a9d6d0 0%, #6ea9a6 20%, #7f90b2 40%, #b18fbe 55%,
-    #e9a89f 72%, #7d8ba0 88%, #465e6b 100%);
+    #e8e6e1 0%, #b9b7b2 18%, #8e8d89 36%, #d8d6d1 52%,
+    #f2f0eb 60%, #a7a5a1 76%, #6f6e6b 92%, #555452 100%);
 }
 .face.back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
 .face.back img { width: 34%; opacity: .5;
