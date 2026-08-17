@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reserve @yourname — iMoney (pearl)</title>
+  <meta name="description" content="Spending is the art of knowing yourself. Claim your name on iMoney before it launches.">
+  <meta property="og:title" content="Reserve @yourname on iMoney">
+  <meta property="og:description" content="Spending is the art of knowing yourself.">
+  <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="/assets/appicon.png">
+  <link rel="apple-touch-icon" href="/assets/appicon.png">
+  <link rel="stylesheet" href="/assets/card.css">
+  <link rel="stylesheet" href="/assets/orb.css">
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0; min-height: 100svh; background: var(--ink); color: var(--bone);
+      font: 17px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 28px 24px 0; text-align: center;
+    }
+    /* Wide. The card is the page, so the column is sized to give the card
+       room rather than to keep a paragraph readable. */
+    .wrap { width: 100%; max-width: 760px; flex: 1; display: flex; flex-direction: column; }
+
+    header { display: flex; align-items: center; gap: 9px; align-self: flex-start; }
+    header img { height: 26px; }
+    header b { font-size: 17px; font-weight: 600; letter-spacing: -.2px; }
+
+    /* The card is the hero, but the field is the only thing to DO here —
+       so the card is sized from the height left over rather than a fixed
+       cap. Tall screen: big card. Laptop: it gives way so the form stays
+       above the fold. 1.586 is the card's aspect ratio. */
+    /* Square, so it's sized off whichever runs out first — height on a
+       laptop, width on a phone. */
+    .orb-scene { margin: min(7vh, 58px) auto 0;
+                 max-width: min(100%, 420px, calc(100svh - 430px)); }
+
+    h1 { font-size: clamp(32px, 5.6vw, 54px); font-weight: 700; letter-spacing: -1.5px;
+         margin: clamp(30px, 4.6vh, 52px) 0 10px; }
+    .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px); margin: 0 0 28px; }
+
+    .row { display: flex; gap: 10px; max-width: 400px; width: 100%; margin: 0 auto; }
+    /* A lit well rather than a dark box. The old field was the same value as
+       the page, so it read as decoration — this one is glass over ink, with
+       a brighter rim, so it's obvious it's the thing you fill in. */
+    .field { flex: 1; display: flex; align-items: center; gap: 4px;
+             background: rgba(244,241,234,.055);
+             border: 1px solid rgba(244,241,234,.20); border-radius: 18px; padding: 0 22px;
+             box-shadow: inset 0 1px 0 rgba(244,241,234,.06);
+             transition: border-color .2s, background .2s; }
+    .field:hover { background: rgba(244,241,234,.075); }
+    .field:focus-within { border-color: var(--accent); background: rgba(244,241,234,.09); }
+    .field span { color: var(--bone-dim); font-size: 21px; }
+    input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--bone);
+            font: 21px/1 inherit; padding: 23px 0; }
+    /* The placeholder is the instruction — dim to the point of invisible
+       was the reason the field didn't read as a field. */
+    input::placeholder { color: var(--bone-faint); opacity: 1; }
+    button { background: var(--bone); color: var(--ink); border: 0; border-radius: 18px;
+             padding: 23px 30px; font: 600 18px/1 inherit; cursor: pointer; white-space: nowrap; }
+    button:disabled { opacity: .4; cursor: default; }
+
+    .status { font-size: 14px; color: var(--bone-faint); margin-top: 16px; min-height: 20px; }
+    .status.bad { color: var(--negative); }
+    .status.good { color: var(--positive); }
+
+
+    footer { margin-top: auto; padding: 34px 0 24px; font-size: 13px; color: var(--bone-faint); }
+    .lang { margin-bottom: 12px; }
+    footer a { color: var(--bone-faint); text-decoration: none; }
+    footer a:hover { color: var(--bone-dim); }
+    footer .sep { opacity: .4; margin: 0 8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="/assets/logo-mark.png" alt="">
+      <b>iMoney</b>
+    </header>
+
+    <!-- The card is the whole page. It carries the mark, and the handle
+         appears on it live as you type — you watch your name land on the
+         object before you commit to anything. -->
+    <div class="orb-scene">
+      <div class="orb-float">
+        <div class="orb" id="orb">
+          <div class="orb-face">
+            <div class="orb-handle placeholder" id="card-handle">@yourname</div>
+            <div class="orb-sub">Pre-launch · August 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h1 id="headline">Reserve <span id="head-handle">@yourname</span></h1>
+    <p class="slogan">A money app that does NOT read your bank.</p>
+
+    <form class="row" id="form">
+      <label class="field">
+        <span>@</span>
+        <input id="handle" placeholder="yourname" autocapitalize="none" autocorrect="off"
+               spellcheck="false" maxlength="20" aria-label="Your handle">
+      </label>
+      <button id="go" type="submit" disabled>Reserve</button>
+    </form>
+    <p class="status" id="status"></p>
+
+    <footer>
+      <div class="lang"><a href="/zh/">繁體中文</a></div>
+      <a href="/privacy/">Privacy</a><span class="sep">·</span>
+      <a href="/support/">Support</a><span class="sep">·</span>
+      <a href="mailto:upappco@gmail.com">Contact</a>
+    </footer>
+  </div>
+
+  <script>
+    const QUOTES = [
+      'Designed to replace your notebook.',
+      'A better relationship with your money.',
+      'Spending is the art of knowing yourself.',
+      'Minimal. Social. Weirdly addictive.'
+    ];
+    document.getElementById('card-quote').textContent =
+      QUOTES[Math.floor(Math.random() * QUOTES.length)];
+
+    const SB = 'https://cpsdkarncveeemrfmkll.supabase.co';
+    const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc2RrYXJuY3ZlZWVtcmZta2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NzQ3NzAsImV4cCI6MjA5NjE1MDc3MH0.zzHVArTaz2OdW1pYEzMIlrgcyuXWm4MNnR-bizyRhdY';
+
+    const input = document.getElementById('handle');
+    const card  = document.getElementById('card-handle');
+    const go    = document.getElementById('go');
+    const status = document.getElementById('status');
+    const DEFAULT = '';
+
+    const clean = v => v.trim().toLowerCase().replace(/^@/, '').replace(/[^a-z0-9_]/g, '');
+
+    input.addEventListener('input', () => {
+      const h = clean(input.value);
+      if (h !== input.value.trim().toLowerCase().replace(/^@/, '')) input.value = h;
+      const shown = '@' + (h || 'yourname');
+      card.textContent = shown;
+      card.classList.toggle('placeholder', !h);
+      document.getElementById('head-handle').textContent = shown;
+      go.disabled = h.length < 2;
+      status.className = 'status';
+      if (!h.length)         { status.textContent = DEFAULT; }
+      else if (h.length < 2) { status.textContent = 'At least 2 characters.'; }
+      else                   { check(h); }
+    });
+
+    let checkTimer, checking = '';
+    function check(h) {
+      clearTimeout(checkTimer);
+      status.textContent = 'Checking…';
+      checkTimer = setTimeout(async () => {
+        checking = h;
+        try {
+          const res = await fetch(SB + '/rest/v1/rpc/is_handle_taken', {
+            method: 'POST',
+            headers: { apikey: KEY, Authorization: 'Bearer ' + KEY,
+                       'Content-Type': 'application/json' },
+            body: JSON.stringify({ target_handle: h })
+          });
+          const taken = await res.json();
+          if (checking !== h || clean(input.value) !== h) return;   // stale
+          status.className = 'status' + (taken ? ' bad' : ' good');
+          status.textContent = (taken ? '@%s is taken. Try another?' : '@%s is free.').replace('%s', h);
+          go.disabled = !!taken;
+        } catch {
+          // Never claim "taken" on a network blip — let them try to reserve
+          // and be told by the server, which can't be wrong about it.
+          if (checking !== h) return;
+          status.className = 'status';
+          status.textContent = DEFAULT;
+          go.disabled = false;
+        }
+      }, 350);
+    }
+
+    // Auth lives on /reserve — one place, one set of redirect URLs. The
+    // handle rides along so nobody has to type it twice.
+    document.getElementById('form').addEventListener('submit', e => {
+      e.preventDefault();
+      const h = clean(input.value);
+      if (h.length < 2 || go.disabled) return;
+      location.href = '/reserve/?h=' + encodeURIComponent(h);
+    });
+  </script>
+  <script>
+    // The highlight follows your pointer — a metal ball catching your light
+    // is the one interaction a sphere asks for, and it needs no tilt.
+    (() => {
+      const orb = document.getElementById('orb');
+      if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      orb.addEventListener('pointermove', e => {
+        const r = orb.getBoundingClientRect();
+        orb.style.setProperty('--sx', ((e.clientX - r.left) / r.width  * 100) + '%');
+        orb.style.setProperty('--sy', ((e.clientY - r.top)  / r.height * 100) + '%');
+      });
+      orb.addEventListener('pointerleave', () => {
+        orb.style.removeProperty('--sx'); orb.style.removeProperty('--sy');
+      });
+    })();
+  </script>
+</body>
+</html>

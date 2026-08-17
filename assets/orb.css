@@ -1,0 +1,66 @@
+/* The pearl. Chrome built from layered radial gradients rather than an
+   image, so it can respond to the pointer and stay crisp at any size — a
+   photograph of a ball can do neither.
+   Spheres are already iMoney's language: the achievements page is pearls
+   and milestone spheres. A card is borrowed from fintech; this isn't. */
+.orb-scene { container-type: inline-size; width: 100%;
+             display: flex; justify-content: center; }
+/* width:100% matters — as a bare flex item this shrank to its text and the
+   orb's own width:100% resolved against nothing, collapsing the sphere. */
+.orb-float { width: 100%; animation: orb-bob 7s ease-in-out infinite; }
+@keyframes orb-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+
+.orb {
+  position: relative; width: 100%; aspect-ratio: 1; border-radius: 50%;
+  /* Base metal: dark equator, light pole, warm bounce along the bottom rim
+     — the three things that make a sphere read as metal rather than as a
+     grey circle. */
+  background:
+    radial-gradient(circle at 32% 26%, #fdfcfa 0%, #cfc7b8 14%, #8e8577 38%, #4a453d 68%, #23211d 100%),
+    radial-gradient(circle at 70% 88%, rgba(217,179,106,.55) 0%, rgba(217,179,106,0) 42%);
+  box-shadow:
+    inset -14px -18px 34px rgba(0,0,0,.55),
+    inset 10px 12px 26px rgba(255,255,255,.28),
+    0 30px 60px rgba(0,0,0,.6);
+  isolation: isolate;
+}
+
+/* The specular — a moving highlight, not a moving object. The engraving has
+   to stay still and readable; it's the LIGHT that travels. A rotating
+   sphere would carry the name out of view, which is the one thing it must
+   not do. */
+.orb::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at var(--sx, 34%) var(--sy, 24%),
+              rgba(255,255,255,.92) 0%, rgba(255,255,255,.35) 9%, rgba(255,255,255,0) 26%);
+  transition: background .25s ease-out;
+  pointer-events: none;
+}
+/* A second, dimmer catch on the opposite side — real metal picks up the
+   room, not just the key light. */
+.orb::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(ellipse 50% 26% at 62% 92%,
+              rgba(255,240,214,.34) 0%, rgba(255,240,214,0) 70%);
+  pointer-events: none;
+}
+
+.orb-face { position: absolute; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 2cqw; z-index: 1;
+            padding: 0 16%; text-align: center; }
+
+/* Engraved into the metal: dark bite above, light catch below. Same rule as
+   the card, but it has to work over a surface that goes light-to-dark, so
+   the edges are stronger. */
+.orb-handle {
+  font-size: clamp(20px, 11cqw, 78px); font-weight: 700; letter-spacing: -1.5px;
+  color: rgba(28,25,21,.82); line-height: 1;
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.42), 0 1.5px 0 rgba(255,255,255,.5);
+}
+.orb-handle.placeholder { color: rgba(28,25,21,.42); }
+.orb-sub { font: 700 clamp(7px, 1.7cqw, 12px)/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+           letter-spacing: 1.6px; text-transform: uppercase; color: rgba(28,25,21,.5);
+           text-shadow: 0 -1px 0 rgba(0,0,0,.3), 0 1px 0 rgba(255,255,255,.42); }
+
+@media (prefers-reduced-motion: reduce) { .orb-float { animation: none; } }
