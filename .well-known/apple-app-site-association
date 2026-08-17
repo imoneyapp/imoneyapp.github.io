@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["DNAQSGZS6D.co.up.imoney"],
+        "components": [
+          { "/": "/i", "comment": "Shared-profile invite landing" },
+          { "/": "/i/*", "comment": "Shared-profile invite landing" },
+          { "/": "/reserve", "comment": "Handle reservation" }
+        ]
+      }
+    ]
+  }
+}
