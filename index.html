@@ -33,6 +33,17 @@
       position: relative; width: 100%; height: 100svh;
       background: #000 url(/assets/planet.jpg) right center / cover no-repeat;
     }
+    /* The living version, desktop only: phones keep the portrait still —
+       battery, data, and iOS low-power mode blocks autoplay anyway, which
+       would leave a frozen frame where a designed image could be. The
+       poster and the background are the same planet, so a browser that
+       refuses the video shows the photograph and nobody sees a hole. */
+    .cosmos-video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: right center;
+    }
+    @media (max-width: 700px) { .cosmos-video { display: none; } }
+    @media (prefers-reduced-motion: reduce) { .cosmos-video { display: none; } }
     .cosmos-inner {
       position: absolute; top: 50%; left: clamp(24px, 12vw, 220px);
       transform: translateY(-50%);
@@ -72,6 +83,8 @@
 </head>
 <body>
   <section class="cosmos" aria-label="iMoney">
+    <video class="cosmos-video" autoplay muted loop playsinline
+           poster="/assets/planet.jpg" src="/assets/planet.mp4"></video>
     <div class="cosmos-inner">
       <img class="cosmos-mark" src="/assets/logo-mark.png" alt="">
       <a class="cosmos-cta" href="/claim/">Reserve @yourname</a>
