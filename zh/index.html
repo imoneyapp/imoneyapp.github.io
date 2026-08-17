@@ -30,8 +30,11 @@
       background: #000 url(/assets/planet.jpg) right center / cover no-repeat;
     }
     .cosmos-inner {
-      position: absolute; top: 50%; left: clamp(24px, 12vw, 220px);
-      transform: translateY(-50%);
+      /* Centred in the dark: the planet's lit limb starts ~55% across the
+         photo, so the column sits at half of that — the middle of the
+         blank space, not hugging the corner. */
+      position: absolute; top: 50%; left: 27vw;
+      transform: translate(-50%, -50%);
       display: flex; flex-direction: column; align-items: center; gap: 16px;
     }
     /* Not a flicker — a breath. The mark fades from near-transparent to
@@ -62,7 +65,9 @@
     .cta-enter {
       position: absolute; left: calc(100% + 5px); top: 50%;
       transform: translateY(-50%);
-      width: 1.15em; height: 1.15em; border-radius: 50%;
+      /* 1.18em IS the text's line box (measured 23.6px at 20px type), so
+         the circle's top and bottom sit exactly on the glyph bounds. */
+      width: 1.18em; height: 1.18em; border-radius: 50%;
       border: 1px solid rgba(244,241,234,.35);
       display: flex; align-items: center; justify-content: center;
       transition: border-color .25s, background .25s, color .25s;
@@ -85,9 +90,9 @@
        is now the whole door. */
     @media (hover: none) {
       .cosmos-cta { pointer-events: none; }
-      .cosmos-cta .cta-enter { pointer-events: auto;
-                               width: 1.3em; height: 1.3em; }
-      .cta-enter svg { width: .56em; height: .56em; }
+      /* Same 1.18em as desktop: aligned to the text is also the smaller
+         circle asked for. */
+      .cosmos-cta .cta-enter { pointer-events: auto; }
     }
 
     @media (prefers-reduced-motion: reduce) { .cosmos-mark { animation: none; } }
