@@ -29,6 +29,23 @@
    as depth. Degrees stay small; it is a lean, not a flip. */
 .card { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); }
 
+/* Phones: NO 3D. A perspective transform makes iOS rasterize the card's
+   layer at reduced resolution — that is the blur on the engraving. Touch
+   devices get a flat, crisp card with a small press on tap instead. */
+@media (hover: none) {
+  .scene { perspective: none; }
+  .card { transform: none; transform-style: flat; transition: transform .18s ease; }
+  .card:active { transform: scale(.985); }
+}
+
+/* The plate: one line on a desktop card, two on a phone card. The <br>
+   only exists below 460px of card. */
+.plate-br { display: none; }
+@container (max-width: 460px) {
+  .plate-br { display: inline; }
+  .card-foot .card-meta { white-space: normal; text-align: right; }
+}
+
 .card.turning { animation: spin 26s linear infinite; transform: none; }
 .card.turning:hover, .card.turning:active { animation-play-state: paused; }
 @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }

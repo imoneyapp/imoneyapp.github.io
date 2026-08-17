@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=21">
+  <link rel="stylesheet" href="/assets/card.css?v=22">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"MobileApplication","name":"iMoney",
    "alternateName":["iMoney 記帳","iMoney Money Tracker"],
@@ -237,6 +237,7 @@
                 <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
                 <div class="card-foot">
                   <div class="quote engraved">Designed to replace your estimate.</div>
+                  <div class="card-meta engraved">Open to <br class="plate-br">reserve</div>
                 </div>
               </div>
             </div>
@@ -407,13 +408,18 @@
         }
         requestAnimationFrame(tick);
       };
-      video.pause();
-      // Safari won't paint frame zero until asked; the nudge also flips
-      // the layer visible only once there is a real frame to show.
-      video.addEventListener('loadeddata', () => {
-        video.currentTime = 0.001;
-        video.classList.add('ready');
-      }, { once: true });
+      // Safari renders nothing until play() has run once — loadeddata
+      // alone may never even fire for a video nobody plays. Prime it:
+      // play, pause immediately, then hand the clock to the scroll.
+      const ready = () => { video.currentTime = 0.001; video.classList.add('ready'); };
+      const primed = video.play();
+      if (primed && primed.then) {
+        primed.then(() => { video.pause(); ready(); })
+              .catch(() => video.addEventListener('loadeddata', ready, { once: true }));
+      } else {
+        video.pause();
+        video.addEventListener('loadeddata', ready, { once: true });
+      }
       requestAnimationFrame(tick);
     })();
   </script>
