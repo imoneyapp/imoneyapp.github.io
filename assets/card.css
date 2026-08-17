@@ -105,9 +105,17 @@
              align-items: flex-end;
              align-items: last baseline;
              gap: 14px; flex: 0 0 auto; min-height: 0; }
-/* A line worth reading, not a form field. It gets the room a caption
-   would have wasted on a label nobody needed. */
-.card-foot .quote { font: 500 clamp(10px, 1.95cqw, 15px)/1.4 inherit;
+/* Set to exactly the same size as the plate opposite it — same clamp, same
+   line-height — so the two ends of the foot read as one row of engraving
+   rather than a sentence with a caption stuck next to it. Weight and case
+   still differ: this one is meant to be read, RESERVED is meant to be
+   glanced at. */
+/* Longhand, not `font: 500 <size>/1.5 inherit`. `inherit` is not a family
+   name, so that shorthand is invalid and browsers threw the whole thing
+   away — which is why this line had been rendering at the body's 17px/400
+   the entire time, and why it looked so much bigger than RESERVED. */
+.card-foot .quote { font-weight: 500; font-size: clamp(9px, 1.6cqw, 12px);
+                    line-height: 1.5; font-family: inherit;
                     color: rgba(11,11,12,.6); max-width: 62%; }
 .card-foot .right { text-align: right; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
                     font-size: clamp(9px, 1.55cqw, 12.5px); color: rgba(11,11,12,.55);
@@ -117,11 +125,11 @@
    card is much wider than the page on desktop and vw units broke that. */
 .scene { container-type: inline-size; }
 
-/* On a phone-sized card the line is set against 62% of the width, which
-   throws it into three cramped lines right under the handle. Give it most
-   of the card and it settles into two. */
+/* On a phone-sized card 62% is too tight for the line even at this size —
+   give it most of the card. No font-size override here: matching RESERVED
+   is the point, and the shared clamp already handles small cards. */
 @container (max-width: 460px) {
-  .card-foot .quote { max-width: 80%; font-size: 11px; line-height: 1.35; }
+  .card-foot .quote { max-width: 80%; }
 }
 /* Smaller still and it has nowhere to go — three lines even at that size,
    and the foot pushes up through the handle. The name is the point of the
