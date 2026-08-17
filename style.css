@@ -35,7 +35,10 @@ main { max-width: 760px; margin: 0 auto; padding: clamp(104px, 18vh, 168px) 24px
 header.site { position: absolute; top: 26px; left: clamp(24px, 3vw, 40px);
               display: flex; align-items: center; gap: 9px; }
 header.site a { color: var(--bone); text-decoration: none; font-weight: 600;
-                font-size: 17px; letter-spacing: -.2px; border-bottom: 0; }
+                font-size: 17px; letter-spacing: -.2px; border-bottom: 0;
+                /* SF Rounded, matching the app's wordmark; ui-rounded is the
+                   system route to it and falls back gracefully elsewhere. */
+                font-family: ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", system-ui, sans-serif; }
 /* Direct child only. `header.site a::before` also matched the language link
    and stamped a second logo next to 繁體中文. */
 header.site > a::before {

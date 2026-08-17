@@ -33,7 +33,11 @@
     #brand { display: flex; align-items: center; gap: 9px; background: none; border: 0;
              padding: 0; margin: 0; color: inherit; font: inherit; cursor: default; }
     #brand img { height: 26px; }
-    #brand b { font-size: 17px; font-weight: 600; letter-spacing: -.2px; }
+    /* The app's wordmark is SF Rounded (Typography.display). ui-rounded is
+       how the web asks the system for that face — Safari resolves it, other
+       browsers fall back to the plain system sans. */
+    #brand b { font-size: 17px; font-weight: 600; letter-spacing: -.2px;
+               font-family: ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", system-ui, sans-serif; }
     /* Nothing announces itself. The mark just becomes touchable, and the
        only tell is the cursor and a breath of light on hover. */
     #brand.live { cursor: pointer; transition: opacity .3s; }
