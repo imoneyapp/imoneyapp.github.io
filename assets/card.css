@@ -20,7 +20,15 @@
 .card {
   position: relative; width: 100%; aspect-ratio: 1.586;
   transform-style: preserve-3d;
-  transition: transform .6s cubic-bezier(.2,.8,.2,1);
+  transition: transform .55s cubic-bezier(.2,.8,.2,1);
+}
+/* Level at rest, tilts toward you on hover. The angle is a response to
+   being touched rather than a pose it holds — a card that's permanently
+   askew reads as a mockup, and it costs legibility on the handle, which
+   is the only line that matters here. No hover on touch, so phones just
+   get the level card. */
+@media (hover: hover) {
+  .card:not(.turning):hover { transform: rotateX(6deg) rotateY(-11deg) scale(1.03); }
 }
 .card.turning { animation: spin 26s linear infinite; transform: none; }
 .card.turning:hover, .card.turning:active { animation-play-state: paused; }
