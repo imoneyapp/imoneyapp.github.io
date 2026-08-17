@@ -22,7 +22,13 @@
     /* ---- The planet hero. One page again: the CTA scrolls to #reserve,
        and when a clean loop video exists it can sit here scroll-scrubbed —
        the structure is ready for it. ---- */
-    html { scroll-behavior: smooth; }
+    /* One screen at a time: each section is a snap point and a scroll
+       always settles on one of them — nobody can rest in the seam between
+       the planet and the card. snap-stop keeps a hard fling from blowing
+       through a screen entirely. */
+    html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+    .cosmos { scroll-snap-align: start; scroll-snap-stop: always; }
+    .wrap { scroll-snap-align: start; scroll-snap-stop: always; }
     .cosmos {
       position: relative; width: 100%; height: 100svh;
       background: #000 url(/assets/planet.jpg) right center / cover no-repeat;
