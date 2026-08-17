@@ -36,10 +36,13 @@
   const show = () => {
     if (!veil) build();
     open = true;
-    // Next frame, so the element is in the document before the class that
-    // transitions it — set both together and there's nothing to animate
-    // from, and it just appears.
-    requestAnimationFrame(() => veil.classList.add('open'));
+    // Force layout so the transition has a "from" state to leave. This was
+    // a requestAnimationFrame callback, which is the usual way to do it and
+    // is wrong here: rAF is paused in a hidden or backgrounded tab, so the
+    // veil got built and then never opened. Reading offsetWidth is
+    // synchronous and always happens.
+    void veil.offsetWidth;
+    veil.classList.add('open');
     document.body.style.overflow = 'hidden';
   };
 

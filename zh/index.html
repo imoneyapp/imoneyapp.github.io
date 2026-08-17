@@ -11,7 +11,6 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="/assets/card.css">
-  <link rel="stylesheet" href="/assets/orb.css">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     /* One column, vertically centred between a pinned header and a pinned
@@ -27,7 +26,34 @@
       padding: 0 24px; text-align: center;
     }
     .wrap { width: 100%; max-width: 760px; min-height: 100svh;
-            display: flex; flex-direction: column; }
+            display: flex; flex-direction: column; position: relative; z-index: 1; }
+
+    /* The sea, as ground rather than picture. Fixed so it doesn't travel
+       with the content, dimmed hard because the page's type is bone-white
+       and the fog in that photograph is nearly white — undimmed, the
+       headline vanishes into it. What survives is the horizon and the
+       reflection, which is all it needs to contribute: somewhere for the
+       card to be floating.
+
+       Only the fog is in frame — scaled up and anchored to the top, above
+       the horizon. The photograph's own sphere sits at its centre and its
+       reflection sits below that; both of them, cropped in, surfaced as
+       unexplained dark shapes around the card, two objects arguing over
+       the same space. The fog was the part doing the work anyway: it's
+       what gives the card somewhere to be, and it carries the light. */
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: -2;
+      background: url(/assets/sea.jpg) 50% 0% / auto 260% no-repeat;
+      opacity: .34; filter: grayscale(.45);
+    }
+    /* Vignette: pins the light to the middle so the corners stay ink and
+       the header and footer keep something to sit on. */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background: radial-gradient(ellipse 82% 68% at 50% 46%,
+                  rgba(11,11,12,0) 0%, rgba(11,11,12,.62) 66%, rgba(11,11,12,.96) 100%);
+    }
+
 
     header { display: flex; align-self: flex-start; padding: 26px 0 0; flex: 0 0 auto; }
     #brand { display: flex; align-items: center; gap: 9px; background: none; border: 0;
@@ -50,13 +76,19 @@
        margins that used to stack up. */
     main { flex: 1 1 auto; min-height: 0; overflow: visible;
            display: flex; flex-direction: column; align-items: center;
-           justify-content: center; gap: clamp(16px, 3vh, 38px);
+           justify-content: center; gap: clamp(24px, 3.6vh, 40px);
            padding: clamp(16px, 3vh, 40px) 0; }
 
-    /* Height, not width — see assets/orb.css. It asks for 34vh and gives
-       ground first when the column is tight, so the pearl gets smaller
-       rather than the page getting longer. */
-    .orb-scene { height: min(34vh, 400px); max-width: 86vw; }
+    /* Sized by HEIGHT with width following from the aspect ratio, so the
+       card is the first thing to give ground when the column is tight — it
+       gets smaller rather than the page getting longer. 1.586 is a real
+       card. */
+    /* The width cap has to be expressed as a height too, or the box stays
+       31vh tall while the card inside it is only 86vw/1.586 — 60px of dead
+       space under the card on a phone, which reads as a spacing mistake. */
+    .scene { height: min(31vh, 300px, calc(86vw / 1.586));
+             aspect-ratio: 1.586; width: auto;
+             flex: 0 1 auto; min-height: 0; }
 
     h1 { font-size: clamp(30px, 5.2vw, 52px); font-weight: 700; letter-spacing: -1.5px;
          margin: 0; }
@@ -110,20 +142,28 @@
     </header>
 
     <main>
-      <!-- The pearl is the whole page. It carries the mark, and the handle is
-           engraved on it live as you type — you watch your name land on the
+      <!-- The card is the whole page. It carries the mark, and the handle
+           appears on it live as you type — you watch your name land on the
            object before you commit to anything. -->
-      <div class="orb-scene">
-        <div class="orb-float">
-          <div class="orb" id="orb">
-            <div class="orb-face">
-              <img class="orb-logo" src="/assets/logo-ink-star.png" alt="iMoney">
-              <div class="orb-handle placeholder" id="card-handle">@yourname</div>
-              <div class="orb-sub">August 2026</div>
+      <div class="scene">
+        <div class="float">
+          <div class="card">
+            <div class="face front">
+              <div class="card-inner">
+                <div class="card-top">
+                  <div class="card-meta left engraved">上線前</div>
+                  <div class="card-meta engraved">AUGUST<br>2026</div>
+                </div>
+                <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
+                <div class="card-foot">
+                  <div class="quote engraved" id="card-quote"></div>
+                  <img class="card-logo" src="/assets/logo-ink-star.png" alt="iMoney">
+                </div>
+              </div>
             </div>
+            <div class="face back"><img src="/assets/logo-ink-star.png" alt=""></div>
           </div>
         </div>
-        <div class="orb-shadow"></div>
       </div>
 
       <div class="say">
@@ -151,6 +191,20 @@
   </div>
 
   <script>
+    // The card carries one line, picked at random. Guarded, because the
+    // element only exists on the card layout — an unguarded null here once
+    // threw and took the whole form script down with it.
+    const quote = document.getElementById('card-quote');
+    if (quote) {
+      const QUOTES = [
+        '設計來取代你的筆記本。',
+        '和金錢的關係，可以更好。',
+        '花錢，是一門認識自己的藝術。',
+        '極簡、社群，而且莫名上癮。'
+      ];
+      quote.textContent = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+    }
+
     const SB = 'https://cpsdkarncveeemrfmkll.supabase.co';
     const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc2RrYXJuY3ZlZWVtcmZta2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NzQ3NzAsImV4cCI6MjA5NjE1MDc3MH0.zzHVArTaz2OdW1pYEzMIlrgcyuXWm4MNnR-bizyRhdY';
 
@@ -214,7 +268,6 @@
       location.href = '/reserve/?lang=zh&h=' + encodeURIComponent(h);
     });
   </script>
-  <script src="/assets/orb.js"></script>
   <script src="/assets/still.js"></script>
   <script>
     (() => {

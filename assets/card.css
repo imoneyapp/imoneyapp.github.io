@@ -23,10 +23,13 @@
   transform-style: preserve-3d;
   transition: transform .55s cubic-bezier(.2,.8,.2,1);
 }
-/* Level at rest. `.tilting` was pointer-driven lean on the old landing page;
-   nothing sets it now, but it costs a line and /reserve's card still uses
-   the same base rules. */
-.card.tilting { transition: none; }
+/* Hover, not tilt. Pointer-driven lean made all four corners feel the
+   same and made the handle harder to read; this just lifts the card a
+   little and lets the shadow under it soften, which is what picking
+   something up off a table looks like. */
+.scene:hover .card { transform: translateY(-7px) scale(1.012); }
+.scene:hover .face { box-shadow: 0 38px 74px rgba(0,0,0,.66), 0 2px 0 rgba(255,255,255,.16) inset; }
+.face { transition: box-shadow .55s cubic-bezier(.2,.8,.2,1); }
 
 .card.turning { animation: spin 26s linear infinite; transform: none; }
 .card.turning:hover, .card.turning:active { animation-play-state: paused; }
