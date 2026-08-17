@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=17">
+  <link rel="stylesheet" href="/assets/card.css?v=19">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"MobileApplication","name":"iMoney",
    "alternateName":["iMoney 記帳","iMoney Money Tracker"],
@@ -28,7 +28,8 @@
        through a screen entirely. */
     html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
     .cosmos { scroll-snap-align: start; scroll-snap-stop: always; }
-    .wrap { scroll-snap-align: start; scroll-snap-stop: always; }
+    .claim-screen { position: relative; width: 100%;
+                    scroll-snap-align: start; scroll-snap-stop: always; }
     .cosmos {
       position: relative; width: 100%; height: 100svh;
       background: #000 url(/assets/planet.jpg) right center / cover no-repeat;
@@ -66,11 +67,10 @@
       margin: 0; min-height: 100svh; background: var(--ink); color: var(--bone);
       font: 17px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
       display: flex; flex-direction: column; align-items: center;
-      padding: 0 24px; text-align: center;
+      text-align: center;
     }
-    /* relative, so the absolute header pins to THIS screen's corner — the
-       hero above has the big mark and needs no second brand. */
-    .wrap { position: relative; width: 100%; max-width: 860px; height: 100svh;
+    .wrap { width: 100%; max-width: 860px; height: 100svh; margin: 0 auto;
+            padding-left: 24px; padding-right: 24px;
             display: flex; flex-direction: column;
             /* Named because the centring below has to do arithmetic on it. */
             --card-h: min(42vh, 470px, calc(92vw / 1.586)); }
@@ -204,7 +204,8 @@
     </div>
   </section>
 
-  <div class="wrap" id="reserve">
+  <section class="claim-screen" id="reserve">
+  <div class="wrap">
     <header>
       <a id="brand" href="#top">
         <img src="/assets/logo-mark.png" alt="">
@@ -258,6 +259,7 @@
       <a href="mailto:upappco@gmail.com">Contact</a>
     </footer>
   </div>
+  </section>
 
   <script>
     const SB = 'https://cpsdkarncveeemrfmkll.supabase.co';
@@ -344,14 +346,21 @@
     })();
   </script>
   <script>
-    // The sheen follows the pointer; CSS does the drawing.
+    // The card drifts a few pixels toward the pointer — motion, not light.
     (() => {
+      const scene = document.querySelector('.scene');
       const card = document.querySelector('.card');
-      if (!card || !matchMedia('(hover: hover)').matches) return;
-      card.addEventListener('pointermove', e => {
-        const r = card.getBoundingClientRect();
-        card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
-        card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      if (!scene || !card || !matchMedia('(hover: hover)').matches) return;
+      scene.addEventListener('pointermove', e => {
+        const r = scene.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;   // −.5 … .5
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.setProperty('--tx', (x * 14).toFixed(1) + 'px');
+        card.style.setProperty('--ty', (y * 10).toFixed(1) + 'px');
+      });
+      scene.addEventListener('pointerleave', () => {
+        card.style.removeProperty('--tx');
+        card.style.removeProperty('--ty');
       });
     })();
   </script>

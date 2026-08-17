@@ -21,15 +21,13 @@
 .card {
   position: relative; width: 100%; aspect-ratio: 1.586;
   transform-style: preserve-3d;
-  transition: transform .55s cubic-bezier(.2,.8,.2,1);
+  transition: transform .3s cubic-bezier(.2,.8,.2,1);
 }
-/* Hover, not tilt. Pointer-driven lean made all four corners feel the
-   same and made the handle harder to read; this just lifts the card a
-   little and lets the shadow under it soften, which is what picking
-   something up off a table looks like. */
-.scene:hover .card { transform: translateY(-7px) scale(1.012); }
-.scene:hover .face { box-shadow: 0 38px 74px rgba(0,0,0,.66), 0 2px 0 rgba(255,255,255,.16) inset; }
-.face { transition: box-shadow .55s cubic-bezier(.2,.8,.2,1); }
+/* Hover is MOTION, not light: the card drifts a few pixels toward the
+   pointer and settles back when it leaves. No rotation — tilt was tried
+   and rejected — and no painted highlights, which read as shadow tricks.
+   --tx/--ty come from a few lines of JS. */
+.card { transform: translate(var(--tx, 0px), var(--ty, 0px)); }
 
 .card.turning { animation: spin 26s linear infinite; transform: none; }
 .card.turning:hover, .card.turning:active { animation-play-state: paused; }
@@ -48,18 +46,6 @@
     #a9d6d0 0%, #6ea9a6 20%, #7f90b2 40%, #b18fbe 55%,
     #e9a89f 72%, #7d8ba0 88%, #465e6b 100%);
 }
-/* A light that follows the pointer across the metal — strongest exactly
-   where you are, so hovering a corner lights that corner. Geometry never
-   moves; tilt was tried and rejected, and a sheen is what a real card does
-   under a lamp anyway. --mx/--my come from a few lines of JS. */
-.face.front::before {
-  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%),
-              rgba(255,252,240,.22), transparent 65%);
-  opacity: 0; transition: opacity .35s;
-}
-.scene:hover .face.front::before { opacity: 1; }
-
 .face.back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
 .face.back img { width: 34%; opacity: .5;
                  filter: drop-shadow(0 1px 0 rgba(255,255,255,.25)); }
