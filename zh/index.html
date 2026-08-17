@@ -57,8 +57,8 @@
 
     /* Small, spaced, unemphatic — three asides, not three claims. */
     .creed { list-style: none; margin: clamp(30px, 5vh, 46px) 0 0; padding: 0;
-             display: flex; flex-direction: column; gap: 7px;
-             font-size: 14px; color: var(--bone-faint); }
+             display: flex; flex-direction: column; gap: 16px;
+             font-size: 14px; line-height: 1.55; color: var(--bone-faint); }
     .creed b { color: var(--bone-dim); font-weight: 600; }
 
     footer { margin-top: auto; padding: 34px 0 24px; font-size: 13px; color: var(--bone-faint); }
@@ -113,8 +113,7 @@
     <p class="status" id="status"></p>
 
     <ul class="creed">
-      <li>一個<b>不會</b>去讀你銀行帳戶的記帳 App。</li>
-      <li>就是比你的筆記本好用。</li>
+      <li>一個<b>不會</b>去讀你銀行帳戶的記帳 App。<br>單純為了取代你的筆記本而設計。</li>
       <li>你會更了解你自己。</li>
     </ul>
 
@@ -128,7 +127,7 @@
 
   <script>
     const QUOTES = [
-      '就是比你的筆記本好用。',
+      '為了取代你的筆記本而設計。',
       '更好的金錢關係。',
       '花錢，是一門認識自己的藝術。',
       '極簡。社交。還有點上癮。'

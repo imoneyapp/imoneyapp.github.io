@@ -56,8 +56,8 @@
 
     /* Small, spaced, unemphatic — three asides, not three claims. */
     .creed { list-style: none; margin: clamp(30px, 5vh, 46px) 0 0; padding: 0;
-             display: flex; flex-direction: column; gap: 7px;
-             font-size: 14px; color: var(--bone-faint); }
+             display: flex; flex-direction: column; gap: 16px;
+             font-size: 14px; line-height: 1.55; color: var(--bone-faint); }
     .creed b { color: var(--bone-dim); font-weight: 600; }
 
     footer { margin-top: auto; padding: 34px 0 24px; font-size: 13px; color: var(--bone-faint); }
@@ -112,8 +112,7 @@
     <p class="status" id="status"></p>
 
     <ul class="creed">
-      <li>A money app that does <b>not</b> read your bank.</li>
-      <li>Simply better than your notebook.</li>
+      <li>A money app that does <b>not</b> read your bank.<br>Simply designed to replace your notebook.</li>
       <li>You'll come out knowing yourself better.</li>
     </ul>
 
@@ -127,7 +126,7 @@
 
   <script>
     const QUOTES = [
-      'Simply better than your notebook.',
+      'Designed to replace your notebook.',
       'A better relationship with your money.',
       'Spending is the art of knowing yourself.',
       'Minimal. Social. Weirdly addictive.'
