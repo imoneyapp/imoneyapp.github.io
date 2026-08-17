@@ -29,10 +29,22 @@
     .wrap { width: 100%; max-width: 760px; min-height: 100svh;
             display: flex; flex-direction: column; }
 
-    header { display: flex; align-items: center; gap: 9px; align-self: flex-start;
-             padding: 26px 0 0; flex: 0 0 auto; }
-    header img { height: 26px; }
-    header b { font-size: 17px; font-weight: 600; letter-spacing: -.2px; }
+    header { display: flex; align-self: flex-start; padding: 26px 0 0; flex: 0 0 auto; }
+    #brand { display: flex; align-items: center; gap: 9px; background: none; border: 0;
+             padding: 0; margin: 0; color: inherit; font: inherit; cursor: default; }
+    #brand img { height: 26px; }
+    #brand b { font-size: 17px; font-weight: 600; letter-spacing: -.2px; }
+    /* Nothing announces itself. The mark just becomes touchable, and the
+       only tell is the cursor and a breath of light on hover. */
+    #brand.live { cursor: pointer; transition: opacity .3s; }
+    #brand.live:hover { opacity: .62; }
+
+    /* One image, edge to edge, nothing else. */
+    .still { position: fixed; inset: 0; z-index: 50; background: #0b0b0c;
+             opacity: 0; visibility: hidden; cursor: zoom-out;
+             transition: opacity .7s ease, visibility .7s; }
+    .still.open { opacity: 1; visibility: visible; }
+    .still img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     /* The hero owns the leftover height and centres in it. gap replaces the
        margins that used to stack up. */
@@ -91,8 +103,10 @@
 <body>
   <div class="wrap">
     <header>
-      <img src="/assets/logo-mark.png" alt="">
-      <b>iMoney</b>
+      <button id="brand" type="button">
+        <img src="/assets/logo-mark.png" alt="">
+        <b>iMoney</b>
+      </button>
     </header>
 
     <main>
@@ -201,6 +215,7 @@
     });
   </script>
   <script src="/assets/orb.js"></script>
+  <script src="/assets/still.js"></script>
   <script>
     (() => {
       // The ghost types itself. An empty field says "type something"; a
