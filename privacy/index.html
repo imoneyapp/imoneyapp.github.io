@@ -44,8 +44,8 @@
   <p>We only collect data you give us directly through the app.</p>
   <p><strong>From your sign-in provider (Apple or Google):</strong></p>
   <ul>
-    <li>Your <strong>name</strong> (Apple only returns this once, on the first sign-in)</li>
-    <li>Your <strong>email address</strong> (or Apple's private relay email if you choose that option)</li>
+    <li>Your <strong>name</strong></li>
+    <li>Your <strong>email address</strong> (or Apple's private relay)</li>
     <li>A <strong>user ID</strong> that ties you to your iMoney account</li>
   </ul>
   <p><strong>From you, in the app:</strong></p>
@@ -54,24 +54,24 @@
     <li><strong>Income entries</strong> — amounts and sources you optionally log. Always private; never visible to friends</li>
     <li><strong>Profile avatar</strong> — only if you upload one</li>
     <li><strong>Profile basics</strong> — your @handle, monthly budget, default currency, payment-method labels</li>
-    <li><strong>Birthday</strong> — optional, and you can skip it. We use it to mark your day, and your birth year contributes to the age-range statistics described in section 4. Never shown to other users as anything but a birthday.</li>
+    <li><strong>Birthday</strong> — optional. It marks your day, and your birth year feeds the age-range statistics in section 4. Other users only ever see the day, never the year.</li>
     <li><strong>Friend graph</strong> — the friends you've added, friend requests sent and received, debts owed between you and friends, group events you're part of</li>
-    <li><strong>Support messages</strong> — what you write to us through Settings → Contact, so we can reply and improve the app</li>
-    <li><strong>Device token for push notifications</strong> — a string Apple assigns to your install of the app, so we can send pushes to your phone. Not used to track you across apps or sites.</li>
+    <li><strong>Support messages</strong> — what you write to us through Settings → Contact</li>
+    <li><strong>Device token for push notifications</strong> — a string Apple assigns to your install of the app, so we can send pushes to your phone.</li>
   </ul>
   <p><strong>From your device's operating system:</strong></p>
   <ul>
-    <li>Standard crash reports, performance data, and basic API request logs — used for debugging, keeping the app fast, and improving features. These don't include your transactions or personal data.</li>
+    <li>Standard crash reports, performance data, and basic API request logs — used for debugging and improving the app. Never your transactions or personal data.</li>
   </ul>
 
   <h2>3. What we DON'T collect</h2>
   <ul>
     <li>We don't read your <strong>contacts</strong> or <strong>calendar</strong>.</li>
     <li>We don't track your <strong>location</strong>.</li>
-    <li>We don't connect to your <strong>bank accounts</strong> or <strong>credit cards</strong>. iMoney is a manual tracker — every number is one you typed. Payment-method labels are just names you write yourself.</li>
-    <li>We don't use <strong>third-party analytics</strong> (no Google Analytics, Mixpanel, Amplitude, Segment, etc.).</li>
-    <li>We don't use <strong>advertising SDKs</strong> or share data with advertisers. There are no ads in iMoney and we have no plans to add them.</li>
-    <li>We don't track you <strong>across other apps or websites</strong> (so there's no App Tracking Transparency prompt — you'd never see it anyway).</li>
+    <li>We don't connect to your <strong>bank accounts</strong> or <strong>credit cards</strong>. iMoney is a manual tracker — every number is one you typed.</li>
+    <li>We don't use <strong>third-party analytics</strong>.</li>
+    <li>We don't use <strong>advertising SDKs</strong> or share data with advertisers. There are no ads in iMoney.</li>
+    <li>We don't track you <strong>across other apps or websites</strong>.</li>
   </ul>
 
   <h2>4. How we use your data</h2>
@@ -87,11 +87,8 @@
     out of non-essential email anytime via the unsubscribe link or
     upappco@gmail.com.</li>
     <li><strong>Personalize finance suggestions</strong> — we analyze your own
-    spending patterns to offer recommendations that are realistic for you
-    (e.g. a saving tip built from the categories your money actually goes
-    to), instead of one-size-fits-all advice. These are computed from your
-    data, for you alone — never from ads, data sales, or other users'
-    individual data.</li>
+    spending patterns to offer suggestions that fit you. Computed from your
+    data, for you alone.</li>
   </ul>
   <p>We <strong>do</strong> compute <strong>aggregate, de-identified
   insights</strong> — for example, how spending patterns differ by age range
@@ -110,18 +107,16 @@
     <tr><td><strong>Supabase</strong></td><td>Everything in section 2</td><td>Database + file storage + auth</td></tr>
     <tr><td><strong>Apple</strong> (Sign in with Apple)</td><td>Your Apple ID auth token</td><td>Sign-in</td></tr>
     <tr><td><strong>Google</strong> (Sign in with Google)</td><td>Your Google auth token</td><td>Sign-in (optional)</td></tr>
-    <tr><td><strong>Anthropic</strong> (Claude API)</td><td>Only the <strong>description text</strong> you type on a new transaction (e.g. "starbucks latte")</td><td>Suggests a category. No amount, no friend names.</td></tr>
+    <tr><td><strong>Anthropic</strong> (Claude API)</td><td>Only the <strong>description text</strong> you type on a new transaction (e.g. "starbucks latte")</td><td>Suggests a category.</td></tr>
     <tr><td><strong>Apple Push Notification Service (APNs)</strong></td><td>Notification text + your device token</td><td>Delivering pushes to your phone</td></tr>
   </table>
-  <p>Each of these has its own privacy policy, all of which are public. We
-  don't use any other third-party SDK, analytics provider, or ad network.</p>
+  <p>That's the whole list — no other third-party SDKs, analytics, or ad networks.</p>
 
   <h2>6. Where it's stored, how it's secured</h2>
   <ul>
-    <li>All data lives in <strong>Supabase</strong> (PostgreSQL + object storage). Supabase databases sit on AWS infrastructure in the US East region.</li>
+    <li>All data lives in <strong>Supabase</strong> (PostgreSQL + object storage), hosted in the US.</li>
     <li>Data is <strong>encrypted in transit</strong> (HTTPS / TLS for every request) and <strong>encrypted at rest</strong> by the underlying storage.</li>
     <li><strong>Row-level security</strong> is enforced in the database: a user can only read their own profile and their own transactions. Friend-graph rows are visible to both ends of the friendship, by design.</li>
-    <li>The Anthropic API key is held server-side as a Supabase secret. It never ships in the app binary.</li>
   </ul>
 
   <h2>7. Sharing your data with other people</h2>
@@ -139,8 +134,7 @@
   <h2>8. Purchases</h2>
   <p>iMoney is free. The optional <strong>iMoney Pro</strong> subscription is
   billed entirely by Apple through your Apple ID — we never see your payment
-  card, only a subscription-status flag from Apple so the app can unlock your
-  Pro features. Manage or cancel anytime in iPhone Settings → your name →
+  card, only whether you're subscribed. Manage or cancel anytime in iPhone Settings → your name →
   Subscriptions.</p>
 
   <h2>9. Push notifications</h2>
@@ -171,9 +165,7 @@
   <h2>12. Children</h2>
   <p>iMoney is intended for ages <strong>13 and up</strong>. We don't
   knowingly collect data from children under 13. If you believe a child under
-  13 has created an account, email us and we'll delete it. For users between
-  13 and the local digital age of consent (which can be 16 in parts of the
-  EU), a parent or guardian should review this policy with them.</p>
+  13 has created an account, email us and we'll delete it.</p>
 
   <h2>13. International transfers</h2>
   <p>iMoney's servers are hosted in the United States. If you use iMoney from

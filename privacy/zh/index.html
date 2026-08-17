@@ -42,8 +42,8 @@
   <p>只收集你透過 App 直接提供的資料。</p>
   <p><strong>來自你的登入服務（Apple 或 Google）：</strong></p>
   <ul>
-    <li>你的<strong>姓名</strong>（Apple 只在第一次登入時提供一次）</li>
-    <li>你的<strong>電子郵件</strong>（若你選擇 Apple 的私密轉寄信箱，則是該信箱）</li>
+    <li>你的<strong>姓名</strong></li>
+    <li>你的<strong>電子郵件</strong>（可以是 Apple 私密轉寄信箱）</li>
     <li>一組把你對應到 iMoney 帳號的<strong>使用者 ID</strong></li>
   </ul>
   <p><strong>來自你在 App 內的輸入：</strong></p>
@@ -52,24 +52,24 @@
     <li><strong>收入紀錄</strong>——你選擇記錄的金額與來源。永遠私密，好友絕對看不到</li>
     <li><strong>個人頭像</strong>——只有在你上傳時才會有</li>
     <li><strong>個人資料</strong>——你的 @帳號、每月預算、預設幣別、付款方式名稱</li>
-    <li><strong>生日</strong>——選填，你可以略過。用來記住你的日子，出生年份則會納入第 4 節所述的年齡層統計。對其他使用者而言，它永遠只會以生日的形式呈現。</li>
+    <li><strong>生日</strong>——選填。用來記住你的日子；出生年份會納入第 4 節的年齡層統計。其他使用者只看得到月日，看不到年份。</li>
     <li><strong>好友關係</strong>——你加入的好友、送出與收到的好友邀請、你和好友之間的欠款、你參加的群組活動</li>
-    <li><strong>客服訊息</strong>——你透過「設定 → 聯絡我們」寫給我們的內容，以便回覆並改進 App</li>
-    <li><strong>推播裝置代碼</strong>——Apple 指派給你這台裝置的一串代碼，用來把通知送到你的手機。不會用來跨 App 或網站追蹤你。</li>
+    <li><strong>客服訊息</strong>——你透過「設定 → 聯絡我們」寫給我們的內容</li>
+    <li><strong>推播裝置代碼</strong>——Apple 指派給你這台裝置的一串代碼，用來把通知送到你的手機。</li>
   </ul>
   <p><strong>來自你裝置的作業系統：</strong></p>
   <ul>
-    <li>標準的當機回報、效能資料與基本的 API 請求紀錄——用來除錯、維持 App 的速度並改進功能。這些都不包含你的帳目或個人資料。</li>
+    <li>標準的當機回報、效能資料與基本的 API 請求紀錄——用來除錯與改進 App，不含你的帳目或個人資料。</li>
   </ul>
 
   <h2>3. 「不」收集哪些資料</h2>
   <ul>
     <li>不讀取你的<strong>通訊錄</strong>或<strong>行事曆</strong>。</li>
     <li>不追蹤你的<strong>位置</strong>。</li>
-    <li>不連接你的<strong>銀行帳戶</strong>或<strong>信用卡</strong>。iMoney 是手動記帳——每個數字都是你自己輸入的。付款方式只是你自己取的名稱。</li>
-    <li>不使用<strong>第三方分析工具</strong>（沒有 Google Analytics、Mixpanel、Amplitude、Segment 等）。</li>
-    <li>不使用<strong>廣告 SDK</strong>，也不與廣告商分享資料。iMoney 沒有廣告，未來也不打算加。</li>
-    <li>不會<strong>跨其他 App 或網站</strong>追蹤你（所以你不會看到「要求追蹤許可」的提示——因為根本用不到）。</li>
+    <li>不連接你的<strong>銀行帳戶</strong>或<strong>信用卡</strong>。iMoney 是手動記帳——每個數字都是你自己輸入的。</li>
+    <li>不使用<strong>第三方分析工具</strong>。</li>
+    <li>不使用<strong>廣告 SDK</strong>，也不與廣告商分享資料。iMoney 沒有廣告。</li>
+    <li>不會<strong>跨其他 App 或網站</strong>追蹤你。</li>
   </ul>
 
   <h2>4. 如何使用你的資料</h2>
@@ -82,9 +82,7 @@
     <li>在你按下「匯出」時產生月報表</li>
     <li>偶爾寄信告訴你 iMoney 的消息——新功能與重要帳號通知。絕不濫發、絕無第三方廣告；非必要郵件可隨時透過退訂連結或 upappco@gmail.com 取消。</li>
     <li><strong>個人化理財建議</strong>——分析你自己的消費模式，
-    提供對你來說務實可行的建議（例如根據你的錢實際流向的分類，
-    給出省錢提示），而不是千篇一律的通用建議。這些建議只由你的資料計算、
-    只給你一個人看——絕不來自廣告、資料販售或其他使用者的個別資料。</li>
+    給出對你務實可行的建議。只由你的資料計算、只給你一個人看。</li>
   </ul>
   <p>iMoney <strong>會</strong>計算<strong>群體層級、去識別化的統計</strong>——
   例如不同年齡層或國家的消費模式差異——用來了解趨勢、改進 iMoney，
@@ -100,18 +98,16 @@
     <tr><td><strong>Supabase</strong></td><td>第 2 節所列的全部資料</td><td>資料庫＋檔案儲存＋登入驗證</td></tr>
     <tr><td><strong>Apple</strong>（使用 Apple 登入）</td><td>你的 Apple ID 驗證憑證</td><td>登入</td></tr>
     <tr><td><strong>Google</strong>（使用 Google 登入）</td><td>你的 Google 驗證憑證</td><td>登入（選用）</td></tr>
-    <tr><td><strong>Anthropic</strong>（Claude API）</td><td>只有你在新帳目輸入的<strong>描述文字</strong>（例如「星巴克拿鐵」）</td><td>建議分類。不含金額、不含好友姓名。</td></tr>
+    <tr><td><strong>Anthropic</strong>（Claude API）</td><td>只有你在新帳目輸入的<strong>描述文字</strong>（例如「星巴克拿鐵」）</td><td>建議分類。</td></tr>
     <tr><td><strong>Apple 推播服務（APNs）</strong></td><td>通知文字＋你的裝置代碼</td><td>把推播送到你的手機</td></tr>
   </table>
-  <p>以上服務各有公開的隱私權政策。除此之外，不使用任何其他第三方 SDK、
-  分析服務或廣告網路。</p>
+  <p>名單就這些，沒有其他第三方 SDK、分析工具或廣告網路。</p>
 
   <h2>6. 資料存放在哪裡、如何保護</h2>
   <ul>
-    <li>所有資料存放於 <strong>Supabase</strong>（PostgreSQL＋物件儲存）。Supabase 的資料庫位於 AWS 美國東部區域的基礎設施上。</li>
+    <li>所有資料存放於 <strong>Supabase</strong>（PostgreSQL＋物件儲存），伺服器位於美國。</li>
     <li>資料<strong>傳輸全程加密</strong>（每個請求都走 HTTPS／TLS），<strong>儲存時也由底層系統加密</strong>。</li>
     <li>資料庫強制執行<strong>列層級安全（Row-Level Security）</strong>：每個使用者只能讀取自己的個人資料與帳目。好友關係的資料則設計為關係兩端都能看到。</li>
-    <li>Anthropic 的 API 金鑰保存在伺服器端的 Supabase 密鑰中，絕不會包含在 App 程式裡。</li>
   </ul>
 
   <h2>7. 與其他人分享你的資料</h2>
@@ -127,8 +123,7 @@
 
   <h2>8. 付費項目</h2>
   <p>iMoney 免費使用。選購的 <strong>iMoney Pro</strong> 訂閱完全由 Apple
-  透過你的 Apple ID 收費——iMoney 看不到你的付款卡片，只會從 Apple 收到一個
-  訂閱狀態的旗標，讓 App 為你解鎖 Pro 功能。你可以隨時在 iPhone 的
+  透過你的 Apple ID 收費——iMoney 看不到你的付款卡片，只從 Apple 得知你是否訂閱。你可以隨時在 iPhone 的
   設定 → 你的名字 → 訂閱項目中管理或取消。</p>
 
   <h2>9. 推播通知</h2>
@@ -157,8 +152,7 @@
   <h2>12. 兒童</h2>
   <p>iMoney 適用於 <strong>13 歲以上</strong>的使用者，不會刻意收集
   13 歲以下兒童的資料。若你發現 13 歲以下兒童建立了帳號，來信告訴我們，
-  該帳號會被刪除。介於 13 歲與當地數位同意年齡（歐盟部分地區為 16 歲）
-  之間的使用者，建議由家長或監護人陪同閱讀本政策。</p>
+  該帳號會被刪除。</p>
 
   <h2>13. 跨境傳輸</h2>
   <p>iMoney 的伺服器位於美國。若你在美國以外使用 iMoney，
