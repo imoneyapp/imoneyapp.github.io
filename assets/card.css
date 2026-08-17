@@ -128,6 +128,10 @@
    They share a centreline instead — the same idea as the foot, where the
    two items share a baseline. */
 .card-top { display: flex; align-items: center; justify-content: space-between; flex: 0 0 auto; }
+/* Same fill as every engraving, but mono's thin strokes at 9px read
+   grayer than the sans line at the foot. Same size as the quote plus a
+   weight step makes the two carry the same ink. */
+.card-top .card-meta { font-size: clamp(10px, 1.85cqw, 14px); font-weight: 700; }
 /* NEVER a percentage height on card art: a % against an indefinite parent
    makes the image contribute its intrinsic height to the flex row and
    crushes everything below it. cq units resolve against a definite width. */

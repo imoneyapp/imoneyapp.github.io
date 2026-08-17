@@ -71,17 +71,20 @@
       /* 1.18em IS the text's line box (measured 23.6px at 20px type), so
          the circle's top and bottom sit exactly on the glyph bounds. */
       width: 1.18em; height: 1.18em; border-radius: 50%;
-      border: 1px solid rgba(244,241,234,.35);
+      /* The ring is the planet's ramp — a gradient can't sit on
+         border-color, so it's painted border-box under an ink core. */
+      border: 1px solid transparent;
+      background: linear-gradient(#000, #000) padding-box,
+                  linear-gradient(135deg, #9fd2d6 0%, #b190ab 55%, #d09ab4 100%) border-box;
       display: flex; align-items: center; justify-content: center;
       transition: border-color .25s, background .25s, color .25s;
     }
-    /* Hover fills the key solid — bone circle, ink arrow. */
-    .cosmos-cta:hover .cta-enter { background: var(--bone); color: #0b0b0c;
-                                   border-color: var(--bone); }
-    /* The press: the key inverts — bone fill, ink arrow — for as long as
-       the finger or button is down. */
-    .cosmos-cta:active .cta-enter { background: var(--bone); color: #0b0b0c;
-                                    border-color: var(--bone); }
+    /* Hover and press fill the circle with the same ramp, ink arrow. */
+    .cosmos-cta:hover .cta-enter,
+    .cosmos-cta:active .cta-enter {
+      background: linear-gradient(135deg, #9fd2d6 0%, #b190ab 55%, #d09ab4 100%);
+      color: #0b0b0c;
+    }
     .cta-enter svg { width: .52em; height: .52em; display: block; }
     @media (max-width: 700px) {
       .cosmos { background: #000 url(/assets/planetfull.jpg) center / cover no-repeat; }
