@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=13">
+  <link rel="stylesheet" href="/assets/card.css?v=14">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     /* One column, vertically centred between a pinned header and a pinned
@@ -30,26 +30,15 @@
             /* Named because the centring below has to do arithmetic on it. */
             --card-h: min(42vh, 470px, calc(92vw / 1.586)); }
     header { display: flex; align-self: flex-start; padding: 26px 0 0; flex: 0 0 auto; }
-    #brand { display: flex; align-items: center; gap: 9px; background: none; border: 0;
-             padding: 0; margin: 0; color: inherit; font: inherit; cursor: default; }
+    #brand { display: flex; align-items: center; gap: 9px; color: inherit;
+             text-decoration: none; transition: opacity .3s; }
+    #brand:hover { opacity: .62; }
     #brand img { height: 26px; }
     /* The app's wordmark is SF Rounded (Typography.display). ui-rounded is
        how the web asks the system for that face — Safari resolves it, other
        browsers fall back to the plain system sans. */
     #brand b { font-size: 17px; font-weight: 600; letter-spacing: -.2px;
                font-family: ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", system-ui, sans-serif; }
-    /* Nothing announces itself. The mark just becomes touchable, and the
-       only tell is the cursor and a breath of light on hover. */
-    #brand.live { cursor: pointer; transition: opacity .3s; }
-    #brand.live:hover { opacity: .62; }
-
-    /* One image, edge to edge, nothing else. */
-    .still { position: fixed; inset: 0; z-index: 50; background: #0b0b0c;
-             opacity: 0; visibility: hidden; cursor: zoom-out;
-             transition: opacity .7s ease, visibility .7s; }
-    .still.open { opacity: 1; visibility: visible; }
-    .still img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
     /* The hero owns the leftover height and centres in it. gap replaces the
        margins that used to stack up. */
     main { flex: 1 1 auto; min-height: 0; overflow: visible;
@@ -149,10 +138,10 @@
 <body>
   <div class="wrap">
     <header>
-      <button id="brand" type="button">
+      <a id="brand" href="/reserve/">
         <img src="/assets/logo-mark.png" alt="">
         <b>iMoney</b>
-      </button>
+      </a>
     </header>
   
     <main>
@@ -166,7 +155,7 @@
               <div class="card-inner">
                 <div class="card-top">
                   <img class="card-logo" src="/assets/logo-ink-star.png" alt="iMoney">
-                  <div class="card-meta engraved">AUGUST<br>2026</div>
+                  <div class="card-meta engraved">Aug. 2026</div>
                 </div>
                 <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
                 <div class="card-foot">
@@ -267,7 +256,6 @@
       location.href = '/reserve/?lang=zh&h=' + encodeURIComponent(h);
     });
   </script>
-  <script src="/assets/still.js?v=13"></script>
   <script>
     (() => {
       // The ghost types itself. An empty field says "type something"; a

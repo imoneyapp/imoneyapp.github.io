@@ -111,11 +111,11 @@
    rather than a sentence with a caption stuck next to it. Weight and case
    still differ: this one is meant to be read, RESERVED is meant to be
    glanced at. */
-/* Longhand, not `font: 500 <size>/1.5 inherit`. `inherit` is not a family
-   name, so that shorthand is invalid and browsers threw the whole thing
-   away — which is why this line had been rendering at the body's 17px/400
-   the entire time, and why it looked so much bigger than RESERVED. */
-.card-foot .quote { font-weight: 500; font-size: clamp(9px, 1.6cqw, 12px);
+/* Nominally the plate's size, drawn ~15% larger: the plate is uppercase,
+   the line is lowercase, and equal point sizes make lowercase LOOK smaller
+   — x-height against cap-height. Longhand because `font: ... inherit` is
+   an invalid shorthand browsers discard entirely. */
+.card-foot .quote { font-weight: 600; font-size: clamp(10px, 1.85cqw, 14px);
                     line-height: 1.5; font-family: inherit;
                     color: rgba(11,11,12,.6); max-width: 62%; }
 .card-foot .right { text-align: right; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
