@@ -86,13 +86,14 @@
 /* Engraving. Everything on a real card is stamped INTO the surface: a dark
    edge where the tool bit, a light edge where the metal catches. One shared
    rule so nothing on the card looks printed on top of it. */
-/* Letterpress into metal, three layers deep: the lit lower edge where
-   the metal catches, the tool's dark bite above the stroke, and a soft
-   inner shade that gives the cut its depth. */
+/* Letterpress that scales WITH the type. Pixel offsets were the bug: 1px
+   on the 84px handle is a hairline, but on a 10px line it is a fifth of
+   the glyph — three visibly separate copies, plus a blur smearing them.
+   Em offsets keep the edge proportional at every size, and there is no
+   blur layer: engraving is a cut, not a smudge. */
 .engraved {
-  text-shadow: 0 1px 0 rgba(255,255,255,.75),
-               0 -1px 0 rgba(0,0,0,.5),
-               0 -2px 3px rgba(0,0,0,.16);
+  text-shadow: 0 .045em 0 rgba(255,255,255,.6),
+               0 -.035em 0 rgba(0,0,0,.42);
 }
 
 /* The mark is ~68px and the date is two small lines, so flex-start left
