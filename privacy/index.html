@@ -5,15 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Privacy Policy — iMoney</title>
   <meta name="description" content="iMoney's privacy policy — what we collect, why, who sees it, and how to delete everything. Plain language, no fine print.">
-  <link rel="stylesheet" href="../style.css?v=6">
+  <link rel="stylesheet" href="../style.css?v=7">
   <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png">
   <link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon-256.png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <script>
+    if (/^zh/i.test(navigator.language)) location.replace('zh/');
+  </script>
 </head>
 <body>
 <main>
   <header class="site"><a href="/">iMoney</a><span>Privacy Policy</span></header>
-  <details class="lang-menu"><summary aria-label="Language / 語言" title="Language / 語言"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3.6 9h16.8M3.6 15h16.8"/></svg></summary><div class="lang-pop"><span>English<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M2 7.5l3.5 3.5L12 3.5"/></svg></span><a href="zh/">繁體中文</a></div></details>
   <h1>Privacy Policy</h1>
   <p class="updated">Last updated: August 17, 2026</p>
 
@@ -35,164 +37,187 @@
     </table>
   </div>
 
-  <h2>1. Who we are</h2>
-  <p>iMoney is built and operated by the Up team. You can reach us at
-  <strong>upappco@gmail.com</strong> for any privacy question, data request,
-  or complaint.</p>
+  <div class="faq">
+    <details>
+      <summary>1. Who we are</summary>
+      <p>iMoney is built and operated by the Up team. You can reach us at
+      <strong>upappco@gmail.com</strong> for any privacy question, data request,
+      or complaint.</p>
+    </details>
 
-  <h2>2. What we collect</h2>
-  <p>We only collect data you give us directly through the app.</p>
-  <p><strong>From your sign-in provider (Apple or Google):</strong></p>
-  <ul>
-    <li>Your <strong>name</strong></li>
-    <li>Your <strong>email address</strong> (or Apple's private relay)</li>
-    <li>A <strong>user ID</strong> that ties you to your iMoney account</li>
-  </ul>
-  <p><strong>From you, in the app:</strong></p>
-  <ul>
-    <li><strong>Transactions</strong> — the amount, currency, category, date, payment method, and optional note you enter for each log</li>
-    <li><strong>Income entries</strong> — amounts and sources you optionally log. Always private; never visible to friends</li>
-    <li><strong>Profile avatar</strong> — only if you upload one</li>
-    <li><strong>Profile basics</strong> — your @handle, monthly budget, default currency, payment-method labels</li>
-    <li><strong>Birthday</strong> — optional. It marks your day, and your birth year feeds the age-range statistics in section 4. Other users only ever see the day, never the year.</li>
-    <li><strong>Friend graph</strong> — the friends you've added, friend requests sent and received, debts owed between you and friends, group events you're part of</li>
-    <li><strong>Support messages</strong> — what you write to us through Settings → Contact</li>
-    <li><strong>Device token for push notifications</strong> — a string Apple assigns to your install of the app, so we can send pushes to your phone.</li>
-  </ul>
-  <p><strong>From your device's operating system:</strong></p>
-  <ul>
-    <li>Standard crash reports, performance data, and basic API request logs — used for debugging and improving the app. Never your transactions or personal data.</li>
-  </ul>
+    <details>
+      <summary>2. What we collect</summary>
+      <p>We only collect data you give us directly through the app.</p>
+      <p><strong>From your sign-in provider (Apple or Google):</strong></p>
+      <ul>
+        <li>Your <strong>name</strong></li>
+        <li>Your <strong>email address</strong> (or Apple's private relay)</li>
+        <li>A <strong>user ID</strong> that ties you to your iMoney account</li>
+      </ul>
+      <p><strong>From you, in the app:</strong></p>
+      <ul>
+        <li><strong>Transactions</strong> — the amount, currency, category, date, payment method, and optional note you enter for each log</li>
+        <li><strong>Income entries</strong> — amounts and sources you optionally log. Always private; never visible to friends</li>
+        <li><strong>Profile avatar</strong> — only if you upload one</li>
+        <li><strong>Profile basics</strong> — your @handle, monthly budget, default currency, payment-method labels</li>
+        <li><strong>Birthday</strong> — optional. It marks your day, and your birth year feeds the age-range statistics in section 4. Other users only ever see the day, never the year.</li>
+        <li><strong>Friend graph</strong> — the friends you've added, friend requests sent and received, debts owed between you and friends, group events you're part of</li>
+        <li><strong>Support messages</strong> — what you write to us through Settings → Contact</li>
+        <li><strong>Device token for push notifications</strong> — a string Apple assigns to your install of the app, so we can send pushes to your phone.</li>
+      </ul>
+      <p><strong>From your device's operating system:</strong></p>
+      <ul>
+        <li>Standard crash reports, performance data, and basic API request logs — used for debugging and improving the app. Never your transactions or personal data.</li>
+      </ul>
+    </details>
 
-  <h2>3. What we DON'T collect</h2>
-  <ul>
-    <li>We don't read your <strong>contacts</strong> or <strong>calendar</strong>.</li>
-    <li>We don't track your <strong>location</strong>.</li>
-    <li>We don't connect to your <strong>bank accounts</strong> or <strong>credit cards</strong>. iMoney is a manual tracker — every number is one you typed.</li>
-    <li>We don't use <strong>third-party analytics</strong>.</li>
-    <li>We don't use <strong>advertising SDKs</strong> or share data with advertisers. There are no ads in iMoney.</li>
-    <li>We don't track you <strong>across other apps or websites</strong>.</li>
-  </ul>
+    <details>
+      <summary>3. What we DON'T collect</summary>
+      <ul>
+        <li>We don't read your <strong>contacts</strong> or <strong>calendar</strong>.</li>
+        <li>We don't track your <strong>location</strong>.</li>
+        <li>We don't connect to your <strong>bank accounts</strong> or <strong>credit cards</strong>. iMoney is a manual tracker — every number is one you typed.</li>
+        <li>We don't use <strong>third-party analytics</strong>.</li>
+        <li>We don't use <strong>advertising SDKs</strong> or share data with advertisers. There are no ads in iMoney.</li>
+        <li>We don't track you <strong>across other apps or websites</strong>.</li>
+      </ul>
+    </details>
 
-  <h2>4. How we use your data</h2>
-  <p>Your data is used to run the app for you, and that's it. Specifically:</p>
-  <ul>
-    <li>Show your transactions, compute your monthly budget, render reports</li>
-    <li>Suggest a category for new transactions (see "Third parties" below)</li>
-    <li>Show friends you've explicitly added, and the splits between you</li>
-    <li>Send push notifications when a friend tags you on a split, reminds you to pay, confirms or denies a payment, etc.</li>
-    <li>Render the monthly report when you tap Export</li>
-    <li>Occasionally email you about iMoney — new features and important
-    account notices. Never spam, never third-party offers, and you can opt
-    out of non-essential email anytime via the unsubscribe link or
-    upappco@gmail.com.</li>
-    <li><strong>Personalize finance suggestions</strong> — we analyze your own
-    spending patterns to offer suggestions that fit you. Computed from your
-    data, for you alone.</li>
-  </ul>
-  <p>We <strong>do</strong> compute <strong>aggregate, de-identified
-  insights</strong> — for example, how spending patterns differ by age range
-  or country — to understand trends, improve iMoney, and
-  <strong>publish publicly</strong>, including in iMoney Lab inside the app
-  and on our website and social accounts. These are always group-level:
-  never tied to you, never your individual transactions. If you turn off <strong>Share usage data</strong>, you're excluded
-  from all of it.</p>
-  <p>Beyond that, we do <strong>not</strong> sell your data or build advertising profiles.</p>
+    <details>
+      <summary>4. How we use your data</summary>
+      <p>Your data is used to run the app for you, and that's it. Specifically:</p>
+      <ul>
+        <li>Show your transactions, compute your monthly budget, render reports</li>
+        <li>Suggest a category for new transactions (see "Third parties" below)</li>
+        <li>Show friends you've explicitly added, and the splits between you</li>
+        <li>Send push notifications when a friend tags you on a split, reminds you to pay, confirms or denies a payment, etc.</li>
+        <li>Render the monthly report when you tap Export</li>
+        <li>Occasionally email you about iMoney — new features and important
+        account notices. Never spam, never third-party offers, and you can opt
+        out of non-essential email anytime via the unsubscribe link or
+        upappco@gmail.com.</li>
+        <li><strong>Personalize finance suggestions</strong> — we analyze your own
+        spending patterns to offer suggestions that fit you. Computed from your
+        data, for you alone.</li>
+      </ul>
+      <p>We <strong>do</strong> compute <strong>aggregate, de-identified
+      insights</strong> — for example, how spending patterns differ by age range
+      or country — to understand trends, improve iMoney, and
+      <strong>publish publicly</strong>, including in iMoney Lab inside the app
+      and on our website and social accounts. These are always group-level:
+      never tied to you, never your individual transactions. If you turn off <strong>Share usage data</strong>, you're excluded
+      from all of it.</p>
+      <p>Beyond that, we do <strong>not</strong> sell your data or build advertising profiles.</p>
+    </details>
 
-  <h2>5. Third parties (sub-processors)</h2>
-  <p>iMoney uses these third-party services to function. They never receive
-  more than the minimum needed.</p>
-  <table>
-    <tr><th>Service</th><th>What we send them</th><th>Why</th></tr>
-    <tr><td><strong>Supabase</strong></td><td>Everything in section 2</td><td>Database + file storage + auth</td></tr>
-    <tr><td><strong>Apple</strong> (Sign in with Apple)</td><td>Your Apple ID auth token</td><td>Sign-in</td></tr>
-    <tr><td><strong>Google</strong> (Sign in with Google)</td><td>Your Google auth token</td><td>Sign-in (optional)</td></tr>
-    <tr><td><strong>Anthropic</strong> (Claude API)</td><td>Only the <strong>description text</strong> you type on a new transaction (e.g. "starbucks latte")</td><td>Suggests a category.</td></tr>
-    <tr><td><strong>Apple Push Notification Service (APNs)</strong></td><td>Notification text + your device token</td><td>Delivering pushes to your phone</td></tr>
-  </table>
-  <p>That's the whole list — no other third-party SDKs, analytics, or ad networks.</p>
+    <details>
+      <summary>5. Third parties (sub-processors)</summary>
+      <p>iMoney uses these third-party services to function. They never receive
+      more than the minimum needed.</p>
+      <table>
+        <tr><th>Service</th><th>What we send them</th><th>Why</th></tr>
+        <tr><td><strong>Supabase</strong></td><td>Everything in section 2</td><td>Database + file storage + auth</td></tr>
+        <tr><td><strong>Apple</strong> (Sign in with Apple)</td><td>Your Apple ID auth token</td><td>Sign-in</td></tr>
+        <tr><td><strong>Google</strong> (Sign in with Google)</td><td>Your Google auth token</td><td>Sign-in (optional)</td></tr>
+        <tr><td><strong>Anthropic</strong> (Claude API)</td><td>Only the <strong>description text</strong> you type on a new transaction (e.g. "starbucks latte")</td><td>Suggests a category.</td></tr>
+        <tr><td><strong>Apple Push Notification Service (APNs)</strong></td><td>Notification text + your device token</td><td>Delivering pushes to your phone</td></tr>
+      </table>
+      <p>That's the whole list — no other third-party SDKs, analytics, or ad networks.</p>
+    </details>
 
-  <h2>6. Where it's stored, how it's secured</h2>
-  <ul>
-    <li>All data lives in <strong>Supabase</strong> (PostgreSQL + object storage), hosted in the US.</li>
-    <li>Data is <strong>encrypted in transit</strong> (HTTPS / TLS for every request) and <strong>encrypted at rest</strong> by the underlying storage.</li>
-    <li><strong>Row-level security</strong> is enforced in the database: a user can only read their own profile and their own transactions. Friend-graph rows are visible to both ends of the friendship, by design.</li>
-  </ul>
+    <details>
+      <summary>6. Where it's stored, how it's secured</summary>
+      <ul>
+        <li>All data lives in <strong>Supabase</strong> (PostgreSQL + object storage), hosted in the US.</li>
+        <li>Data is <strong>encrypted in transit</strong> (HTTPS / TLS for every request) and <strong>encrypted at rest</strong> by the underlying storage.</li>
+        <li><strong>Row-level security</strong> is enforced in the database: a user can only read their own profile and their own transactions. Friend-graph rows are visible to both ends of the friendship, by design.</li>
+      </ul>
+    </details>
 
-  <h2>7. Sharing your data with other people</h2>
-  <p>The only place data flows between iMoney users is the <strong>friend
-  graph</strong>:</p>
-  <ul>
-    <li>A friend you've added can see your <strong>@handle</strong>, <strong>display name</strong>, and <strong>avatar</strong> (the same things any user could find via the directory).</li>
-    <li>If you tag a friend on a split, that <strong>specific split</strong> (the amount, the description, the date) becomes visible to them. Your other transactions do not.</li>
-    <li>If you allow it, friends can see your <strong>monthly top-category breakdown</strong> as a donut chart — you control this per your Settings, including hiding it from specific friends.</li>
-    <li>In a <strong>group event</strong> (a trip), the members you invited see the event's shared logs and settlement math. Nothing outside the event.</li>
-  </ul>
-  <p>We don't share data with anyone outside iMoney except the sub-processors
-  listed in section 5, and only the minimum needed to run the app.</p>
+    <details>
+      <summary>7. Sharing your data with other people</summary>
+      <p>The only place data flows between iMoney users is the <strong>friend
+      graph</strong>:</p>
+      <ul>
+        <li>A friend you've added can see your <strong>@handle</strong>, <strong>display name</strong>, and <strong>avatar</strong> (the same things any user could find via the directory).</li>
+        <li>If you tag a friend on a split, that <strong>specific split</strong> (the amount, the description, the date) becomes visible to them. Your other transactions do not.</li>
+        <li>If you allow it, friends can see your <strong>monthly top-category breakdown</strong> as a donut chart — you control this per your Settings, including hiding it from specific friends.</li>
+        <li>In a <strong>group event</strong> (a trip), the members you invited see the event's shared logs and settlement math. Nothing outside the event.</li>
+      </ul>
+      <p>We don't share data with anyone outside iMoney except the sub-processors
+      listed in section 5, and only the minimum needed to run the app.</p>
+    </details>
 
-  <h2>8. Purchases</h2>
-  <p>iMoney is free. The optional <strong>iMoney Pro</strong> subscription is
-  billed entirely by Apple through your Apple ID — we never see your payment
-  card, only whether you're subscribed. Manage or cancel anytime in iPhone Settings → your name →
-  Subscriptions.</p>
+    <details>
+      <summary>8. Purchases</summary>
+      <p>iMoney is free. The optional <strong>iMoney Pro</strong> subscription is
+      billed entirely by Apple through your Apple ID — we never see your payment
+      card, only whether you're subscribed. Manage or cancel anytime in iPhone Settings → your name →
+      Subscriptions.</p>
+    </details>
 
-  <h2>9. Push notifications</h2>
-  <p>We use Apple Push Notification service (APNs) to send you reminders
-  from friends about money owed, confirmations when payments are marked, and
-  new shared-expense alerts. You can disable all push notifications at any
-  time in <strong>iOS Settings → Notifications → iMoney</strong>. The app
-  keeps working without them.</p>
+    <details>
+      <summary>9. Push notifications</summary>
+      <p>We use Apple Push Notification service (APNs) to send you reminders
+      from friends about money owed, confirmations when payments are marked, and
+      new shared-expense alerts. You can disable all push notifications at any
+      time in <strong>iOS Settings → Notifications → iMoney</strong>. The app
+      keeps working without them.</p>
+    </details>
 
-  <h2>10. How long we keep your data</h2>
-  <ul>
-    <li><strong>Active accounts</strong>: data is kept as long as your account exists.</li>
-    <li><strong>Deleted accounts</strong>: when you tap Settings → Delete account, we immediately remove your profile, transactions, friends, and budgets from the live database. <strong>Encrypted backups may take up to 30 days to roll off</strong> — after which everything is gone for good.</li>
-  </ul>
+    <details>
+      <summary>10. How long we keep your data</summary>
+      <ul>
+        <li><strong>Active accounts</strong>: data is kept as long as your account exists.</li>
+        <li><strong>Deleted accounts</strong>: when you tap Settings → Delete account, we immediately remove your profile, transactions, friends, and budgets from the live database. <strong>Encrypted backups may take up to 30 days to roll off</strong> — after which everything is gone for good.</li>
+      </ul>
+    </details>
 
-  <h2>11. Your rights</h2>
-  <ul>
-    <li><strong>Access</strong> — everything iMoney knows about you is already visible in the app. If you'd like a structured export, email us.</li>
-    <li><strong>Correct</strong> — edit any field directly in the app.</li>
-    <li><strong>Delete</strong> — Settings → Delete account, no questions asked.</li>
-    <li><strong>Export</strong> — Home → Export report generates your monthly report. Ask us for a raw JSON export if you'd prefer.</li>
-    <li><strong>Object / restrict / portability</strong> — applicable under EU GDPR and similar laws. Email us and we'll act within 30 days.</li>
-    <li><strong>California (CCPA)</strong> — we do not sell or share your personal information as those terms are defined under California law.</li>
-  </ul>
-  <p>Requests go to <strong>upappco@gmail.com</strong>. We'll respond within
-  30 days.</p>
+    <details>
+      <summary>11. Your rights</summary>
+      <ul>
+        <li><strong>Access</strong> — everything iMoney knows about you is already visible in the app. If you'd like a structured export, email us.</li>
+        <li><strong>Correct</strong> — edit any field directly in the app.</li>
+        <li><strong>Delete</strong> — Settings → Delete account, no questions asked.</li>
+        <li><strong>Export</strong> — Home → Export report generates your monthly report. Ask us for a raw JSON export if you'd prefer.</li>
+        <li><strong>Object / restrict / portability</strong> — applicable under EU GDPR and similar laws. Email us and we'll act within 30 days.</li>
+        <li><strong>California (CCPA)</strong> — we do not sell or share your personal information as those terms are defined under California law.</li>
+      </ul>
+      <p>Requests go to <strong>upappco@gmail.com</strong>. We'll respond within
+      30 days.</p>
+    </details>
 
-  <h2>12. Children</h2>
-  <p>iMoney is intended for ages <strong>13 and up</strong>. We don't
-  knowingly collect data from children under 13. If you believe a child under
-  13 has created an account, email us and we'll delete it.</p>
+    <details>
+      <summary>12. Children</summary>
+      <p>iMoney is intended for ages <strong>13 and up</strong>. We don't
+      knowingly collect data from children under 13. If you believe a child under
+      13 has created an account, email us and we'll delete it.</p>
+    </details>
 
-  <h2>13. International transfers</h2>
-  <p>iMoney's servers are hosted in the United States. If you use iMoney from
-  outside the US, your data crosses borders to be stored there. By using the
-  app you consent to that transfer.</p>
+    <details>
+      <summary>13. International transfers</summary>
+      <p>iMoney's servers are hosted in the United States. If you use iMoney from
+      outside the US, your data crosses borders to be stored there. By using the
+      app you consent to that transfer.</p>
+    </details>
 
-  <h2>14. Changes to this policy</h2>
-  <p>When we materially change this policy, we'll bump the "Last updated"
-  date at the top and — for changes that affect what data we collect or who
-  we share it with — surface an in-app notice the next time you open the
-  app.</p>
+    <details>
+      <summary>14. Changes to this policy</summary>
+      <p>When we materially change this policy, we'll bump the "Last updated"
+      date at the top and — for changes that affect what data we collect or who
+      we share it with — surface an in-app notice the next time you open the
+      app.</p>
+    </details>
 
-  <h2>15. Contact</h2>
-  <p>Questions, deletion requests, GDPR / CCPA requests, anything else:
-  <strong>upappco@gmail.com</strong>. We respond within 30 days, usually much
-  sooner.</p>
+    <details>
+      <summary>15. Contact</summary>
+      <p>Questions, deletion requests, GDPR / CCPA requests, anything else:
+      <strong>upappco@gmail.com</strong>. We respond within 30 days, usually much
+      sooner.</p>
+    </details>
+  </div>
 
   <footer>© 2026 iMoney · <a href="../privacy/">Privacy</a> · <a href="../support/">Support</a></footer>
 </main>
-  <script>
-    // <details> closes itself on a second summary click but not on a click
-    // elsewhere — and a menu that ignores the page around it feels stuck.
-    document.addEventListener('click', e => {
-      document.querySelectorAll('details.lang-menu[open]').forEach(d => {
-        if (!d.contains(e.target)) d.removeAttribute('open');
-      });
-    });
-  </script>
 </body>
 </html>

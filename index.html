@@ -144,6 +144,12 @@
   <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png">
   <link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon-256.png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <script>
+    // Language is decided by the browser, not by a switcher: Chinese
+    // readers land on /zh/, everyone else stays here. replace(), so the
+    // back button doesn't fight the redirect.
+    if (/^zh/i.test(navigator.language)) location.replace('/zh/' + location.search);
+  </script>
 </head>
 <body>
   <div class="wrap">
