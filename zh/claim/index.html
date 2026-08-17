@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=25">
+  <link rel="stylesheet" href="/assets/card.css?v=26">
   <style>
     /* ---- The planet hero. One page again: the CTA scrolls to #reserve,
        and when a clean loop video exists it can sit here scroll-scrubbed —
@@ -99,7 +99,7 @@
     /* The headline wears the card's metal: a restrained vertical sheen,
        bone into worn silver — kinship, not rainbow. */
     h1 { font-size: clamp(24px, 2.8vw, 34px); font-weight: 700; letter-spacing: -.9px;
-         background: linear-gradient(180deg, #f8f6f0 20%, #b9b5ac 100%);
+         background: linear-gradient(180deg, #ffffff 0%, #e9e6df 45%, #a5a198 80%, #837f76 100%);
          -webkit-background-clip: text; background-clip: text;
          -webkit-text-fill-color: transparent; color: #f4f1ea;
          margin: 0; }
@@ -312,12 +312,14 @@
         const r = scene.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width - 0.5;
         const y = (e.clientY - r.top) / r.height - 0.5;
-        card.style.setProperty('--ry', (x * 16).toFixed(2) + 'deg');
-        card.style.setProperty('--rx', (-y * 12).toFixed(2) + 'deg');
+        card.style.setProperty('--ry', (x * 22).toFixed(2) + 'deg');
+        card.style.setProperty('--rx', (-y * 16).toFixed(2) + 'deg');
       });
+      scene.addEventListener('pointerenter', () => card.style.setProperty('--s', '1.025'));
       scene.addEventListener('pointerleave', () => {
         card.style.removeProperty('--rx');
         card.style.removeProperty('--ry');
+        card.style.removeProperty('--s');
       });
     })();
   </script>

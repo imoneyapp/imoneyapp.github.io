@@ -27,7 +27,7 @@
    pointer — the corner under the cursor dips, the far corner rises — and
    settles flat when it leaves. The .scene perspective makes the lean read
    as depth. Degrees stay small; it is a lean, not a flip. */
-.card { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); }
+.card { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(var(--s, 1)); }
 
 /* Phones: NO 3D. A perspective transform makes iOS rasterize the card's
    layer at reduced resolution — that is the blur on the engraving. Touch
@@ -86,11 +86,13 @@
 /* Engraving. Everything on a real card is stamped INTO the surface: a dark
    edge where the tool bit, a light edge where the metal catches. One shared
    rule so nothing on the card looks printed on top of it. */
-/* Letterpress into metal: the tool's dark bite above the stroke, the lit
-   lower edge where the metal catches — both stronger than before so the
-   engraving reads at a glance on brushed silver. */
+/* Letterpress into metal, three layers deep: the lit lower edge where
+   the metal catches, the tool's dark bite above the stroke, and a soft
+   inner shade that gives the cut its depth. */
 .engraved {
-  text-shadow: 0 -1px 1px rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.65);
+  text-shadow: 0 1px 0 rgba(255,255,255,.75),
+               0 -1px 0 rgba(0,0,0,.5),
+               0 -2px 3px rgba(0,0,0,.16);
 }
 
 /* The mark is ~68px and the date is two small lines, so flex-start left
@@ -102,8 +104,8 @@
    makes the image contribute its intrinsic height to the flex row and
    crushes everything below it. cq units resolve against a definite width. */
 
-.card-meta { font: 700 clamp(9px, 1.6cqw, 12px)/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
-             color: rgba(11,11,12,.66); letter-spacing: 1.4px; text-align: right;
+.card-meta { font: 600 clamp(9px, 1.6cqw, 12px)/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+             color: rgba(11,11,12,.6); letter-spacing: 1.9px; text-align: right;
              text-transform: uppercase; }
 .card-meta.left { text-align: left; }
 .card-foot .card-meta { white-space: nowrap; flex: 0 0 auto; }
@@ -118,8 +120,8 @@
              filter: drop-shadow(0 1px 0 rgba(255,255,255,.34))
                      drop-shadow(0 -1px 0 rgba(0,0,0,.26)); }
 
-.card-handle { font-size: clamp(30px, 11cqw, 84px); font-weight: 700; color: rgba(16,16,18,.98);
-               margin: auto 0; letter-spacing: -2px; overflow: hidden;
+.card-handle { font-size: clamp(30px, 11cqw, 84px); font-weight: 650; color: rgba(22,22,24,.96);
+               margin: auto 0; letter-spacing: -1.2px; overflow: hidden;
                text-overflow: ellipsis; white-space: nowrap; }
 .card-handle.placeholder { color: rgba(11,11,12,.48); }
 
@@ -142,7 +144,8 @@
    the line is lowercase, and equal point sizes make lowercase LOOK smaller
    — x-height against cap-height. Longhand because `font: ... inherit` is
    an invalid shorthand browsers discard entirely. */
-.card-foot .quote { font-weight: 600; font-size: clamp(10px, 1.85cqw, 14px);
+.card-foot .quote { font-weight: 500; letter-spacing: .2px;
+                    font-size: clamp(10px, 1.85cqw, 14px);
                     line-height: 1.5; font-family: inherit;
                     color: rgba(11,11,12,.74); max-width: 62%; }
 .card-foot .right { text-align: right; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
