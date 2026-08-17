@@ -8,7 +8,7 @@
   <meta property="og:title" content="Reserve your @handle on iMoney">
   <meta property="og:description" content="Claim your name before it launches.">
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
-  <link rel="stylesheet" href="../assets/card.css?v=8">
+  <link rel="stylesheet" href="../assets/card.css?v=10">
   <style>
     /* Palette mirrors the app: ink ground, bone type, the gold accent. */
     :root {
@@ -170,7 +170,7 @@
                 <div class="card-handle" id="card-handle">@you</div>
                 <div class="card-foot">
                   <span>Member</span>
-                  <div>Reserved</div>
+                  <div id="card-no">—</div>
                 </div>
               </div>
             </div>
@@ -226,11 +226,24 @@
       $('step-' + s).classList.toggle('hidden', s !== name));
     const say = (text, kind) => { $('msg').textContent = text; $('msg').className = 'msg ' + (kind || ''); };
 
-    function renderCard(handle) {
+    // Padded to four digits so the corner never changes width as the queue
+    // grows, and so the first person's card doesn't read as an afterthought.
+    const cardNo = n => 'NO. ' + String(n).padStart(4, '0');
+    let reservationNo = null;
+
+    function renderCard(handle, no) {
       $('card-handle').textContent = '@' + handle;
       $('done-handle').textContent = '@' + handle;
+      if (no != null) { reservationNo = no; $('card-no').textContent = cardNo(no); }
       $('card-date').textContent =
         new Date().toLocaleDateString(undefined, { month: 'short', year: 'numeric' }).toUpperCase();
+    }
+
+    // handle + number in one call. my_handle_reservation() is left alone —
+    // the iOS app calls it during onboarding and only wants the name.
+    async function myReservation() {
+      const { data } = await sb.rpc('my_reservation');
+      return Array.isArray(data) ? data[0] : data;
     }
 
     // A handle typed on the landing page rides in on ?h= — prefill it so
@@ -240,8 +253,8 @@
     async function refresh() {
       const { data: { session } } = await sb.auth.getSession();
       if (!session) { show('in'); return; }
-      const { data } = await sb.rpc('my_handle_reservation');
-      if (data) { renderCard(data); show('done'); return; }
+      const mine = await myReservation();
+      if (mine && mine.handle) { renderCard(mine.handle, mine.reservation_no); show('done'); return; }
       if (wanted && !$('handle').value) $('handle').value = wanted.replace(/^@/, '');
       show('pick');
     }
@@ -271,7 +284,10 @@
         return say(taken ? (T ? T.taken : 'That one’s gone. Try another?')
                          : (T ? T.failed : 'Couldn’t reserve that. Try again?'), 'bad');
       }
-      renderCard(data);
+      // reserve_handle returns the handle; the number comes back from the
+      // row it just wrote.
+      const mine = await myReservation();
+      renderCard(data, mine && mine.reservation_no);
       show('done');
     };
 
@@ -351,7 +367,8 @@
       ctx.fillText('MEMBER', cx + pad, cy + ch - pad - cw * 0.042);
       ctx.fillStyle = 'rgba(11,11,12,.62)';
       ctx.font = '600 ' + Math.round(cw * 0.036) + 'px -apple-system, system-ui, sans-serif';
-      ctx.fillText('Reserved', cx + pad, cy + ch - pad);
+      ctx.fillText(reservationNo != null ? cardNo(reservationNo) : 'Reserved',
+                   cx + pad, cy + ch - pad);
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#f4f1ea';
