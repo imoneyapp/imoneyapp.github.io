@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=3">
+  <link rel="stylesheet" href="/assets/card.css?v=5">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     /* One column, vertically centred between a pinned header and a pinned
@@ -49,7 +49,7 @@
     main { flex: 1 1 auto; min-height: 0; overflow: visible;
            display: flex; flex-direction: column; align-items: center;
            justify-content: center; gap: clamp(18px, 3.2vh, 40px);
-           padding: clamp(10px, 2vh, 36px) 0; }
+           padding: clamp(24px, 8vh, 104px) 0 clamp(10px, 2vh, 36px); }
 
     /* Sized by HEIGHT with width following from the aspect ratio, so the
        card is the first thing to give ground when the column is tight — it
@@ -90,8 +90,9 @@
        was the reason the field didn't read as a field. */
     input::placeholder { color: var(--bone-faint); opacity: 1; }
     button { background: var(--bone); color: var(--ink); border: 0; border-radius: 21px;
-             padding: 23px 24px; flex: 0 0 auto; font-weight: 600; font-size: clamp(19px, 5.2vw, 27px); line-height: 1; font-family: inherit; cursor: pointer;
-             white-space: nowrap; letter-spacing: -.2px; }
+             padding: 23px 22px; flex: 0 0 auto; font-weight: 600; font-size: 17px;
+             line-height: 1; font-family: inherit; cursor: pointer;
+             white-space: nowrap; letter-spacing: -.1px; }
     button:disabled { opacity: .4; cursor: default; }
 
     /* Very short window — a laptop with the browser half-height. The card
@@ -136,12 +137,12 @@
             <div class="face front">
               <div class="card-inner">
                 <div class="card-top">
-                  <div class="card-meta left engraved">上線前</div>
+                  <div class="card-meta left engraved">已預約</div>
                   <div class="card-meta engraved">AUGUST<br>2026</div>
                 </div>
                 <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
                 <div class="card-foot">
-                  <div class="quote engraved" id="card-quote"></div>
+                  <div class="quote engraved">設計來取代你憑感覺估的花費。</div>
                   <img class="card-logo" src="/assets/logo-ink-star.png" alt="iMoney">
                 </div>
               </div>
@@ -176,20 +177,6 @@
   </div>
 
   <script>
-    // The card carries one line, picked at random. Guarded, because the
-    // element only exists on the card layout — an unguarded null here once
-    // threw and took the whole form script down with it.
-    const quote = document.getElementById('card-quote');
-    if (quote) {
-      const QUOTES = [
-        '設計來取代你的筆記本。',
-        '和金錢的關係，可以更好。',
-        '花錢，是一門認識自己的藝術。',
-        '極簡、社群，而且莫名上癮。'
-      ];
-      quote.textContent = QUOTES[Math.floor(Math.random() * QUOTES.length)];
-    }
-
     const SB = 'https://cpsdkarncveeemrfmkll.supabase.co';
     const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc2RrYXJuY3ZlZWVtcmZta2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NzQ3NzAsImV4cCI6MjA5NjE1MDc3MH0.zzHVArTaz2OdW1pYEzMIlrgcyuXWm4MNnR-bizyRhdY';
 
@@ -253,7 +240,7 @@
       location.href = '/reserve/?lang=zh&h=' + encodeURIComponent(h);
     });
   </script>
-  <script src="/assets/still.js?v=3"></script>
+  <script src="/assets/still.js?v=5"></script>
   <script>
     (() => {
       // The ghost types itself. An empty field says "type something"; a
