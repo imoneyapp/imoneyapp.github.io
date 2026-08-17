@@ -82,6 +82,16 @@
       .cosmos { background: #000 url(/assets/planetfull.jpg) center / cover no-repeat; }
       .cosmos-inner { left: 50%; transform: translate(-50%, -50%); }
     }
+    /* On a phone the words are a title, not a button: only the enter key
+       takes you in. The anchor goes inert and the key alone stays live —
+       a tap on it still bubbles to the link. Slightly bigger, because it
+       is now the whole door. */
+    @media (hover: none) {
+      .cosmos-cta { pointer-events: none; }
+      .cosmos-cta .cta-enter { pointer-events: auto;
+                               width: 1.5em; height: 1.5em; }
+      .cta-enter svg { width: .62em; height: .62em; }
+    }
 
     @media (prefers-reduced-motion: reduce) { .cosmos-mark { animation: none; } }
   </style>

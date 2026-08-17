@@ -101,8 +101,14 @@
    Em offsets keep the edge proportional at every size, and there is no
    blur layer: engraving is a cut, not a smudge. */
 .engraved {
-  text-shadow: 0 .045em 0 rgba(255,255,255,.6),
-               0 -.035em 0 rgba(0,0,0,.42);
+  /* Every engraving on the card is cut from the same stock as the handle:
+     the depth is a gradient inside the glyph — dark top wall, lighter
+     floor — plus one hairline of light on the bottom lip. Same texture,
+     same color, whatever the size. */
+  background: linear-gradient(180deg, #34332f 0%, #413f3b 38%, #55534d 72%, #6b6862 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.4));
 }
 
 /* The mark is ~68px and the date is two small lines, so flex-start left
@@ -186,7 +192,10 @@
    line beside the plate — wrapping a nine-word sentence looks like an
    accident at any size. Measured: 10px covers 375px phones and up. */
 @container (max-width: 460px) {
-  .card-foot .quote { max-width: none; white-space: nowrap; font-size: 10px; }
+  /* A phone-sized card drops the plate entirely — OPEN TO RESERVE was the
+     crowding. The line keeps the foot alone, at full width. */
+  .card-foot .card-meta { display: none; }
+  .card-foot .quote { max-width: none; white-space: nowrap; }
 }
 /* Smaller still and it has nowhere to go — three lines even at that size,
    and the foot pushes up through the handle. The name is the point of the

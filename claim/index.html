@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=29">
+  <link rel="stylesheet" href="/assets/card.css?v=30">
   <style>
     /* ---- The planet hero. One page again: the CTA scrolls to #reserve,
        and when a clean loop video exists it can sit here scroll-scrubbed —
@@ -74,8 +74,11 @@
        keyboard leaves (~430px), so typing shows the whole ritual — card,
        headline, field — with nothing hidden and nothing to scroll. */
     @media (max-width: 640px) {
-      main { justify-content: center; padding-top: 10px; padding-bottom: 12px; gap: 16px; }
-      .scene { margin: 12px 0; }
+      main { justify-content: center; padding-top: 14px; padding-bottom: 16px; gap: 22px;
+             /* Air, not size: the card cedes a little width and height so
+                the stack stops touching itself. */
+             --card-h: min(38vh, calc(87vw / 1.586)); }
+      .scene { margin: 14px 0; }
       /* Premium type whispers: the phone page steps everything down a
          size and lets the card carry the weight. */
       .say h1 { font-size: 22px; letter-spacing: -.6px; }
@@ -191,7 +194,7 @@
                 </div>
                 <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
                 <div class="card-foot">
-                  <div class="quote engraved">Better money lifestyle, for yourself.</div>
+                  <div class="quote engraved">Minimal. Private. Yours.</div>
                   <div class="card-meta engraved">Open to <br class="plate-br">reserve</div>
                 </div>
               </div>
