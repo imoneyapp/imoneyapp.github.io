@@ -143,7 +143,7 @@
     <!-- 2. Signed in, choosing -->
     <section id="step-pick" class="hidden">
       <h1>Pick your name</h1>
-      <p class="sub">3–20 characters. Letters, numbers and underscores.</p>
+      <p class="sub">2–20 characters. Letters, numbers and underscores.</p>
       <div class="row">
         <input id="handle" placeholder="handle" autocapitalize="none" autocorrect="off"
                spellcheck="false" maxlength="20" inputmode="latin">
@@ -207,13 +207,13 @@
       title: '預約你的 @帳號', pickTitle: '選一個名字',
       inTitle: '預約你的 @帳號',
       inSub: 'iMoney 還沒上線。現在把名字定下來 —— 上線時它就在那裡等你。',
-      pickSub: '3–20 個字元，可用英文字母、數字與底線。',
+      pickSub: '2–20 個字元，可用英文字母、數字與底線。',
       privacy: '只有 iMoney 團隊看得到。若在 Lab 中獲得回覆，也永遠不會顯示你的名字。',
       apple: '用 Apple 繼續', google: '用 Google 繼續',
       reserve: '預約', cancel: '取消', signout: '登出',
       change: '換一個名字', share: '分享我的卡片',
       isYours: '是你的了。', slogan: '花錢，是一門認識自己的藝術。',
-      bad: '3–20 個字元，只能是英文字母、數字與底線。',
+      bad: '2–20 個字元，只能是英文字母、數字與底線。',
       taken: '這個名字已經有人用了，換一個？',
       failed: '預約失敗，再試一次？', checking: '檢查中…'
     } : null;
@@ -257,8 +257,8 @@
 
     $('claim').onclick = async () => {
       const handle = $('handle').value.trim().toLowerCase().replace(/^@/, '');
-      if (!/^[a-z0-9_]{3,20}$/.test(handle)) {
-        return say(T ? T.bad : '3–20 characters, letters, numbers and underscores only.', 'bad');
+      if (!/^[a-z0-9_]{2,20}$/.test(handle)) {
+        return say(T ? T.bad : '2–20 characters, letters, numbers and underscores only.', 'bad');
       }
       $('claim').disabled = true; say(T ? T.checking : 'Checking…');
       const { data, error } = await sb.rpc('reserve_handle', { p_handle: handle });

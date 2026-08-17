@@ -63,6 +63,7 @@
 
     .status { font-size: 14px; color: var(--bone-faint); margin-top: 16px; min-height: 20px; }
     .status.bad { color: var(--negative); }
+    .status.good { color: var(--positive); }
 
 
     footer { margin-top: auto; padding: 34px 0 24px; font-size: 13px; color: var(--bone-faint); }
@@ -134,6 +135,9 @@
     document.getElementById('card-quote').textContent =
       QUOTES[Math.floor(Math.random() * QUOTES.length)];
 
+    const SB = 'https://cpsdkarncveeemrfmkll.supabase.co';
+    const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc2RrYXJuY3ZlZWVtcmZta2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NzQ3NzAsImV4cCI6MjA5NjE1MDc3MH0.zzHVArTaz2OdW1pYEzMIlrgcyuXWm4MNnR-bizyRhdY';
+
     const input = document.getElementById('handle');
     const card  = document.getElementById('card-handle');
     const go    = document.getElementById('go');
@@ -152,18 +156,48 @@
       // The URL line reads as the address the name will actually live at.
       document.getElementById('card-url').textContent =
         h ? 'withimoney.com/@' + h : 'withimoney.com';
-      go.disabled = h.length < 3;
-      // Only nag once they've typed enough to have an opinion about.
+      go.disabled = h.length < 2;
       status.className = 'status';
-      status.textContent = h.length && h.length < 3 ? 'At least 3 characters.' : DEFAULT;
+      if (!h.length)         { status.textContent = DEFAULT; }
+      else if (h.length < 2) { status.textContent = 'At least 2 characters.'; }
+      else                   { check(h); }
     });
+
+    let checkTimer, checking = '';
+    function check(h) {
+      clearTimeout(checkTimer);
+      status.textContent = 'Checking…';
+      checkTimer = setTimeout(async () => {
+        checking = h;
+        try {
+          const res = await fetch(SB + '/rest/v1/rpc/is_handle_taken', {
+            method: 'POST',
+            headers: { apikey: KEY, Authorization: 'Bearer ' + KEY,
+                       'Content-Type': 'application/json' },
+            body: JSON.stringify({ target_handle: h })
+          });
+          const taken = await res.json();
+          if (checking !== h || clean(input.value) !== h) return;   // stale
+          status.className = 'status' + (taken ? ' bad' : ' good');
+          status.textContent = (taken ? '@%s is taken. Try another?' : '@%s is free.').replace('%s', h);
+          go.disabled = !!taken;
+        } catch {
+          // Never claim "taken" on a network blip — let them try to reserve
+          // and be told by the server, which can't be wrong about it.
+          if (checking !== h) return;
+          status.className = 'status';
+          status.textContent = DEFAULT;
+          go.disabled = false;
+        }
+      }, 350);
+    }
 
     // Auth lives on /reserve — one place, one set of redirect URLs. The
     // handle rides along so nobody has to type it twice.
     document.getElementById('form').addEventListener('submit', e => {
       e.preventDefault();
       const h = clean(input.value);
-      if (h.length < 3) return;
+      if (h.length < 2 || go.disabled) return;
       location.href = '/reserve/?h=' + encodeURIComponent(h);
     });
   </script>
