@@ -10,7 +10,8 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="assets/card.css">
+  <link rel="stylesheet" href="/assets/card.css">
+  <link rel="stylesheet" href="/assets/orb.css">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
@@ -31,14 +32,19 @@
        so the card is sized from the height left over rather than a fixed
        cap. Tall screen: big card. Laptop: it gives way so the form stays
        above the fold. 1.586 is the card's aspect ratio. */
-    .scene { margin: min(11vh, 92px) auto 0;
-             max-width: min(100%, 680px, calc((100svh - 470px) * 1.586)); }
+    /* Square, so it's sized off whichever runs out first — height on a
+       laptop, width on a phone. */
+    /* max() floor: on a short window `100svh - 450px` goes to zero or
+       negative and the ball disappears completely rather than just getting
+       small. 210px is the smallest it still reads as an object. */
+    .orb-scene { margin: min(6vh, 50px) auto 0;
+                 max-width: min(100%, 430px, max(210px, calc(100svh - 450px))); }
 
     h1 { font-size: clamp(32px, 5.6vw, 54px); font-weight: 700; letter-spacing: -1.5px;
          margin: clamp(30px, 4.6vh, 52px) 0 10px; }
     .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px); margin: 0 0 28px; }
 
-    .row { display: flex; gap: 10px; max-width: 400px; width: 100%; margin: 0 auto; }
+    .row { display: flex; gap: 9px; max-width: 300px; width: 100%; margin: 0 auto; }
     /* A lit well rather than a dark box. The old field was the same value as
        the page, so it read as decoration — this one is glass over ink, with
        a brighter rim, so it's obvious it's the thing you fill in. */
@@ -49,14 +55,15 @@
              transition: border-color .2s, background .2s; }
     .field:hover { background: rgba(244,241,234,.075); }
     .field:focus-within { border-color: var(--accent); background: rgba(244,241,234,.09); }
-    .field span { color: var(--bone-dim); font-size: 21px; }
+    .field span { color: var(--bone-dim); font-size: clamp(19px, 2.3vw, 23px); font-weight: 600; }
     input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--bone);
-            font: 21px/1 inherit; padding: 23px 0; }
+            font-weight: 600; font-size: clamp(19px, 2.3vw, 23px); line-height: 1; font-family: inherit; padding: 19px 0; letter-spacing: -.3px; }
     /* The placeholder is the instruction — dim to the point of invisible
        was the reason the field didn't read as a field. */
     input::placeholder { color: var(--bone-faint); opacity: 1; }
     button { background: var(--bone); color: var(--ink); border: 0; border-radius: 18px;
-             padding: 23px 30px; font: 600 18px/1 inherit; cursor: pointer; white-space: nowrap; }
+             padding: 19px 22px; font-weight: 600; font-size: clamp(19px, 2.3vw, 23px); line-height: 1; font-family: inherit; cursor: pointer;
+             white-space: nowrap; letter-spacing: -.2px; }
     button:disabled { opacity: .4; cursor: default; }
 
     .status { font-size: 14px; color: var(--bone-faint); margin-top: 16px; min-height: 20px; }
@@ -77,32 +84,24 @@
 <body>
   <div class="wrap">
     <header>
-      <img src="assets/logo-mark.png" alt="">
+      <img src="/assets/logo-mark.png" alt="">
       <b>iMoney</b>
     </header>
 
     <!-- The card is the whole page. It carries the mark, and the handle
          appears on it live as you type — you watch your name land on the
          object before you commit to anything. -->
-    <div class="scene">
-      <div class="float">
-        <div class="card">
-          <div class="face front">
-            <div class="card-inner">
-              <div class="card-top">
-                <div class="card-meta left engraved">Pre-launch</div>
-                <div class="card-meta engraved">AUGUST<br>2026</div>
-              </div>
-              <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
-              <div class="card-foot">
-                <div class="quote engraved" id="card-quote"></div>
-                <img class="card-logo" src="assets/logo-ink-star.png" alt="iMoney">
-              </div>
-            </div>
+    <div class="orb-scene">
+      <div class="orb-float">
+        <div class="orb" id="orb">
+          <div class="orb-face">
+            <img class="orb-logo" src="/assets/logo-ink-star.png" alt="iMoney">
+            <div class="orb-handle placeholder" id="card-handle">@yourname</div>
+            <div class="orb-sub">August 2026</div>
           </div>
-          <div class="face back"><img src="assets/logo-ink-star.png" alt=""></div>
         </div>
       </div>
+      <div class="orb-shadow"></div>
     </div>
 
     <h1 id="headline">Reserve <span id="head-handle">@yourname</span></h1>
@@ -127,15 +126,6 @@
   </div>
 
   <script>
-    const QUOTES = [
-      'Designed to replace your notebook.',
-      'A better relationship with your money.',
-      'Spending is the art of knowing yourself.',
-      'Minimal. Social. Weirdly addictive.'
-    ];
-    document.getElementById('card-quote').textContent =
-      QUOTES[Math.floor(Math.random() * QUOTES.length)];
-
     const SB = 'https://cpsdkarncveeemrfmkll.supabase.co';
     const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc2RrYXJuY3ZlZWVtcmZta2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NzQ3NzAsImV4cCI6MjA5NjE1MDc3MH0.zzHVArTaz2OdW1pYEzMIlrgcyuXWm4MNnR-bizyRhdY';
 
@@ -199,6 +189,55 @@
       location.href = '/reserve/?h=' + encodeURIComponent(h);
     });
   </script>
-  <script src="assets/card.js"></script>
+  <script>
+    (() => {
+      const orb  = document.getElementById('orb');
+      if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        // Turn the ball toward wherever you are. 26° because the marks
+        // ride the surface now — they swing bodily around the sphere, so
+        // the angle that still leaves the name readable is much smaller
+        // than it would be for a flat face pivoting in place.
+        const MAX = 26;
+        addEventListener('pointermove', e => {
+          const r = orb.getBoundingClientRect();
+          if (!r.width) return;
+          const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+          // Divisor sets the reach: it responds from about one ball-width
+          // away. Then the VECTOR is clamped to the unit disc, not each
+          // axis separately — clamping per-axis lets a corner reach
+          // MAX on both at once, and the two rotations compound into a
+          // swing that carries the name clean off the rim.
+          let x = (e.clientX - cx) / (r.width  * 1.1);
+          let y = (e.clientY - cy) / (r.height * 1.1);
+          const m = Math.hypot(x, y);
+          if (m > 1) { x /= m; y /= m; }
+          orb.classList.add('free');
+          orb.style.setProperty('--ry', (x * MAX) + 'deg');
+          orb.style.setProperty('--rx', (-y * MAX) + 'deg');
+        });
+        document.addEventListener('pointerleave', () => {
+          orb.classList.remove('free');
+          orb.style.removeProperty('--ry'); orb.style.removeProperty('--rx');
+        });
+      }
+
+      // The ghost types itself. An empty field says "type something"; a
+      // field quietly writing @ev, @kai, @yuki says "type a NAME" — and
+      // it's the one thing on a still page that rewards watching.
+      const input = document.getElementById('handle');
+      const NAMES = ['ev', 'kai', 'yuki', 'asu', 'yourname'];
+      let n = 0, i = 0, erasing = false;
+      (function tick() {
+        if (input.value) { input.placeholder = 'yourname'; return setTimeout(tick, 1200); }
+        const word = NAMES[n];
+        i += erasing ? -1 : 1;
+        input.placeholder = word.slice(0, i) + (i < word.length ? '\u2009' : '');
+        let wait = erasing ? 45 : 95;
+        if (!erasing && i === word.length) { erasing = true; wait = 1500; }
+        else if (erasing && i === 0)       { erasing = false; n = (n + 1) % NAMES.length; wait = 260; }
+        setTimeout(tick, wait);
+      })();
+    })();
+  </script>
 </body>
 </html>

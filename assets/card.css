@@ -1,6 +1,7 @@
-/* The member card, shared by the landing page and /reserve.
-   Extracted rather than duplicated: the card is the brand's one object, and
-   two copies would drift the first time either page was touched. */
+/* Palette for every page, plus the member card that /reserve still shows on
+   its done step. The landing pages moved to the pearl (assets/orb.css); the
+   card lives on here because the confirmation screen and its share image are
+   still drawn as a card. */
 :root {
   --ink: #0b0b0c; --ink-raised: #161617; --bone: #f4f1ea;
   --bone-dim: #a8a49c; --bone-faint: #6f6c66;
@@ -22,10 +23,9 @@
   transform-style: preserve-3d;
   transition: transform .55s cubic-bezier(.2,.8,.2,1);
 }
-/* Level at rest. The tilt is driven by pointer position (assets/card.js) so
-   each corner leans a different way — a single hover state made all four
-   corners feel identical, which is the opposite of holding an object. The
-   transition below is what makes it settle back rather than snap. */
+/* Level at rest. `.tilting` was pointer-driven lean on the old landing page;
+   nothing sets it now, but it costs a line and /reserve's card still uses
+   the same base rules. */
 .card.tilting { transition: none; }
 
 .card.turning { animation: spin 26s linear infinite; transform: none; }
