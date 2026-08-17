@@ -34,14 +34,14 @@
        above the fold. 1.586 is the card's aspect ratio. */
     /* Square, so it's sized off whichever runs out first — height on a
        laptop, width on a phone. */
-    .orb-scene { margin: min(7vh, 58px) auto 0;
-                 max-width: min(100%, 420px, calc(100svh - 430px)); }
+    .orb-scene { margin: min(6vh, 50px) auto 0;
+                 max-width: min(100%, 430px, calc(100svh - 450px)); }
 
     h1 { font-size: clamp(32px, 5.6vw, 54px); font-weight: 700; letter-spacing: -1.5px;
          margin: clamp(30px, 4.6vh, 52px) 0 10px; }
     .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px); margin: 0 0 28px; }
 
-    .row { display: flex; gap: 10px; max-width: 400px; width: 100%; margin: 0 auto; }
+    .row { display: flex; gap: 10px; max-width: 330px; width: 100%; margin: 0 auto; }
     /* A lit well rather than a dark box. The old field was the same value as
        the page, so it read as decoration — this one is glass over ink, with
        a brighter rim, so it's obvious it's the thing you fill in. */
@@ -52,14 +52,15 @@
              transition: border-color .2s, background .2s; }
     .field:hover { background: rgba(244,241,234,.075); }
     .field:focus-within { border-color: var(--accent); background: rgba(244,241,234,.09); }
-    .field span { color: var(--bone-dim); font-size: 21px; }
+    .field span { color: var(--bone-dim); font-size: clamp(17px, 2vw, 20px); font-weight: 600; }
     input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--bone);
-            font: 21px/1 inherit; padding: 23px 0; }
+            font: 600 clamp(17px, 2vw, 20px)/1 inherit; padding: 19px 0; letter-spacing: -.2px; }
     /* The placeholder is the instruction — dim to the point of invisible
        was the reason the field didn't read as a field. */
     input::placeholder { color: var(--bone-faint); opacity: 1; }
     button { background: var(--bone); color: var(--ink); border: 0; border-radius: 18px;
-             padding: 23px 30px; font: 600 18px/1 inherit; cursor: pointer; white-space: nowrap; }
+             padding: 19px 24px; font: 600 clamp(17px, 2vw, 20px)/1 inherit; cursor: pointer;
+             white-space: nowrap; letter-spacing: -.2px; }
     button:disabled { opacity: .4; cursor: default; }
 
     .status { font-size: 14px; color: var(--bone-faint); margin-top: 16px; min-height: 20px; }
@@ -89,13 +90,17 @@
          object before you commit to anything. -->
     <div class="orb-scene">
       <div class="orb-float">
-        <div class="orb" id="orb">
-          <div class="orb-face">
-            <div class="orb-handle placeholder" id="card-handle">@yourname</div>
-            <div class="orb-sub">Pre-launch · August 2026</div>
+        <div class="orb-spin" id="orb-spin">
+          <div class="orb" id="orb">
+            <div class="orb-face">
+              <img class="orb-logo" src="/assets/logo-ink-star.png" alt="iMoney">
+              <div class="orb-handle placeholder" id="card-handle">@yourname</div>
+              <div class="orb-sub">Pre-launch · August 2026</div>
+            </div>
           </div>
         </div>
       </div>
+      <div class="orb-shadow"></div>
     </div>
 
     <h1 id="headline">Reserve <span id="head-handle">@yourname</span></h1>
@@ -193,19 +198,54 @@
     });
   </script>
   <script>
-    // The highlight follows your pointer — a metal ball catching your light
-    // is the one interaction a sphere asks for, and it needs no tilt.
     (() => {
-      const orb = document.getElementById('orb');
-      if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-      orb.addEventListener('pointermove', e => {
-        const r = orb.getBoundingClientRect();
-        orb.style.setProperty('--sx', ((e.clientX - r.left) / r.width  * 100) + '%');
-        orb.style.setProperty('--sy', ((e.clientY - r.top)  / r.height * 100) + '%');
-      });
-      orb.addEventListener('pointerleave', () => {
-        orb.style.removeProperty('--sx'); orb.style.removeProperty('--sy');
-      });
+      const spin = document.getElementById('orb-spin');
+      const orb  = document.getElementById('orb');
+      if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        // Turn the ball toward wherever you are. Capped at 42° because past
+        // that the engraving edges away and the name stops being readable —
+        // it should feel like you can push it around, not lose it.
+        const MAX = 42;
+        addEventListener('pointermove', e => {
+          const r = orb.getBoundingClientRect();
+          if (!r.width) return;
+          const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+          // Clamped to ±1 so MAX really is the maximum. Clamping the
+          // normalised value at 1.4 instead let it reach 58° — past the
+          // point where the engraving edges away, which is the whole thing
+          // the cap exists to stop. Divisor sets the reach: it responds
+          // from about one ball-width away.
+          const x = Math.max(-1, Math.min(1, (e.clientX - cx) / (r.width  * 1.1)));
+          const y = Math.max(-1, Math.min(1, (e.clientY - cy) / (r.height * 1.1)));
+          spin.classList.add('free');
+          spin.style.transform = `rotateY(${x * MAX}deg) rotateX(${-y * MAX}deg)`;
+          // The highlight stays with the LIGHT while the surface turns.
+          orb.style.setProperty('--sx', (32 - x * 14) + '%');
+          orb.style.setProperty('--sy', (24 - y * 12) + '%');
+        });
+        document.addEventListener('pointerleave', () => {
+          spin.classList.remove('free');
+          spin.style.transform = '';
+          orb.style.removeProperty('--sx'); orb.style.removeProperty('--sy');
+        });
+      }
+
+      // The ghost types itself. An empty field says "type something"; a
+      // field quietly writing @ev, @kai, @yuki says "type a NAME" — and
+      // it's the one thing on a still page that rewards watching.
+      const input = document.getElementById('handle');
+      const NAMES = ['ev', 'kai', 'yuki', 'asu', 'yourname'];
+      let n = 0, i = 0, erasing = false;
+      (function tick() {
+        if (input.value) { input.placeholder = 'yourname'; return setTimeout(tick, 1200); }
+        const word = NAMES[n];
+        i += erasing ? -1 : 1;
+        input.placeholder = word.slice(0, i) + (i < word.length ? '\u2009' : '');
+        let wait = erasing ? 45 : 95;
+        if (!erasing && i === word.length) { erasing = true; wait = 1500; }
+        else if (erasing && i === 0)       { erasing = false; n = (n + 1) % NAMES.length; wait = 260; }
+        setTimeout(tick, wait);
+      })();
     })();
   </script>
 </body>
