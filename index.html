@@ -47,8 +47,10 @@
       font-size: clamp(15px, 1.8vw, 20px); font-weight: 600; letter-spacing: -.2px;
       opacity: .85; transition: opacity .25s;
     }
-    .cosmos-cta { display: flex; align-items: center; gap: 10px;
-                  white-space: nowrap; }
+    /* The key hangs OUTSIDE the centring math: the eye centres on the
+       words and barely counts the faint circle, so the column centres the
+       text under the mark exactly and the key rides to the right. */
+    .cosmos-cta { position: relative; white-space: nowrap; }
     .cosmos-cta:hover { opacity: 1; }
     /* The caret lives only while typing; the enter key waits for the last
        character before it fades in. */
@@ -61,7 +63,9 @@
     .cosmos-cta .cta-enter { opacity: 0; transition: opacity .45s; }
     .cosmos-cta.typed .cta-enter { opacity: 1; }
     .cta-enter {
-      width: 24px; height: 24px; border-radius: 50%; flex: 0 0 auto;
+      position: absolute; left: calc(100% + 10px); top: 50%;
+      transform: translateY(-50%);
+      width: 24px; height: 24px; border-radius: 50%;
       border: 1px solid rgba(244,241,234,.35);
       display: flex; align-items: center; justify-content: center;
       transition: border-color .25s, background .25s, color .25s;
