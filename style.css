@@ -97,3 +97,50 @@ footer a:hover { color: var(--bone-dim); }
   th { width: 42%; padding-right: 14px; }
   th, td { font-size: 14.5px; }
 }
+
+/* ---------------------------------------------------------------------------
+   Disclosure rows — the Apple support-page pattern. A stack of hairline-
+   separated rows; the question on the left, a chevron on the right that
+   turns a quarter when the row opens.
+
+   Built on <details>, so it works with no JavaScript, is keyboard-operable,
+   and screen readers announce the expanded state on their own. A div-and-
+   onclick version would have to reimplement all three and would get at
+   least one of them wrong.
+   ------------------------------------------------------------------------ */
+.faq { margin-top: 8px; border-top: 1px solid var(--hairline); }
+
+.faq details { border-bottom: 1px solid var(--hairline); }
+
+.faq summary {
+  list-style: none;                 /* the default triangle, gone */
+  display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding: 20px 2px; cursor: pointer;
+  color: var(--bone); font-size: 17.5px; font-weight: 550; line-height: 1.45;
+  transition: color .2s;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary:hover { color: var(--accent); }
+/* Focus belongs on the row, not on a hairline of text inside it. */
+.faq summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 6px; }
+
+/* Drawn rather than a glyph: a chevron in a font is at the mercy of whatever
+   font is actually loaded, and this one has to sit at a precise angle. */
+.faq summary::after {
+  content: ""; flex: 0 0 auto; width: 9px; height: 9px;
+  border-right: 2px solid var(--bone-faint); border-bottom: 2px solid var(--bone-faint);
+  border-radius: 1px;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform .28s cubic-bezier(.2,.8,.2,1), border-color .2s;
+}
+.faq details[open] summary::after { transform: rotate(-135deg) translate(-3px, -3px); }
+.faq summary:hover::after { border-color: var(--accent); }
+
+.faq details > *:not(summary) { margin: 0 2px 22px; }
+.faq details[open] > *:not(summary) { animation: faq-in .28s cubic-bezier(.2,.8,.2,1); }
+@keyframes faq-in { from { opacity: 0; transform: translateY(-4px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .faq summary::after { transition: none; }
+  .faq details[open] > *:not(summary) { animation: none; }
+}
