@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>預約 @yourname — iMoney</title>
-  <meta name="description" content="花錢，是一門認識自己的藝術。在 iMoney 上線前，先把你的名字預約起來。">
+  <meta name="description" content="iMoney——極簡、社群的記帳 App。手動記帳、和朋友分帳、不連接銀行。上線前先預約你的 @帳號。">
   <meta property="og:title" content="在 iMoney 預約 @yourname">
   <meta property="og:description" content="花錢，是一門認識自己的藝術。">
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
@@ -74,29 +74,14 @@
     /* The width cap has to be expressed as a height too, or the box stays
        at its vh height while the card inside it is only 92vw/1.586 — dead
        space under the card on a phone that reads as a spacing mistake. */
-    /* Typing mode, phones. The keyboard takes half the screen, and iOS's
-       answer is to scroll the input into view — which shoves the card off
-       the top, and the card is the whole point: your name lands on it as
-       you type. So while the field has focus the page compacts instead:
-       the headline steps aside (the card is already saying it), the card
-       shrinks to fit what the keyboard leaves, and everything holds still
-       above the fold. */
+    /* Phones: the stack is tightened until card → field fits in what a
+       keyboard leaves (~430px), so typing shows the whole ritual — card,
+       headline, field — with nothing hidden and nothing to scroll. */
     @media (max-width: 640px) {
-      main { transition: gap .25s; }
-      .scene { transition: height .25s; }
-      main:focus-within { justify-content: flex-start; gap: 16px;
-                          padding-top: clamp(10px, 2vh, 24px); }
-      main:focus-within .say { display: none; }
-      main:focus-within .scene { height: min(30vh, calc(80vw / 1.586)); margin: 0; }
-      /* The compacted card slides up over the corner brand — one thing at a
-         time on a keyboard-height screen. (:has needs iOS 15.4+; older
-         Safaris just keep the harmless overlap.) */
-      body:has(#handle:focus) header { opacity: 0; transition: opacity .2s; }
-    }
-    /* Phones: the card gets air above and below — at small sizes the flex
-       gaps alone leave it shoulder-to-shoulder with the headline. */
-    @media (max-width: 640px) {
-      .scene { margin: clamp(18px, 4vh, 36px) 0; }
+      main { padding-top: 10px; padding-bottom: 12px; gap: 16px; }
+      .scene { margin: 12px 0; }
+      .say h1 { font-size: 27px; }
+      .slogan { margin-top: 6px; font-size: 14px; }
     }
     .scene { height: var(--card-h);
              aspect-ratio: 1.586; width: auto;
@@ -215,6 +200,13 @@
   <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png?v=2">
   <link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon-256.png?v=2">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"MobileApplication","name":"iMoney",
+   "alternateName":["iMoney 記帳","iMoney Money Tracker"],
+   "operatingSystem":"iOS","applicationCategory":"FinanceApplication",
+   "url":"https://withimoney.com","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
+   "description":"極簡、社群的 iOS 記帳 App。手動記帳、和朋友分帳、預算與月報表——不連接銀行帳戶、沒有廣告。"}
+  </script>
 </head>
 <body>
   <section class="cosmos" aria-label="iMoney">
@@ -248,7 +240,6 @@
                 <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
                 <div class="card-foot">
                   <div class="quote engraved">為取代你的直覺而設計</div>
-                  <div class="card-meta engraved">開放預留</div>
                 </div>
               </div>
             </div>
