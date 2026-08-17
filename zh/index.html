@@ -22,16 +22,10 @@
     /* ---- The planet hero. One page again: the CTA scrolls to #reserve,
        and when a clean loop video exists it can sit here scroll-scrubbed —
        the structure is ready for it. ---- */
-    /* One screen at a time: each section is a snap point and a scroll
-       always settles on one of them — nobody can rest in the seam between
-       the planet and the card. snap-stop keeps a hard fling from blowing
-       through a screen entirely. */
-    html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
-    .claim-screen { position: relative; width: 100%;
-                    scroll-snap-align: start; scroll-snap-stop: always; }
+    html { scroll-behavior: smooth; }
+    .claim-screen { position: relative; width: 100%; }
     .cosmos {
       position: relative; width: 100%; height: 100svh; overflow: hidden;
-      scroll-snap-align: start; scroll-snap-stop: always;
       background: #000 url(/assets/planet.jpg) right center / cover no-repeat;
     }
     .cosmos-inner {
@@ -50,11 +44,6 @@
       opacity: .85; transition: opacity .25s;
     }
     .cosmos-cta:hover { opacity: 1; }
-    .cosmos-hint {
-      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-      font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
-      color: rgba(244,241,234,.45); transition: opacity .4s; pointer-events: none;
-    }
     @media (max-width: 700px) {
       .cosmos { background-image: url(/assets/planet-vertical.jpg);
                 background-position: center; }
@@ -187,7 +176,6 @@
       <img class="cosmos-mark" src="/assets/logo-mark.png" alt="">
       <a class="cosmos-cta" href="#reserve">預約 @yourname</a>
     </div>
-    <div class="cosmos-hint" id="cosmos-hint">滑動</div>
   </section>
 
   <section class="claim-screen" id="reserve">
@@ -362,14 +350,6 @@
       inp.addEventListener('focus', () => {
         setTimeout(() => document.getElementById('reserve').scrollIntoView({ behavior: 'smooth' }), 60);
       });
-    })();
-  </script>
-  <script>
-    // The hero's hint bows out once scrolling has begun.
-    (() => {
-      const hint = document.getElementById('cosmos-hint');
-      if (!hint) return;
-      addEventListener('scroll', () => { hint.style.opacity = scrollY > 80 ? '0' : '1'; }, { passive: true });
     })();
   </script>
 </body>
