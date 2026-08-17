@@ -24,10 +24,16 @@ body {
    different sites. Type goes up with it: a wider measure at the same size
    just makes lines longer to track, which is the trade you don't want on a
    policy someone is actually trying to read. */
-main { max-width: 760px; margin: 0 auto; padding: 28px 24px 40px; }
+main { max-width: 760px; margin: 0 auto; padding: clamp(104px, 18vh, 168px) 24px 40px; }
 
-/* Header matches the landing page's: mark, wordmark, nothing else. */
-header.site { display: flex; align-items: center; gap: 9px; margin-bottom: clamp(52px, 12vh, 104px); }
+/* Header matches the landing page's: mark, wordmark, nothing else.
+   Pinned to the SCREEN's corner, not the column's — the column centres
+   itself for reading, but the brand belongs to the page, and on a wide
+   window a mid-screen logo reads as misplaced rather than aligned. Absolute
+   rather than fixed so it scrolls away with the top of the document instead
+   of hovering over the text. */
+header.site { position: absolute; top: 26px; left: clamp(24px, 3vw, 40px);
+              display: flex; align-items: center; gap: 9px; }
 header.site a { color: var(--bone); text-decoration: none; font-weight: 600;
                 font-size: 17px; letter-spacing: -.2px; border-bottom: 0; }
 /* Direct child only. `header.site a::before` also matched the language link
