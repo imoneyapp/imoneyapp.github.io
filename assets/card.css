@@ -13,12 +13,13 @@
 .scene { perspective: 1600px; width: 100%; }
 .float { animation: bob 7s ease-in-out infinite; }
 
-/* Still by default, tilted just off-square. Before you've claimed anything
-   the card's job is to show YOUR name — turning it away mid-read is the one
-   thing it must not do. Rotation is earned. */
+/* Still and square by default. Before you've claimed anything the card's job
+   is to show YOUR name — turning it away mid-read is the one thing it must
+   not do, and a tilt makes the handle harder to read for no gain. Rotation
+   is earned. */
 .card {
   position: relative; width: 100%; aspect-ratio: 1.586;
-  transform-style: preserve-3d; transform: rotateY(-9deg) rotate(-1deg);
+  transform-style: preserve-3d;
   transition: transform .6s cubic-bezier(.2,.8,.2,1);
 }
 .card.turning { animation: spin 26s linear infinite; transform: none; }
@@ -87,5 +88,5 @@
 /* Decoration, not information — nobody needs it spinning to understand it. */
 @media (prefers-reduced-motion: reduce) {
   .float, .card.turning, .face::after { animation: none; }
-  .card.turning { transform: rotateY(-9deg); }
+  .card.turning { transform: none; }
 }
