@@ -8,7 +8,7 @@
   <meta property="og:title" content="Reserve @yourname on iMoney">
   <meta property="og:description" content="Claim your name before it launches.">
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
-  <link rel="stylesheet" href="../assets/card.css?v=28">
+  <link rel="stylesheet" href="../assets/card.css?v=29">
   <style>
     /* Palette mirrors the app: ink ground, bone type, the gold accent. */
     :root {
@@ -47,8 +47,14 @@
     .face {
       position: absolute; inset: 0; border-radius: 22px; overflow: hidden;
       backface-visibility: hidden; -webkit-backface-visibility: hidden;
-      border: 1px solid rgba(244,241,234,.28);
-      box-shadow: 0 18px 40px rgba(0,0,0,.55);
+      /* Same milled rim as the claim card: bright wall top/left, shaded
+         wall bottom/right, dark outer ring for the side that turns away. */
+      border: 1px solid rgba(70,68,64,.9);
+      box-shadow: 0 18px 40px rgba(0,0,0,.55),
+                  inset 0 2.5px 1px -0.5px rgba(255,255,255,.95),
+                  inset 2.5px 0 1px -0.5px rgba(255,255,255,.55),
+                  inset 0 -2.5px 1px -0.5px rgba(42,41,38,.8),
+                  inset -2.5px 0 1px -0.5px rgba(52,51,48,.6);
       background: linear-gradient(135deg, #e8e6e1 0%, #b9b7b2 30%, #d8d6d1 52%, #a7a5a1 76%, #6f6e6b 100%);
     }
     .face.back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
@@ -376,7 +382,19 @@
       seam.addColorStop(0.6, 'rgba(255,255,255,.10)');
       seam.addColorStop(1,   'rgba(255,255,255,0)');
       ctx.fillStyle = seam; ctx.fillRect(cx, cy, cw, ch);
+
+      // The milled rim, matching the live card: a wall of light along the
+      // top-left edge falling to shadow at the bottom-right, stroked just
+      // inside the face, with a dark outer ring where the side turns away.
+      const rim = ctx.createLinearGradient(cx, cy, cx + cw * 0.4, cy + ch);
+      rim.addColorStop(0, 'rgba(255,255,255,.95)');
+      rim.addColorStop(0.5, 'rgba(255,255,255,.25)');
+      rim.addColorStop(1, 'rgba(42,41,38,.8)');
+      roundRect(ctx, cx + 2, cy + 2, cw - 4, ch - 4, cw * 0.055 - 2);
+      ctx.strokeStyle = rim; ctx.lineWidth = 4; ctx.stroke();
       ctx.restore();
+      roundRect(ctx, cx, cy, cw, ch, cw * 0.055);
+      ctx.strokeStyle = 'rgba(70,68,64,.9)'; ctx.lineWidth = 2; ctx.stroke();
 
       const pad = cw * 0.062;
       if (logo.complete && logo.naturalWidth) {

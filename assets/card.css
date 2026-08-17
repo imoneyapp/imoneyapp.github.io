@@ -54,8 +54,17 @@
 .face {
   position: absolute; inset: 0; border-radius: 4.4%/7%; overflow: hidden;
   backface-visibility: hidden; -webkit-backface-visibility: hidden;
-  border: 1px solid rgba(244,241,234,.28);
-  box-shadow: 0 26px 60px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.18) inset;
+  /* The edge has THICKNESS: a milled rim you can see, not a hairline.
+     Light strikes from above-left, so the rim is a bright wall along the
+     top and left, and a shaded wall along the bottom and right — four
+     inset strips, feathered a pixel so they read as machined metal, plus
+     a dark outer ring where the side wall turns away from the light. */
+  border: 1px solid rgba(70,68,64,.9);
+  box-shadow: 0 26px 60px rgba(0,0,0,.6),
+              inset 0 2.5px 1px -0.5px rgba(255,255,255,.95),
+              inset 2.5px 0 1px -0.5px rgba(255,255,255,.55),
+              inset 0 -2.5px 1px -0.5px rgba(42,41,38,.8),
+              inset -2.5px 0 1px -0.5px rgba(52,51,48,.6);
   /* Brushed silver: neutral greys with one cool bright band, the way sheet
      metal catches a single light. Neutral so the engraving carries the
      card, and it sits quietly against both the planet and the ink page. */
