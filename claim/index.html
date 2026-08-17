@@ -206,7 +206,7 @@
       </div>
 
       <div class="say">
-        <h1 id="headline">Reserve <span id="head-handle">@yourname</span></h1>
+        <h1 id="headline">Reserve early.</h1>
         <p class="slogan">A money app that does NOT read your banks.</p>
       </div>
 
@@ -247,7 +247,6 @@
       const shown = '@' + (h || 'yourname');
       card.textContent = shown;
       card.classList.toggle('placeholder', !h);
-      document.getElementById('head-handle').textContent = shown;
       go.disabled = h.length < 2;
       status.className = 'status';
       if (!h.length)         { status.textContent = DEFAULT; }
