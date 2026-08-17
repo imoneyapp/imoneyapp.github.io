@@ -35,7 +35,7 @@
 @media (hover: none) {
   .scene { perspective: none; }
   .card { transform: none; transform-style: flat; transition: transform .18s ease; }
-  .card:active { transform: scale(.985); }
+  .card:active { transform: scale(.965); }
 }
 
 /* The plate: one line on a desktop card, two on a phone card. The <br>

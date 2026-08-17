@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=23">
+  <link rel="stylesheet" href="/assets/card.css?v=24">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"MobileApplication","name":"iMoney",
    "alternateName":["iMoney 記帳","iMoney Money Tracker"],
@@ -23,7 +23,15 @@
        and when a clean loop video exists it can sit here scroll-scrubbed —
        the structure is ready for it. ---- */
     html { scroll-behavior: smooth; }
-    .claim-screen { position: relative; width: 100%; }
+    /* The same sky, one screen down: the stars are cropped from the
+       hero photograph's own left side, so grain and density match and the
+       two screens read as one continuous night. A breath of ink over it
+       keeps the card and type in charge. */
+    .claim-screen { position: relative; width: 100%;
+                    background: #0b0b0c url(/assets/stars.jpg) center / cover no-repeat; }
+    .claim-screen::before { content: ""; position: absolute; inset: 0;
+                            background: rgba(11,11,12,.42); pointer-events: none; }
+    .claim-screen > .wrap { position: relative; }
     .cosmos {
       position: relative; width: 100%; height: 100svh; overflow: hidden;
       background: #000 url(/assets/planet.jpg) right center / cover no-repeat;
@@ -43,7 +51,17 @@
       font-size: clamp(17px, 2vw, 21px); font-weight: 600; letter-spacing: -.2px;
       opacity: .85; transition: opacity .25s;
     }
+    .cosmos-cta { display: flex; align-items: center; gap: 12px; }
     .cosmos-cta:hover { opacity: 1; }
+    .cta-enter {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1px solid rgba(244,241,234,.35);
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .25s, background .25s;
+    }
+    .cosmos-cta:hover .cta-enter { border-color: rgba(244,241,234,.7);
+                                   background: rgba(244,241,234,.08); }
+    .cta-enter svg { width: 13px; height: 13px; display: block; }
     @media (max-width: 700px) {
       .cosmos { background-image: url(/assets/planet-vertical.jpg);
                 background-position: center; }
@@ -179,7 +197,7 @@
   <section class="cosmos" id="top" aria-label="iMoney">
     <div class="cosmos-inner">
       <img class="cosmos-mark" src="/assets/logo-mark.png" alt="">
-      <a class="cosmos-cta" href="#reserve">Reserve @yourname</a>
+      <a class="cosmos-cta" href="#reserve">Reserve @yourname<span class="cta-enter" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v5a2 2 0 0 1-2 2H3.5"/><path d="M6 7 3 10l3 3"/></svg></span></a>
     </div>
   </section>
 
@@ -336,8 +354,8 @@
         const r = scene.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width - 0.5;
         const y = (e.clientY - r.top) / r.height - 0.5;
-        card.style.setProperty('--ry', (x * 10).toFixed(2) + 'deg');
-        card.style.setProperty('--rx', (-y * 8).toFixed(2) + 'deg');
+        card.style.setProperty('--ry', (x * 16).toFixed(2) + 'deg');
+        card.style.setProperty('--rx', (-y * 12).toFixed(2) + 'deg');
       });
       scene.addEventListener('pointerleave', () => {
         card.style.removeProperty('--rx');
