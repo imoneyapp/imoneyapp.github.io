@@ -8,7 +8,7 @@
   <meta property="og:title" content="Reserve @yourname on iMoney">
   <meta property="og:description" content="Claim your name before it launches.">
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
-  <link rel="stylesheet" href="../assets/card.css?v=30">
+  <link rel="stylesheet" href="../assets/card.css?v=31">
   <style>
     /* Palette mirrors the app: ink ground, bone type, the gold accent. */
     :root {
@@ -390,6 +390,23 @@
       seam.addColorStop(0.6, 'rgba(255,255,255,.10)');
       seam.addColorStop(1,   'rgba(255,255,255,0)');
       ctx.fillStyle = seam; ctx.fillRect(cx, cy, cw, ch);
+
+      // Grain, so the saved card has the same tooth as the live one: a
+      // small noise tile, laid over the face at low alpha.
+      const gt = document.createElement('canvas');
+      gt.width = gt.height = 128;
+      const gc = gt.getContext('2d');
+      const gd = gc.createImageData(128, 128);
+      for (let i = 0; i < gd.data.length; i += 4) {
+        const v = 128 + (Math.random() - 0.5) * 255;
+        gd.data[i] = gd.data[i+1] = gd.data[i+2] = v; gd.data[i+3] = 255;
+      }
+      gc.putImageData(gd, 0, 0);
+      ctx.save();
+      ctx.globalAlpha = 0.05; ctx.globalCompositeOperation = 'overlay';
+      ctx.fillStyle = ctx.createPattern(gt, 'repeat');
+      ctx.fillRect(cx, cy, cw, ch);
+      ctx.restore();
 
       // The milled rim, matching the live card: a wall of light along the
       // top-left edge falling to shadow at the bottom-right, stroked just

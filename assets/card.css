@@ -79,6 +79,16 @@
 .card:not(.turning) .face.back { display: none; }
 .face.back img { width: 34%; opacity: .5;
                  filter: drop-shadow(0 1px 0 rgba(255,255,255,.25)); }
+/* Tooth. A polished gradient alone reads as plastic; real stock has
+   grain. Fractal noise, desaturated, overlay-blended at low opacity — it
+   perturbs the sheen without ever reading as dirt. Sits under ::after so
+   the light seam travels OVER the grain, the way light moves on metal. */
+.face::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='260'%20height='260'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.82'%20numOctaves='3'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20type='saturate'%20values='0'/%3E%3C/filter%3E%3Crect%20width='100%'%20height='100%'%20filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 260px 260px;
+  opacity: .35; mix-blend-mode: overlay;
+}
 .face::after {                     /* travelling light seam */
   content: ""; position: absolute; inset: -30%;
   background: linear-gradient(105deg, transparent 38%, rgba(255,236,230,.4) 48%,
