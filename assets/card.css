@@ -79,6 +79,7 @@
              color: rgba(11,11,12,.5); letter-spacing: 1.4px; text-align: right;
              text-transform: uppercase; }
 .card-meta.left { text-align: left; }
+.card-foot .card-meta { white-space: nowrap; flex: 0 0 auto; }
 
 /* The real lockup, not a mask of it — masking flattened the wordmark and
    the star into one silhouette and stopped looking like the logo. Engraved
@@ -125,11 +126,10 @@
    card is much wider than the page on desktop and vw units broke that. */
 .scene { container-type: inline-size; }
 
-/* On a phone-sized card 62% is too tight for the line even at this size —
-   give it most of the card. No font-size override here: matching RESERVED
-   is the point, and the shared clamp already handles small cards. */
+/* The plate holds its width, so on a small card the line is what gives —
+   it's short enough at this size to live inside half the card. */
 @container (max-width: 460px) {
-  .card-foot .quote { max-width: 80%; }
+  .card-foot .quote { max-width: 52%; }
 }
 /* Smaller still and it has nowhere to go — three lines even at that size,
    and the foot pushes up through the handle. The name is the point of the
