@@ -63,7 +63,7 @@
     .cosmos-cta .cta-enter { opacity: 0; transition: opacity .45s; }
     .cosmos-cta.typed .cta-enter { opacity: 1; }
     .cta-enter {
-      position: absolute; left: calc(100% + 9px); top: 50%;
+      position: absolute; left: calc(100% + 5px); top: 50%;
       transform: translateY(-50%);
       width: 1.15em; height: 1.15em; border-radius: 50%;
       border: 1px solid rgba(244,241,234,.35);
@@ -114,11 +114,24 @@
       const cta = document.querySelector('.cosmos-cta');
       const el = cta && cta.querySelector('.cta-text');
       if (!el) return;
-      const ACTS = ['Reserve @yourname', 'on @iMoney', 'See you inside.'];
-      const done = () => { cta.classList.remove('typing'); cta.classList.add('typed'); };
+      const ACTS = ['Welcome to @iMoney', 'Reserve @yourname', 'See you inside iMoney.'];
+      // The key parks 5px off the LAST GLYPH, not off the frozen box —
+      // the box holds the widest act's width, and when the final line is
+      // narrower than that (zh: the reserve act is longest), a box-edge
+      // key floats 40px out in space.
+      const done = () => {
+        cta.classList.remove('typing');
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const key = cta.querySelector('.cta-enter');
+        if (key) key.style.left =
+          (range.getBoundingClientRect().right - cta.getBoundingClientRect().left + 5) + 'px';
+        cta.classList.add('typed');
+      };
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        // The one static frame has to carry the message, not the sign-off.
-        el.textContent = ACTS[0]; done(); return;
+        // The one static frame has to carry the message — the reserve
+        // line, not the welcome or the sign-off.
+        el.textContent = ACTS[1]; done(); return;
       }
       // Measure with the typing class ON, so the caret's width is inside
       // the frozen box — at the widest act the caret otherwise pokes past
