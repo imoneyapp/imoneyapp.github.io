@@ -123,6 +123,17 @@
   <div class="wrap">
     <img class="mark" src="../assets/logo-mark.png" alt="iMoney">
 
+    <!-- 0. Already an iMoney account. Checked before reservations, because
+         a real account outranks a held name — offering to reserve a handle
+         to somebody who already has one is the page telling them it doesn't
+         know who they are. -->
+    <section id="step-have" class="hidden">
+      <h1 id="have-handle">@you</h1>
+      <p class="sub" id="have-sub">is already yours.</p>
+      <p class="note" id="have-note">You signed up in the app. Nothing to reserve.</p>
+      <button class="ghost" id="have-signout">Use another account</button>
+    </section>
+
     <!-- 1. Signed out -->
     <section id="step-in">
       <h1>Reserve @yourname</h1>
@@ -215,6 +226,8 @@
       apple: '用 Apple 繼續', google: '用 Google 繼續',
       reserve: '預約', cancel: '取消', signout: '登出',
       change: '換一個名字', share: '分享我的卡片',
+      haveSub: '已經是你的了。', haveNote: '你已經在 App 裡註冊過，不用再預約。',
+      haveSwitch: '換一個帳號',
       isYours: '是你的了。', slogan: '花錢，是一門認識自己的藝術。',
       bad: '只能用 2–20 個 a–z、0–9、_。',
       taken: '這個名字已經有人用了，換一個？',
@@ -222,7 +235,7 @@
     } : null;
 
     const $ = id => document.getElementById(id);
-    const show = name => ['in','pick','done'].forEach(s =>
+    const show = name => ['have','in','pick','done'].forEach(s =>
       $('step-' + s).classList.toggle('hidden', s !== name));
     const say = (text, kind) => { $('msg').textContent = text; $('msg').className = 'msg ' + (kind || ''); };
 
@@ -253,6 +266,16 @@
     async function refresh() {
       const { data: { session } } = await sb.auth.getSession();
       if (!session) { show('in'); return; }
+      // A real profile means this identity already IS an iMoney user — the
+      // same auth.users row the app signed them in with. RLS lets them read
+      // their own row and nobody else's.
+      const { data: prof } = await sb.from('profiles')
+        .select('handle').eq('id', session.user.id).maybeSingle();
+      if (prof && prof.handle) {
+        $('have-handle').textContent = '@' + prof.handle;
+        show('have'); return;
+      }
+
       const mine = await myReservation();
       if (mine && mine.handle) { renderCard(mine.handle, mine.reservation_no); show('done'); return; }
       if (wanted && !$('handle').value) $('handle').value = wanted.replace(/^@/, '');
@@ -268,7 +291,9 @@
     $('google').onclick = () => oauth('google');
     $('apple').onclick  = () => oauth('apple');
 
-    $('signout').onclick = async () => { await sb.auth.signOut(); show('in'); };
+    const signOut = async () => { await sb.auth.signOut(); show('in'); };
+    $('signout').onclick = signOut;
+    $('have-signout').onclick = signOut;
     $('change').onclick = () => { $('handle').value = ''; show('pick'); say(''); };
 
     $('claim').onclick = async () => {
@@ -418,6 +443,9 @@
       set('#share', T.share);
       set('#step-done .sub', T.isYours);
       set('#step-done .note', T.slogan);
+      set('#have-sub', T.haveSub);
+      set('#have-note', T.haveNote);
+      set('#have-signout', T.haveSwitch);
       $('handle').placeholder = 'yourname';
     }
 
