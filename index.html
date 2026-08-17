@@ -89,8 +89,8 @@
     @media (hover: none) {
       .cosmos-cta { pointer-events: none; }
       .cosmos-cta .cta-enter { pointer-events: auto;
-                               width: 1.5em; height: 1.5em; }
-      .cta-enter svg { width: .62em; height: .62em; }
+                               width: 1.3em; height: 1.3em; }
+      .cta-enter svg { width: .56em; height: .56em; }
     }
 
     @media (prefers-reduced-motion: reduce) { .cosmos-mark { animation: none; } }
@@ -114,7 +114,7 @@
       const cta = document.querySelector('.cosmos-cta');
       const el = cta && cta.querySelector('.cta-text');
       if (!el) return;
-      const ACTS = ['Welcome to @iMoney', 'Reserve @yourname', 'See you inside iMoney.'];
+      const ACTS = ['Welcome to @iMoney', 'Reserve @yourname'];
       // The key parks 5px off the LAST GLYPH, not off the frozen box —
       // the box holds the widest act's width, and when the final line is
       // narrower than that (zh: the reserve act is longest), a box-edge
