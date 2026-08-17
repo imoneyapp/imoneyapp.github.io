@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>iMoney</title>
   <meta name="description" content="iMoney — a minimal, social money tracker. Log spending by hand, split with friends, no bank linking. Reserve your @handle before launch.">
-  <meta property="og:title" content="iMoney">
-  <meta property="og:description" content="iMoney — a minimal, social money tracker. Log spending by hand, split with friends, no bank linking. Reserve your @handle before launch.">
+  <meta property="og:title" content="Reserve @yourname on iMoney">
+  <meta property="og:description" content="Spending is the art of knowing yourself.">
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
-  <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png?v=2">
-  <link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon-256.png?v=2">
-  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="/assets/card.css?v=17">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"MobileApplication","name":"iMoney",
    "alternateName":["iMoney 記帳","iMoney Money Tracker"],
@@ -19,51 +18,25 @@
    "url":"https://withimoney.com","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
    "description":"A minimal, social expense tracker for iOS. Manual logging, splitting with friends, budgets and monthly reports — with no bank account linking and no ads."}
   </script>
-  <script>
-    // Language is the browser's call: Chinese readers land on /zh/,
-    // everyone else stays. replace(), so back doesn't fight it.
-    if (/^zh/i.test(navigator.language)) location.replace('/zh/' + location.search);
-  </script>
   <style>
-    * { box-sizing: border-box; margin: 0; }
-    :root { --bone: #f4f1ea; --bone-dim: #a8a49c; }
-    body { background: #000;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", system-ui, sans-serif; }
+    /* ---- The planet hero. One page again: the CTA scrolls to #reserve,
+       and when a clean loop video exists it can sit here scroll-scrubbed —
+       the structure is ready for it. ---- */
+    html { scroll-behavior: smooth; }
     .cosmos {
       position: relative; width: 100%; height: 100svh;
       background: #000 url(/assets/planet.jpg) right center / cover no-repeat;
     }
-    /* The living version, desktop only: phones keep the portrait still —
-       battery, data, and iOS low-power mode blocks autoplay anyway, which
-       would leave a frozen frame where a designed image could be. The
-       poster and the background are the same planet, so a browser that
-       refuses the video shows the photograph and nobody sees a hole. */
-    .cosmos-video {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; object-position: right center;
-    }
-    @media (max-width: 700px) { .cosmos-video { display: none; } }
-    @media (prefers-reduced-motion: reduce) { .cosmos-video { display: none; } }
     .cosmos-inner {
       position: absolute; top: 50%; left: clamp(24px, 12vw, 220px);
       transform: translateY(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 34px;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
     }
-    /* Still, translucent, flickering like a sign warming up — irregular,
-       mostly lit, never fully out. It hangs; it doesn't drift. */
-    .cosmos-mark { width: clamp(56px, 7vw, 92px); opacity: .55;
-                   animation: cosmos-flicker 6.5s linear infinite; }
-    @keyframes cosmos-flicker {
-      0%, 100%    { opacity: .55; }
-      7%           { opacity: .22; }
-      9%           { opacity: .58; }
-      13%          { opacity: .38; }
-      15%, 52%    { opacity: .55; }
-      54%          { opacity: .18; }
-      56%          { opacity: .5; }
-      71%          { opacity: .34; }
-      74%          { opacity: .55; }
-    }
+    /* Not a flicker — a breath. The mark fades from near-transparent to
+       fully lit and back, slow and even; nothing snaps. */
+    .cosmos-mark { width: clamp(56px, 7vw, 92px); opacity: .25;
+                   animation: cosmos-breathe 5s ease-in-out infinite; }
+    @keyframes cosmos-breathe { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
     .cosmos-cta {
       color: var(--bone); text-decoration: none;
       font-size: clamp(17px, 2vw, 21px); font-weight: 600; letter-spacing: -.2px;
@@ -71,24 +44,322 @@
     }
     .cosmos-cta:hover { opacity: 1; }
     @media (max-width: 700px) {
-      /* The portrait crop, made for this: cover from the centre so the
-         photo owns every pixel — no borders, no bars. The mark and the
-         line sit dead centre of the screen. */
       .cosmos { background-image: url(/assets/planet-vertical.jpg);
                 background-position: center; }
       .cosmos-inner { left: 50%; transform: translate(-50%, -50%); }
     }
     @media (prefers-reduced-motion: reduce) { .cosmos-mark { animation: none; } }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    /* One column, vertically centred between a pinned header and a pinned
+       footer. An earlier version stacked fixed margins and sized the hero
+       with `calc(100svh - 470px)`; on a short window that sum overflowed,
+       the page scrolled, and the card got sliced off the top. Nothing here
+       is a subtraction — the hero takes a share of the height and the
+       flexbox does the arithmetic. */
+    body {
+      margin: 0; min-height: 100svh; background: var(--ink); color: var(--bone);
+      font: 17px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 0 24px; text-align: center;
+    }
+    /* relative, so the absolute header pins to THIS screen's corner — the
+       hero above has the big mark and needs no second brand. */
+    .wrap { position: relative; width: 100%; max-width: 860px; height: 100svh;
+            display: flex; flex-direction: column;
+            /* Named because the centring below has to do arithmetic on it. */
+            --card-h: min(42vh, 470px, calc(92vw / 1.586)); }
+    /* Same spot as the policy/support pages: the SCREEN's corner, not the
+       column's edge — the brand belongs to the page, not the layout. */
+    header { position: absolute; top: 26px; left: clamp(24px, 3vw, 40px); }
+    #brand { display: flex; align-items: center; gap: 9px; color: inherit;
+             text-decoration: none; transition: opacity .3s; }
+    #brand:hover { opacity: .62; }
+    #brand img { height: 34px; }
+    /* The app's wordmark is SF Rounded (Typography.display). ui-rounded is
+       how the web asks the system for that face — Safari resolves it, other
+       browsers fall back to the plain system sans. */
+    #brand b { font-size: 20px; font-weight: 600; letter-spacing: -.2px;
+               font-family: ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", system-ui, sans-serif; }
+    /* The hero owns the leftover height and centres in it. gap replaces the
+       margins that used to stack up. */
+    main { flex: 1 1 auto; min-height: 0; overflow: visible;
+           display: flex; flex-direction: column; align-items: center;
+           justify-content: center; gap: clamp(18px, 2.8vh, 34px);
+           padding: clamp(24px, 8vh, 104px) 0 clamp(10px, 2vh, 36px); }
+
+    /* Tall enough to afford it: pin the CARD to the middle of the screen
+       rather than centring the whole column in the space left over. The
+       header is 52px, so the run-up is half the viewport minus half the
+       card minus the header. Everything below simply follows, and the
+       footer is allowed to fall past the fold — a landing page is read
+       from the top, and the field still lands above it.
+
+       Only above 800px, because below that the sum doesn't close: a
+       centred card puts the form off the bottom, and the form is the one
+       thing on this page anybody has to reach. */
+    @media (min-height: 800px) {
+      .wrap { height: auto; min-height: 100svh; }
+      main { flex: 0 0 auto; justify-content: flex-start;
+             padding-top: max(24px, calc(50svh - var(--card-h) / 2)); }
+      footer { margin-top: auto; }
+    }
+
+    /* Sized by HEIGHT with width following from the aspect ratio, so the
+       card is the first thing to give ground when the column is tight — it
+       gets smaller rather than the page getting longer. 1.586 is a real
+       card. */
+    /* The width cap has to be expressed as a height too, or the box stays
+       at its vh height while the card inside it is only 92vw/1.586 — dead
+       space under the card on a phone that reads as a spacing mistake. */
+    /* Phones: the stack is tightened until card → field fits in what a
+       keyboard leaves (~430px), so typing shows the whole ritual — card,
+       headline, field — with nothing hidden and nothing to scroll. */
+    @media (max-width: 640px) {
+      main { padding-top: 10px; padding-bottom: 12px; gap: 16px; }
+      .scene { margin: 12px 0; }
+      .say h1 { font-size: 27px; }
+      .slogan { margin-top: 6px; font-size: 14px; }
+    }
+    .scene { height: var(--card-h);
+             aspect-ratio: 1.586; width: auto;
+             flex: 0 1 auto;
+             /* A floor, because past this the card's own contents stop
+                fitting inside it and the handle disappears entirely — a
+                card too small to carry a name isn't worth showing. */
+             min-height: 150px; }
+
+    h1 { font-size: clamp(30px, 5.2vw, 52px); font-weight: 700; letter-spacing: -1.5px;
+         margin: 0; }
+    .say h1 { margin: 0; }
+    .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px);
+              margin: 10px 0 0; }
+
+    .row { display: flex; gap: 9px; max-width: 330px; width: 100%; margin: 0 auto; }
+    /* A lit well rather than a dark box. The old field was the same value as
+       the page, so it read as decoration — this one is glass over ink, with
+       a brighter rim, so it's obvious it's the thing you fill in. */
+    .field { flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px;
+             background: rgba(244,241,234,.055);
+             border: 1px solid rgba(244,241,234,.20); border-radius: 17px; padding: 0 20px;
+             box-shadow: inset 0 1px 0 rgba(244,241,234,.06);
+             transition: border-color .2s, background .2s; }
+    .field:hover { background: rgba(244,241,234,.075); }
+    .field:focus-within { border-color: var(--accent); background: rgba(244,241,234,.09); }
+    .field span { color: var(--bone-dim); font-size: clamp(16px, 4.2vw, 19px); font-weight: 600; flex: 0 0 auto; }
+    input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--bone);
+            font-weight: 600; font-size: clamp(16px, 4.2vw, 19px); line-height: 1; font-family: inherit; padding: 17px 0; letter-spacing: -.2px; }
+    /* The placeholder is the instruction — dim to the point of invisible
+       was the reason the field didn't read as a field. */
+    input::placeholder { color: var(--bone-faint); opacity: 1; }
+    button { background: var(--bone); color: var(--ink); border: 0; border-radius: 17px;
+             padding: 17px 18px; flex: 0 0 auto; font-weight: 600; font-size: 15px;
+             line-height: 1; font-family: inherit; cursor: pointer;
+             white-space: nowrap; letter-spacing: -.1px; }
+    button:disabled { opacity: .4; cursor: default; }
+
+    /* Very short window — a laptop with the browser half-height. The card
+       has already shrunk to its floor by here, so the words give way next
+       rather than letting the column spill over the footer. */
+    @media (max-height: 620px) {
+      h1 { font-size: clamp(24px, 4vw, 36px); }
+      .slogan { font-size: 15px; margin-top: 6px; }
+      .status { display: none; }
+    }
+
+    .status { font-size: 14px; color: var(--bone-faint); min-height: 20px; margin: 0; }
+    .status.bad { color: var(--negative); }
+    .status.good { color: var(--positive); }
+
+    /* The status line lands right under the button, so the footer needs
+       real air above it or the two read as one block. Padding rather than a
+       margin on .status, so the gap is there whether or not the status has
+       anything to say. */
+    footer { flex: 0 0 auto; padding: clamp(30px, 6vh, 78px) 0 30px;
+             font-size: 13px; color: var(--bone-faint); }
+    footer a { color: var(--bone-faint); text-decoration: none; }
+    footer a:hover { color: var(--bone-dim); }
+    footer .sep { opacity: .4; margin: 0 8px; }
   </style>
+  <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png?v=2">
+  <link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon-256.png?v=2">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2">
+  <script>
+    // Language is decided by the browser, not by a switcher: Chinese
+    // readers land on /zh/, everyone else stays here. replace(), so the
+    // back button doesn't fight the redirect.
+    if (/^zh/i.test(navigator.language)) location.replace('/zh/' + location.search);
+  </script>
 </head>
 <body>
   <section class="cosmos" aria-label="iMoney">
-    <video class="cosmos-video" autoplay muted loop playsinline
-           poster="/assets/planet.jpg" src="/assets/planet.mp4"></video>
     <div class="cosmos-inner">
       <img class="cosmos-mark" src="/assets/logo-mark.png" alt="">
-      <a class="cosmos-cta" href="/claim/">Reserve @yourname</a>
+      <a class="cosmos-cta" href="#reserve">Reserve @yourname</a>
     </div>
   </section>
+
+  <div class="wrap" id="reserve">
+    <header>
+      <a id="brand" href="/reserve/">
+        <img src="/assets/logo-mark.png" alt="">
+        <b>iMoney</b>
+      </a>
+    </header>
+
+    <main>
+      <!-- The card is the whole page. It carries the mark, and the handle
+           appears on it live as you type — you watch your name land on the
+           object before you commit to anything. -->
+      <div class="scene">
+        <div class="float">
+          <div class="card">
+            <div class="face front">
+              <div class="card-inner">
+                <div class="card-top">
+                  <img class="card-logo" src="/assets/logo-ink-star.png" alt="iMoney">
+                  <div class="card-meta engraved">Aug. 2026</div>
+                </div>
+                <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
+                <div class="card-foot">
+                  <div class="quote engraved">Designed to replace your estimate.</div>
+                </div>
+              </div>
+            </div>
+            <div class="face back"><img src="/assets/logo-ink-star.png" alt=""></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="say">
+        <h1 id="headline">Reserve <span id="head-handle">@yourname</span></h1>
+        <p class="slogan">A money app that does NOT read your bank.</p>
+      </div>
+
+      <form class="row" id="form">
+        <label class="field">
+          <span>@</span>
+          <input id="handle" placeholder="yourname" autocapitalize="none" autocorrect="off"
+                 spellcheck="false" maxlength="20" aria-label="Your handle">
+        </label>
+        <button id="go" type="submit" disabled>Reserve</button>
+      </form>
+      <p class="status" id="status"></p>
+    </main>
+
+    <footer>
+      <a href="/privacy/">Privacy</a><span class="sep">·</span>
+      <a href="/support/">Support</a><span class="sep">·</span>
+      <a href="mailto:upappco@gmail.com">Contact</a>
+    </footer>
+  </div>
+
+  <script>
+    const SB = 'https://cpsdkarncveeemrfmkll.supabase.co';
+    const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc2RrYXJuY3ZlZWVtcmZta2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NzQ3NzAsImV4cCI6MjA5NjE1MDc3MH0.zzHVArTaz2OdW1pYEzMIlrgcyuXWm4MNnR-bizyRhdY';
+
+    const input = document.getElementById('handle');
+    const card  = document.getElementById('card-handle');
+    const go    = document.getElementById('go');
+    const status = document.getElementById('status');
+    const DEFAULT = '';
+
+    const clean = v => v.trim().toLowerCase().replace(/^@/, '').replace(/[^a-z0-9_]/g, '');
+
+    input.addEventListener('input', () => {
+      const h = clean(input.value);
+      if (h !== input.value.trim().toLowerCase().replace(/^@/, '')) input.value = h;
+      const shown = '@' + (h || 'yourname');
+      card.textContent = shown;
+      card.classList.toggle('placeholder', !h);
+      document.getElementById('head-handle').textContent = shown;
+      go.disabled = h.length < 2;
+      status.className = 'status';
+      if (!h.length)         { status.textContent = DEFAULT; }
+      else if (h.length < 2) { status.textContent = 'At least 2 characters.'; }
+      else                   { check(h); }
+    });
+
+    let checkTimer, checking = '';
+    function check(h) {
+      clearTimeout(checkTimer);
+      status.textContent = 'Checking…';
+      checkTimer = setTimeout(async () => {
+        checking = h;
+        try {
+          const res = await fetch(SB + '/rest/v1/rpc/is_handle_taken', {
+            method: 'POST',
+            headers: { apikey: KEY, Authorization: 'Bearer ' + KEY,
+                       'Content-Type': 'application/json' },
+            body: JSON.stringify({ target_handle: h })
+          });
+          const taken = await res.json();
+          if (checking !== h || clean(input.value) !== h) return;   // stale
+          status.className = 'status' + (taken ? ' bad' : ' good');
+          status.textContent = (taken ? '@%s already has an owner. Try another.' : '@%s can be yours.').replace('%s', h);
+          go.disabled = !!taken;
+        } catch {
+          // Never claim "taken" on a network blip — let them try to reserve
+          // and be told by the server, which can't be wrong about it.
+          if (checking !== h) return;
+          status.className = 'status';
+          status.textContent = DEFAULT;
+          go.disabled = false;
+        }
+      }, 350);
+    }
+
+    // Auth lives on /reserve — one place, one set of redirect URLs. The
+    // handle rides along so nobody has to type it twice.
+    document.getElementById('form').addEventListener('submit', e => {
+      e.preventDefault();
+      const h = clean(input.value);
+      if (h.length < 2 || go.disabled) return;
+      location.href = '/reserve/?h=' + encodeURIComponent(h);
+    });
+  </script>
+  <script>
+    (() => {
+      // The ghost types itself. An empty field says "type something"; a
+      // field quietly writing @ev, @kai, @yuki says "type a NAME" — and
+      // it's the one thing on a still page that rewards watching.
+      const input = document.getElementById('handle');
+      const NAMES = ['ev', 'kai', 'imoney', 'ineedyou', 'yourname'];
+      let n = 0, i = 0, erasing = false;
+      (function tick() {
+        if (input.value) { input.placeholder = 'yourname'; return setTimeout(tick, 1200); }
+        const word = NAMES[n];
+        i += erasing ? -1 : 1;
+        input.placeholder = word.slice(0, i) + (i < word.length ? '\u2009' : '');
+        let wait = erasing ? 45 : 95;
+        if (!erasing && i === word.length) { erasing = true; wait = 1500; }
+        else if (erasing && i === 0)       { erasing = false; n = (n + 1) % NAMES.length; wait = 260; }
+        setTimeout(tick, wait);
+      })();
+    })();
+  </script>
+  <script>
+    // The sheen follows the pointer; CSS does the drawing.
+    (() => {
+      const card = document.querySelector('.card');
+      if (!card || !matchMedia('(hover: hover)').matches) return;
+      card.addEventListener('pointermove', e => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      });
+    })();
+  </script>
+  <script>
+    // iOS scrolls the focused field into view by scrolling the CARD out of
+    // view. The compact layout already fits above the keyboard, so pin the
+    // page back to the top once the keyboard has landed.
+    (() => {
+      const inp = document.getElementById('handle');
+      if (!inp || !matchMedia('(max-width: 640px)').matches) return;
+      inp.addEventListener('focus', () => {
+        setTimeout(() => document.getElementById('reserve').scrollIntoView({ behavior: 'smooth' }), 60);
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -39,9 +39,14 @@
 .face {
   position: absolute; inset: 0; border-radius: 4.4%/7%; overflow: hidden;
   backface-visibility: hidden; -webkit-backface-visibility: hidden;
-  border: 1px solid rgba(217,179,106,.35);
+  border: 1px solid rgba(168,216,210,.35);
   box-shadow: 0 26px 60px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.12) inset;
-  background: linear-gradient(135deg, rgba(217,179,106,.62), rgba(217,179,106,.24)), var(--ink);
+  /* The planet's own light, run across the card: teal at the top of the
+     sweep through lavender and pink to the deep blue the nightside falls
+     into. Sampled from the photograph, not invented. */
+  background: linear-gradient(128deg,
+    #a9d6d0 0%, #6ea9a6 20%, #7f90b2 40%, #b18fbe 55%,
+    #e9a89f 72%, #7d8ba0 88%, #465e6b 100%);
 }
 /* A light that follows the pointer across the metal — strongest exactly
    where you are, so hovering a corner lights that corner. Geometry never
@@ -60,8 +65,8 @@
                  filter: drop-shadow(0 1px 0 rgba(255,255,255,.25)); }
 .face::after {                     /* travelling light seam */
   content: ""; position: absolute; inset: -30%;
-  background: linear-gradient(105deg, transparent 38%, rgba(217,179,106,.55) 48%,
-              rgba(244,241,234,.22) 53%, transparent 62%);
+  background: linear-gradient(105deg, transparent 38%, rgba(255,236,230,.4) 48%,
+              rgba(244,241,234,.24) 53%, transparent 62%);
   animation: sweep 7s ease-in-out infinite;
 }
 @keyframes sweep { 0%,100% { transform: translateX(-22%); } 50% { transform: translateX(22%); } }
