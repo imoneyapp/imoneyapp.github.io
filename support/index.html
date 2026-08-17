@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Support — iMoney</title>
   <meta name="description" content="Get help with iMoney — contact, FAQs, account deletion.">
-  <link rel="stylesheet" href="../style.css?v=5">
+  <link rel="stylesheet" href="../style.css?v=6">
   <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png">
   <link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon-256.png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
@@ -13,7 +13,7 @@
 <body>
 <main>
   <header class="site"><a href="/">iMoney</a><span>Support</span></header>
-  <a class="lang-switch" href="zh/" aria-label="中文版" title="中文版"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3.6 9h16.8M3.6 15h16.8"/></svg></a>
+  <details class="lang-menu"><summary aria-label="Language / 語言" title="Language / 語言"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3.6 9h16.8M3.6 15h16.8"/></svg></summary><div class="lang-pop"><span>English<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M2 7.5l3.5 3.5L12 3.5"/></svg></span><a href="zh/">繁體中文</a></div></details>
   <h1>Support</h1>
   <p class="lede">Questions, bugs, ideas — send them over.</p>
 
@@ -55,5 +55,14 @@
 
   <footer>© 2026 iMoney · <a href="../privacy/">Privacy</a> · <a href="../support/">Support</a></footer>
 </main>
+  <script>
+    // <details> closes itself on a second summary click but not on a click
+    // elsewhere — and a menu that ignores the page around it feels stuck.
+    document.addEventListener('click', e => {
+      document.querySelectorAll('details.lang-menu[open]').forEach(d => {
+        if (!d.contains(e.target)) d.removeAttribute('open');
+      });
+    });
+  </script>
 </body>
 </html>
