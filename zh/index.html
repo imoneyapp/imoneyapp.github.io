@@ -39,20 +39,25 @@
     @keyframes cosmos-breathe { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
     .cosmos-cta {
       color: var(--bone); text-decoration: none;
-      font-size: clamp(17px, 2vw, 21px); font-weight: 600; letter-spacing: -.2px;
+      font-size: clamp(15px, 1.8vw, 20px); font-weight: 600; letter-spacing: -.2px;
       opacity: .85; transition: opacity .25s;
     }
-    .cosmos-cta { display: flex; align-items: center; gap: 12px; }
+    .cosmos-cta { display: flex; align-items: center; gap: 10px;
+                  white-space: nowrap; }
     .cosmos-cta:hover { opacity: 1; }
     .cta-enter {
-      width: 30px; height: 30px; border-radius: 50%;
+      width: 24px; height: 24px; border-radius: 50%; flex: 0 0 auto;
       border: 1px solid rgba(244,241,234,.35);
       display: flex; align-items: center; justify-content: center;
-      transition: border-color .25s, background .25s;
+      transition: border-color .25s, background .25s, color .25s;
     }
     .cosmos-cta:hover .cta-enter { border-color: rgba(244,241,234,.7);
                                    background: rgba(244,241,234,.08); }
-    .cta-enter svg { width: 13px; height: 13px; display: block; }
+    /* The press: the key inverts — bone fill, ink arrow — for as long as
+       the finger or button is down. */
+    .cosmos-cta:active .cta-enter { background: var(--bone); color: #0b0b0c;
+                                    border-color: var(--bone); }
+    .cta-enter svg { width: 11px; height: 11px; display: block; }
     @media (max-width: 700px) {
       .cosmos { background-image: url(/assets/planet-vertical.jpg);
                 background-position: center; }
