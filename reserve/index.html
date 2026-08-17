@@ -284,9 +284,16 @@
 
     // Back to this exact page. Both providers must also be listed under
     // Supabase → Authentication → URL Configuration → Redirect URLs.
+    // prompt=select_account matters for "Use another account": without it
+    // Google sees its own live session and silently signs the SAME account
+    // back in — sign-out here doesn't sign you out of Google. Apple always
+    // shows its own sheet, so it needs no nudge.
     const oauth = provider => sb.auth.signInWithOAuth({
       provider,
-      options: { redirectTo: window.location.href.split('#')[0] }
+      options: {
+        redirectTo: window.location.href.split('#')[0],
+        queryParams: provider === 'google' ? { prompt: 'select_account' } : {}
+      }
     });
     $('google').onclick = () => oauth('google');
     $('apple').onclick  = () => oauth('apple');

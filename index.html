@@ -25,7 +25,9 @@
       display: flex; flex-direction: column; align-items: center;
       padding: 0 24px; text-align: center;
     }
-    .wrap { width: 100%; max-width: 860px; height: 100svh;
+    /* relative, so the absolute header pins to THIS screen's corner — the
+       hero above has the big mark and needs no second brand. */
+    .wrap { position: relative; width: 100%; max-width: 860px; height: 100svh;
             display: flex; flex-direction: column;
             /* Named because the centring below has to do arithmetic on it. */
             --card-h: min(42vh, 470px, calc(92vw / 1.586)); }
@@ -155,6 +157,59 @@
     footer a { color: var(--bone-faint); text-decoration: none; }
     footer a:hover { color: var(--bone-dim); }
     footer .sep { opacity: .4; margin: 0 8px; }
+    /* ---- The home screen: the planet. Card and form live one scroll
+       below; the CTA and the typing scroll-pin both land on #reserve. ---- */
+    html { scroll-behavior: smooth; }
+    .cosmos {
+      position: relative; width: 100%; height: 100svh;
+      background: #000 url(/assets/planet.jpg) right center / cover no-repeat;
+    }
+    @media (max-width: 700px) {
+      /* right-anchored on a phone shows only the planet's face; 72% keeps
+         the lit rim in frame and leaves the black side for the mark */
+      .cosmos { background-position: 72% center; }
+    }
+    .cosmos-inner {
+      position: absolute; top: 50%; left: clamp(24px, 12vw, 220px);
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 34px;
+    }
+    /* The mark floats in the dark and flickers like a sign warming up —
+       irregular, mostly lit, never fully out. */
+    .cosmos-mark { width: clamp(56px, 7vw, 92px); opacity: .55;
+                   animation: cosmos-bob 7s ease-in-out infinite,
+                              cosmos-flicker 6.5s linear infinite; }
+    @keyframes cosmos-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+    @keyframes cosmos-flicker {
+      0%, 100%      { opacity: .55; }
+      7%            { opacity: .22; }
+      9%            { opacity: .58; }
+      13%           { opacity: .38; }
+      15%, 52%      { opacity: .55; }
+      54%           { opacity: .18; }
+      56%           { opacity: .5; }
+      71%           { opacity: .34; }
+      74%           { opacity: .55; }
+    }
+    .cosmos-cta {
+      color: var(--bone); text-decoration: none;
+      font-size: clamp(17px, 2vw, 21px); font-weight: 600; letter-spacing: -.2px;
+      opacity: .85; transition: opacity .25s;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+    }
+    .cosmos-cta:hover { opacity: 1; }
+    /* a drawn chevron, pointing the way down */
+    .cosmos-cta::after {
+      content: ""; width: 10px; height: 10px;
+      border-right: 2px solid var(--bone-dim); border-bottom: 2px solid var(--bone-dim);
+      transform: rotate(45deg);
+      animation: cosmos-nudge 2.6s ease-in-out infinite;
+    }
+    @keyframes cosmos-nudge { 0%,100% { transform: rotate(45deg) translate(0,0); }
+                              50% { transform: rotate(45deg) translate(3px,3px); } }
+    @media (prefers-reduced-motion: reduce) {
+      .cosmos-mark, .cosmos-cta::after { animation: none; }
+    }
   </style>
   <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png?v=2">
   <link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon-256.png?v=2">
@@ -167,7 +222,14 @@
   </script>
 </head>
 <body>
-  <div class="wrap">
+  <section class="cosmos" aria-label="iMoney">
+    <div class="cosmos-inner">
+      <img class="cosmos-mark" src="/assets/logo-mark.png" alt="">
+      <a class="cosmos-cta" href="#reserve">Reserve @yourname</a>
+    </div>
+  </section>
+
+  <div class="wrap" id="reserve">
     <header>
       <a id="brand" href="/reserve/">
         <img src="/assets/logo-mark.png" alt="">
@@ -327,7 +389,7 @@
       const inp = document.getElementById('handle');
       if (!inp || !matchMedia('(max-width: 640px)').matches) return;
       inp.addEventListener('focus', () => {
-        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 60);
+        setTimeout(() => document.getElementById('reserve').scrollIntoView({ behavior: 'smooth' }), 60);
       });
     })();
   </script>
