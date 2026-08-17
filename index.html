@@ -14,11 +14,11 @@
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     /* One column, vertically centred between a pinned header and a pinned
-       footer. The old version stacked fixed margins and sized the ball with
-       `calc(100svh - 450px)`; on a short window that sum overflowed, the page
-       scrolled, and the ball got sliced off the top. Nothing here is a
-       subtraction — the hero takes a share of the height and the flexbox
-       does the arithmetic. */
+       footer. An earlier version stacked fixed margins and sized the hero
+       with `calc(100svh - 470px)`; on a short window that sum overflowed,
+       the page scrolled, and the card got sliced off the top. Nothing here
+       is a subtraction — the hero takes a share of the height and the
+       flexbox does the arithmetic. */
     body {
       margin: 0; min-height: 100svh; background: var(--ink); color: var(--bone);
       font: 17px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
@@ -26,35 +26,7 @@
       padding: 0 24px; text-align: center;
     }
     .wrap { width: 100%; max-width: 760px; min-height: 100svh;
-            display: flex; flex-direction: column; position: relative; z-index: 1; }
-
-    /* The sea, as ground rather than picture. Fixed so it doesn't travel
-       with the content, dimmed hard because the page's type is bone-white
-       and the fog in that photograph is nearly white — undimmed, the
-       headline vanishes into it. What survives is the horizon and the
-       reflection, which is all it needs to contribute: somewhere for the
-       card to be floating.
-
-       Only the fog is in frame — scaled up and anchored to the top, above
-       the horizon. The photograph's own sphere sits at its centre and its
-       reflection sits below that; both of them, cropped in, surfaced as
-       unexplained dark shapes around the card, two objects arguing over
-       the same space. The fog was the part doing the work anyway: it's
-       what gives the card somewhere to be, and it carries the light. */
-    body::before {
-      content: ""; position: fixed; inset: 0; z-index: -2;
-      background: url(/assets/sea.jpg) 50% 0% / auto 260% no-repeat;
-      opacity: .34; filter: grayscale(.45);
-    }
-    /* Vignette: pins the light to the middle so the corners stay ink and
-       the header and footer keep something to sit on. */
-    body::after {
-      content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-      background: radial-gradient(ellipse 82% 68% at 50% 46%,
-                  rgba(11,11,12,0) 0%, rgba(11,11,12,.62) 66%, rgba(11,11,12,.96) 100%);
-    }
-
-
+            display: flex; flex-direction: column; }
     header { display: flex; align-self: flex-start; padding: 26px 0 0; flex: 0 0 auto; }
     #brand { display: flex; align-items: center; gap: 9px; background: none; border: 0;
              padding: 0; margin: 0; color: inherit; font: inherit; cursor: default; }
@@ -76,17 +48,17 @@
        margins that used to stack up. */
     main { flex: 1 1 auto; min-height: 0; overflow: visible;
            display: flex; flex-direction: column; align-items: center;
-           justify-content: center; gap: clamp(24px, 3.6vh, 40px);
-           padding: clamp(16px, 3vh, 40px) 0; }
+           justify-content: center; gap: clamp(18px, 3.2vh, 40px);
+           padding: clamp(10px, 2vh, 36px) 0; }
 
     /* Sized by HEIGHT with width following from the aspect ratio, so the
        card is the first thing to give ground when the column is tight — it
        gets smaller rather than the page getting longer. 1.586 is a real
        card. */
     /* The width cap has to be expressed as a height too, or the box stays
-       31vh tall while the card inside it is only 86vw/1.586 — 60px of dead
-       space under the card on a phone, which reads as a spacing mistake. */
-    .scene { height: min(31vh, 300px, calc(86vw / 1.586));
+       at its vh height while the card inside it is only 92vw/1.586 — dead
+       space under the card on a phone that reads as a spacing mistake. */
+    .scene { height: min(38vh, 400px, calc(92vw / 1.586));
              aspect-ratio: 1.586; width: auto;
              flex: 0 1 auto; min-height: 0; }
 
@@ -96,25 +68,25 @@
     .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px);
               margin: 10px 0 0; }
 
-    .row { display: flex; gap: 9px; max-width: 300px; width: 100%; margin: 0 auto; }
+    .row { display: flex; gap: 10px; max-width: 390px; width: 100%; margin: 0 auto; }
     /* A lit well rather than a dark box. The old field was the same value as
        the page, so it read as decoration — this one is glass over ink, with
        a brighter rim, so it's obvious it's the thing you fill in. */
     .field { flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px;
              background: rgba(244,241,234,.055);
-             border: 1px solid rgba(244,241,234,.20); border-radius: 18px; padding: 0 22px;
+             border: 1px solid rgba(244,241,234,.20); border-radius: 21px; padding: 0 24px;
              box-shadow: inset 0 1px 0 rgba(244,241,234,.06);
              transition: border-color .2s, background .2s; }
     .field:hover { background: rgba(244,241,234,.075); }
     .field:focus-within { border-color: var(--accent); background: rgba(244,241,234,.09); }
-    .field span { color: var(--bone-dim); font-size: clamp(17px, 4.6vw, 23px); font-weight: 600; flex: 0 0 auto; }
+    .field span { color: var(--bone-dim); font-size: clamp(19px, 5.2vw, 27px); font-weight: 600; flex: 0 0 auto; }
     input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--bone);
-            font-weight: 600; font-size: clamp(17px, 4.6vw, 23px); line-height: 1; font-family: inherit; padding: 19px 0; letter-spacing: -.3px; }
+            font-weight: 600; font-size: clamp(19px, 5.2vw, 27px); line-height: 1; font-family: inherit; padding: 23px 0; letter-spacing: -.4px; }
     /* The placeholder is the instruction — dim to the point of invisible
        was the reason the field didn't read as a field. */
     input::placeholder { color: var(--bone-faint); opacity: 1; }
-    button { background: var(--bone); color: var(--ink); border: 0; border-radius: 18px;
-             padding: 19px 20px; flex: 0 0 auto; font-weight: 600; font-size: clamp(17px, 4.6vw, 23px); line-height: 1; font-family: inherit; cursor: pointer;
+    button { background: var(--bone); color: var(--ink); border: 0; border-radius: 21px;
+             padding: 23px 24px; flex: 0 0 auto; font-weight: 600; font-size: clamp(19px, 5.2vw, 27px); line-height: 1; font-family: inherit; cursor: pointer;
              white-space: nowrap; letter-spacing: -.2px; }
     button:disabled { opacity: .4; cursor: default; }
 
