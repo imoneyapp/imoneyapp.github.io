@@ -103,6 +103,13 @@
    card is much wider than the page on desktop and vw units broke that. */
 .scene { container-type: inline-size; }
 
+/* Below this the line has already hit its 10px floor and still wraps to
+   three, which pushes the foot up through the handle. The name is the
+   point of the card; the line is a nicety, so the line goes. */
+@container (max-width: 330px) {
+  .card-foot .quote { display: none; }
+}
+
 /* Decoration, not information — nobody needs it spinning to understand it. */
 @media (prefers-reduced-motion: reduce) {
   .float, .card.turning, .face::after { animation: none; }

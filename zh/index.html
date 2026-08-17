@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css">
+  <link rel="stylesheet" href="/assets/card.css?v=3">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     /* One column, vertically centred between a pinned header and a pinned
@@ -25,7 +25,7 @@
       display: flex; flex-direction: column; align-items: center;
       padding: 0 24px; text-align: center;
     }
-    .wrap { width: 100%; max-width: 760px; min-height: 100svh;
+    .wrap { width: 100%; max-width: 860px; height: 100svh;
             display: flex; flex-direction: column; }
     header { display: flex; align-self: flex-start; padding: 26px 0 0; flex: 0 0 auto; }
     #brand { display: flex; align-items: center; gap: 9px; background: none; border: 0;
@@ -58,9 +58,13 @@
     /* The width cap has to be expressed as a height too, or the box stays
        at its vh height while the card inside it is only 92vw/1.586 — dead
        space under the card on a phone that reads as a spacing mistake. */
-    .scene { height: min(38vh, 400px, calc(92vw / 1.586));
+    .scene { height: min(46vh, 500px, calc(92vw / 1.586));
              aspect-ratio: 1.586; width: auto;
-             flex: 0 1 auto; min-height: 0; }
+             flex: 0 1 auto;
+             /* A floor, because past this the card's own contents stop
+                fitting inside it and the handle disappears entirely — a
+                card too small to carry a name isn't worth showing. */
+             min-height: 150px; }
 
     h1 { font-size: clamp(30px, 5.2vw, 52px); font-weight: 700; letter-spacing: -1.5px;
          margin: 0; }
@@ -89,6 +93,15 @@
              padding: 23px 24px; flex: 0 0 auto; font-weight: 600; font-size: clamp(19px, 5.2vw, 27px); line-height: 1; font-family: inherit; cursor: pointer;
              white-space: nowrap; letter-spacing: -.2px; }
     button:disabled { opacity: .4; cursor: default; }
+
+    /* Very short window — a laptop with the browser half-height. The card
+       has already shrunk to its floor by here, so the words give way next
+       rather than letting the column spill over the footer. */
+    @media (max-height: 620px) {
+      h1 { font-size: clamp(24px, 4vw, 36px); }
+      .slogan { font-size: 15px; margin-top: 6px; }
+      .status { display: none; }
+    }
 
     .status { font-size: 14px; color: var(--bone-faint); min-height: 20px; margin: 0; }
     .status.bad { color: var(--negative); }
@@ -240,7 +253,7 @@
       location.href = '/reserve/?lang=zh&h=' + encodeURIComponent(h);
     });
   </script>
-  <script src="/assets/still.js"></script>
+  <script src="/assets/still.js?v=3"></script>
   <script>
     (() => {
       // The ghost types itself. An empty field says "type something"; a
