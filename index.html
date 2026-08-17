@@ -54,11 +54,6 @@
     .status { font-size: 14px; color: var(--bone-faint); margin-top: 16px; min-height: 20px; }
     .status.bad { color: var(--negative); }
 
-    /* Small, spaced, unemphatic — three asides, not three claims. */
-    .creed { list-style: none; margin: clamp(30px, 5vh, 46px) 0 0; padding: 0;
-             display: flex; flex-direction: column; gap: 16px;
-             font-size: 14px; line-height: 1.55; color: var(--bone-faint); }
-    .creed b { color: var(--bone-dim); font-weight: 600; }
 
     footer { margin-top: auto; padding: 34px 0 24px; font-size: 13px; color: var(--bone-faint); }
     .lang { margin-bottom: 12px; }
@@ -99,7 +94,7 @@
     </div>
 
     <h1 id="headline">Reserve <span id="head-handle">@yourname</span></h1>
-    <p class="slogan">Spending is the art of knowing yourself.</p>
+    <p class="slogan">A money app that does NOT read your bank.</p>
 
     <form class="row" id="form">
       <label class="field">
@@ -110,11 +105,6 @@
       <button id="go" type="submit" disabled>Reserve</button>
     </form>
     <p class="status" id="status"></p>
-
-    <ul class="creed">
-      <li>A money app that does <b>not</b> read your bank.<br>Simply designed to replace your notebook.</li>
-      <li>You'll come out knowing yourself better.</li>
-    </ul>
 
     <footer>
       <div class="lang"><a href="/zh/">繁體中文</a></div>
