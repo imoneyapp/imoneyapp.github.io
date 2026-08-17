@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=15">
+  <link rel="stylesheet" href="/assets/card.css?v=16">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     /* One column, vertically centred between a pinned header and a pinned
@@ -72,6 +72,25 @@
     /* The width cap has to be expressed as a height too, or the box stays
        at its vh height while the card inside it is only 92vw/1.586 — dead
        space under the card on a phone that reads as a spacing mistake. */
+    /* Typing mode, phones. The keyboard takes half the screen, and iOS's
+       answer is to scroll the input into view — which shoves the card off
+       the top, and the card is the whole point: your name lands on it as
+       you type. So while the field has focus the page compacts instead:
+       the headline steps aside (the card is already saying it), the card
+       shrinks to fit what the keyboard leaves, and everything holds still
+       above the fold. */
+    @media (max-width: 640px) {
+      main { transition: gap .25s; }
+      .scene { transition: height .25s; }
+      main:focus-within { justify-content: flex-start; gap: 16px;
+                          padding-top: clamp(10px, 2vh, 24px); }
+      main:focus-within .say { display: none; }
+      main:focus-within .scene { height: min(30vh, calc(80vw / 1.586)); margin: 0; }
+      /* The compacted card slides up over the corner brand — one thing at a
+         time on a keyboard-height screen. (:has needs iOS 15.4+; older
+         Safaris just keep the harmless overlap.) */
+      body:has(#handle:focus) header { opacity: 0; transition: opacity .2s; }
+    }
     /* Phones: the card gets air above and below — at small sizes the flex
        gaps alone leave it shoulder-to-shoulder with the headline. */
     @media (max-width: 640px) {
@@ -292,6 +311,18 @@
         const r = card.getBoundingClientRect();
         card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
         card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      });
+    })();
+  </script>
+  <script>
+    // iOS scrolls the focused field into view by scrolling the CARD out of
+    // view. The compact layout already fits above the keyboard, so pin the
+    // page back to the top once the keyboard has landed.
+    (() => {
+      const inp = document.getElementById('handle');
+      if (!inp || !matchMedia('(max-width: 640px)').matches) return;
+      inp.addEventListener('focus', () => {
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 60);
       });
     })();
   </script>
