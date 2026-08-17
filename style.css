@@ -167,7 +167,7 @@ footer a:hover { color: var(--bone-dim); }
    absolutely positioned under the first letter). */
 .tldr { border: 1px solid rgba(217,179,106,.38);
         background: rgba(217,179,106,.06);
-        border-radius: 16px; padding: 20px 24px; margin: 28px 0 4px; }
+        border-radius: 16px; padding: 20px 24px; margin: 28px 0 30px; }
 .tldr-lead { margin: 0; font-size: 15px; font-weight: 700;
              letter-spacing: -.1px; color: var(--accent); }
 .tldr ul { margin: 10px 0 0; padding: 0; list-style: none; }
