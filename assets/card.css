@@ -23,11 +23,11 @@
   transform-style: preserve-3d;
   transition: transform .3s cubic-bezier(.2,.8,.2,1);
 }
-/* Hover is MOTION, not light: the card drifts a few pixels toward the
-   pointer and settles back when it leaves. No rotation — tilt was tried
-   and rejected — and no painted highlights, which read as shadow tricks.
-   --tx/--ty come from a few lines of JS. */
-.card { transform: translate(var(--tx, 0px), var(--ty, 0px)); }
+/* The cloudflare.pay hover: the card leans a few degrees toward the
+   pointer — the corner under the cursor dips, the far corner rises — and
+   settles flat when it leaves. The .scene perspective makes the lean read
+   as depth. Degrees stay small; it is a lean, not a flip. */
+.card { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); }
 
 .card.turning { animation: spin 26s linear infinite; transform: none; }
 .card.turning:hover, .card.turning:active { animation-play-state: paused; }

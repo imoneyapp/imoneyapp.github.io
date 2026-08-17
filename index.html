@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=20">
+  <link rel="stylesheet" href="/assets/card.css?v=21">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"MobileApplication","name":"iMoney",
    "alternateName":["iMoney 記帳","iMoney Money Tracker"],
@@ -55,10 +55,16 @@
       opacity: .85; transition: opacity .25s;
     }
     .cosmos-cta:hover { opacity: 1; }
+    /* Invisible until it has actually decoded a frame: a video element
+       paints BLACK before that, and layered over the photograph it erased
+       the planet. The photo underneath is the truth until the video can
+       do better. */
     .cosmos-video {
       position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; object-position: right center;
+      opacity: 0; transition: opacity .6s;
     }
+    .cosmos-video.ready { opacity: 1; }
     @media (max-width: 700px) {
       .cosmos { background-image: url(/assets/planet-vertical.jpg);
                 background-position: center; }
@@ -348,21 +354,22 @@
     })();
   </script>
   <script>
-    // The card drifts a few pixels toward the pointer — motion, not light.
+    // The cloudflare.pay lean: the corner under the pointer dips a few
+    // degrees, the far corner rises, flat again on leave.
     (() => {
       const scene = document.querySelector('.scene');
       const card = document.querySelector('.card');
       if (!scene || !card || !matchMedia('(hover: hover)').matches) return;
       scene.addEventListener('pointermove', e => {
         const r = scene.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - 0.5;   // −.5 … .5
+        const x = (e.clientX - r.left) / r.width - 0.5;
         const y = (e.clientY - r.top) / r.height - 0.5;
-        card.style.setProperty('--tx', (x * 14).toFixed(1) + 'px');
-        card.style.setProperty('--ty', (y * 10).toFixed(1) + 'px');
+        card.style.setProperty('--ry', (x * 10).toFixed(2) + 'deg');
+        card.style.setProperty('--rx', (-y * 8).toFixed(2) + 'deg');
       });
       scene.addEventListener('pointerleave', () => {
-        card.style.removeProperty('--tx');
-        card.style.removeProperty('--ty');
+        card.style.removeProperty('--rx');
+        card.style.removeProperty('--ry');
       });
     })();
   </script>
@@ -401,6 +408,12 @@
         requestAnimationFrame(tick);
       };
       video.pause();
+      // Safari won't paint frame zero until asked; the nudge also flips
+      // the layer visible only once there is a real frame to show.
+      video.addEventListener('loadeddata', () => {
+        video.currentTime = 0.001;
+        video.classList.add('ready');
+      }, { once: true });
       requestAnimationFrame(tick);
     })();
   </script>

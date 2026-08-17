@@ -47,16 +47,16 @@
     .face {
       position: absolute; inset: 0; border-radius: 22px; overflow: hidden;
       backface-visibility: hidden; -webkit-backface-visibility: hidden;
-      border: 1px solid rgba(217,179,106,.35);
+      border: 1px solid rgba(244,241,234,.28);
       box-shadow: 0 18px 40px rgba(0,0,0,.55);
-      background: linear-gradient(135deg, rgba(217,179,106,.62), rgba(217,179,106,.24)), var(--ink);
+      background: linear-gradient(135deg, #e8e6e1 0%, #b9b7b2 30%, #d8d6d1 52%, #a7a5a1 76%, #6f6e6b 100%);
     }
     .face.back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
     .face.back img { width: 34%; opacity: .55; }
     .face::after {                    /* the travelling light seam */
       content: ""; position: absolute; inset: -30%;
-      background: linear-gradient(105deg, transparent 38%, rgba(217,179,106,.55) 48%,
-                  rgba(244,241,234,.22) 53%, transparent 62%);
+      background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.5) 48%,
+                  rgba(244,241,234,.24) 53%, transparent 62%);
       animation: sweep 7s ease-in-out infinite;
     }
     @keyframes sweep { 0%,100% { transform: translateX(-22%); } 50% { transform: translateX(22%); } }
@@ -352,8 +352,8 @@
       ctx.fillRect(0, 0, W, H);
       // Warm bloom behind the card, same as the app's story view.
       const bloom = ctx.createRadialGradient(W/2, H*0.42, 0, W/2, H*0.42, W*0.9);
-      bloom.addColorStop(0, 'rgba(217,179,106,.28)');
-      bloom.addColorStop(1, 'rgba(217,179,106,0)');
+      bloom.addColorStop(0, 'rgba(232,230,225,.22)');
+      bloom.addColorStop(1, 'rgba(232,230,225,0)');
       ctx.fillStyle = bloom; ctx.fillRect(0, 0, W, H);
 
       // The card, ID-1 proportions.
@@ -363,7 +363,7 @@
       ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 60; ctx.shadowOffsetY = 30;
       roundRect(ctx, cx, cy, cw, ch, cw * 0.055);
       const face = ctx.createLinearGradient(cx, cy, cx + cw, cy + ch);
-      face.addColorStop(0, '#c8a463'); face.addColorStop(1, '#6d5a37');
+      face.addColorStop(0, '#e8e6e1'); face.addColorStop(0.5, '#c9c7c2'); face.addColorStop(1, '#777672');
       ctx.fillStyle = face; ctx.fill();
       ctx.restore();
 
