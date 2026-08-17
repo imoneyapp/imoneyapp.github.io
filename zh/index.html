@@ -92,25 +92,31 @@
   </section>
 
   <script>
-    // The line types itself, reconsiders, and finishes somewhere better:
-    // "預約 @yourname" — a beat — the name comes back off, and "在 @imoney 預約"
-    // stands. Reduced-motion skips the theatre and shows the ending.
+    // The act: "預約 @yourname" — a beat — the name comes off, and the line
+    // lands on "現在就預約". The box holds the widest line during the act
+    // and glides down to the ending's width as the key fades in: one soft
+    // settle at the finale, never per-keystroke jitter.
     (() => {
       const cta = document.querySelector('.cosmos-cta');
       const el = cta && cta.querySelector('.cta-text');
       if (!el) return;
-      const P1 = '預約 @yourname', DEL = 12, P2 = '在 @imoney 預約';
-      const done = () => { cta.classList.remove('typing'); cta.classList.add('typed'); };
+      const P1 = '預約 @yourname', DEL = 12, P2 = '現在就預約', FINAL = '現在就預約';
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        el.textContent = '在 @imoney 預約'; done(); return;
+        el.textContent = FINAL;
+        cta.classList.add('typed'); return;
       }
-      // freeze the box at the wider of the two lines so nothing reflows
       const w1 = el.getBoundingClientRect().width;
-      el.textContent = '在 @imoney 預約';
+      el.textContent = FINAL;
       const w2 = el.getBoundingClientRect().width;
       el.style.minWidth = Math.ceil(Math.max(w1, w2)) + 'px';
       el.textContent = '';
       cta.classList.add('typing');
+      const done = () => {
+        cta.classList.remove('typing');
+        el.style.transition = 'min-width .38s cubic-bezier(.2,.8,.2,1)';
+        el.style.minWidth = Math.ceil(w2) + 'px';
+        cta.classList.add('typed');
+      };
       const typeOut = (base, add, i, next) => {
         el.textContent = base + add.slice(0, ++i);
         if (i < add.length) setTimeout(() => typeOut(base, add, i, next), 58 + Math.random() * 46);
