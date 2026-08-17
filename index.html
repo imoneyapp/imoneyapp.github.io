@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=22">
+  <link rel="stylesheet" href="/assets/card.css?v=23">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"MobileApplication","name":"iMoney",
    "alternateName":["iMoney 記帳","iMoney Money Tracker"],
@@ -26,21 +26,12 @@
        always settles on one of them — nobody can rest in the seam between
        the planet and the card. snap-stop keeps a hard fling from blowing
        through a screen entirely. */
-    html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+    html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
     .claim-screen { position: relative; width: 100%;
                     scroll-snap-align: start; scroll-snap-stop: always; }
-    /* Scroll-driven rotation: the track is three screens tall, the hero
-       sticks for all of them, and the video's clock is the scroll bar —
-       scrubbing forward as you scroll, backward if you change your mind,
-       ending exactly as the card screen arrives. No autoplay: the reader
-       turns the planet. */
-    /* width: 100% is load-bearing: the body is a centred flex column, so
-       without it the track shrinks to fit-content — and its children are
-       all absolutely positioned, so "content" is nothing. WebKit rendered
-       the whole hero into a zero-width sliver; Chromium papered over it. */
-    .cosmos-track { width: 100%; height: 300svh; scroll-snap-align: start; }
     .cosmos {
-      position: sticky; top: 0; width: 100%; height: 100svh; overflow: hidden;
+      position: relative; width: 100%; height: 100svh; overflow: hidden;
+      scroll-snap-align: start; scroll-snap-stop: always;
       background: #000 url(/assets/planet.jpg) right center / cover no-repeat;
     }
     .cosmos-inner {
@@ -64,26 +55,12 @@
       font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
       color: rgba(244,241,234,.45); transition: opacity .4s; pointer-events: none;
     }
-    /* Invisible until it has actually decoded a frame: a video element
-       paints BLACK before that, and layered over the photograph it erased
-       the planet. The photo underneath is the truth until the video can
-       do better. */
-    .cosmos-video {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; object-position: right center;
-      opacity: 0; transition: opacity .6s;
-    }
-    .cosmos-video.ready { opacity: 1; }
     @media (max-width: 700px) {
       .cosmos { background-image: url(/assets/planet-vertical.jpg);
                 background-position: center; }
-      .cosmos-video { object-position: 70% center; }
       .cosmos-inner { left: 50%; transform: translate(-50%, -50%); }
     }
-    @media (prefers-reduced-motion: reduce) {
-      .cosmos-track { height: 100svh; }
-      .cosmos-video { display: none; }
-    }
+
     @media (prefers-reduced-motion: reduce) { .cosmos-mark { animation: none; } }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     /* One column, vertically centred between a pinned header and a pinned
@@ -210,17 +187,13 @@
   </script>
 </head>
 <body>
-  <div class="cosmos-track" id="top">
-  <section class="cosmos" aria-label="iMoney">
-    <video class="cosmos-video" muted playsinline preload="auto"
-           src="/assets/planet.mp4"></video>
+  <section class="cosmos" id="top" aria-label="iMoney">
     <div class="cosmos-inner">
       <img class="cosmos-mark" src="/assets/logo-mark.png" alt="">
       <a class="cosmos-cta" href="#reserve">Reserve @yourname</a>
     </div>
     <div class="cosmos-hint" id="cosmos-hint">Scroll</div>
   </section>
-  </div>
 
   <section class="claim-screen" id="reserve">
   <div class="wrap">
@@ -397,53 +370,11 @@
     })();
   </script>
   <script>
-    // The technique from evlynsu.com: fetch the whole video as a Blob and
-    // scrub a local object-URL. Every seek is against fully-local data, so
-    // Safari has nothing to stall on and paints frames without ever being
-    // played. Scroll events are rAF-throttled; currentTime maps straight
-    // onto scroll progress through the track.
+    // The hero's hint bows out once scrolling has begun.
     (() => {
-      const track = document.querySelector('.cosmos-track');
-      const video = document.querySelector('.cosmos-video');
-      if (!track || !video) return;
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-      const src = video.getAttribute('src');
-      let ready = false, ticking = false;
-
-      const update = () => {
-        ticking = false;
-        const span = track.offsetHeight - innerHeight;
-        if (!ready || !video.duration || span <= 0) return;
-        const p = Math.min(1, Math.max(0, -track.getBoundingClientRect().top / span));
-        video.currentTime = p * video.duration * 0.97;
-      };
-
-      fetch(src)
-        .then(r => r.blob())
-        .then(blob => { video.src = URL.createObjectURL(blob); video.load(); })
-        .catch(() => video.load());
-
-      // Visibility flips on 'seeked', not loadedmetadata: metadata means
-      // "I know the duration", not "I have a frame", and a frameless video
-      // layer paints BLACK. seeked guarantees a painted frame; if it never
-      // fires, the photograph simply stays. Black is now impossible.
-      video.addEventListener('seeked', () => video.classList.add('ready'), { once: true });
-      const activate = () => {
-        ready = true;
-        video.pause();
-        video.currentTime = 0.001;
-        update();
-      };
-      video.addEventListener('loadedmetadata', activate, { once: true });
-      if (video.readyState >= 1) activate();
-
       const hint = document.getElementById('cosmos-hint');
-      addEventListener('scroll', () => {
-        if (hint) hint.style.opacity = scrollY > 80 ? '0' : '1';
-        if (!ticking) { ticking = true; requestAnimationFrame(update); }
-      }, { passive: true });
-      update();
+      if (!hint) return;
+      addEventListener('scroll', () => { hint.style.opacity = scrollY > 80 ? '0' : '1'; }, { passive: true });
     })();
   </script>
 </body>

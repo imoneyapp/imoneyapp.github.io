@@ -64,6 +64,10 @@
     #f2f0eb 60%, #a7a5a1 76%, #6f6e6b 92%, #555452 100%);
 }
 .face.back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
+/* WebKit culls backfaces unreliably on a card whose transform is identity —
+   the back's logo bled through the front as a giant ghost. A card that
+   isn't spinning has no back worth rendering at all. */
+.card:not(.turning) .face.back { display: none; }
 .face.back img { width: 34%; opacity: .5;
                  filter: drop-shadow(0 1px 0 rgba(255,255,255,.25)); }
 .face::after {                     /* travelling light seam */
