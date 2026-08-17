@@ -34,8 +34,8 @@
        so the card is sized from the height left over rather than a fixed
        cap. Tall screen: big card. Laptop: it gives way so the form stays
        above the fold. 1.586 is the card's aspect ratio. */
-    .scene { margin: min(6vh, 46px) auto 0;
-             max-width: min(100%, 680px, calc((100svh - 400px) * 1.586)); }
+    .scene { margin: min(11vh, 92px) auto 0;
+             max-width: min(100%, 680px, calc((100svh - 470px) * 1.586)); }
 
     h1 { font-size: clamp(30px, 5.2vw, 50px); font-weight: 700; letter-spacing: -.5px;
          margin: clamp(30px, 4.6vh, 52px) 0 10px; }
@@ -59,6 +59,7 @@
     .creed { list-style: none; margin: clamp(30px, 5vh, 46px) 0 0; padding: 0;
              display: flex; flex-direction: column; gap: 7px;
              font-size: 14px; color: var(--bone-faint); }
+    .creed b { color: var(--bone-dim); font-weight: 600; }
 
     footer { margin-top: auto; padding: 34px 0 24px; font-size: 13px; color: var(--bone-faint); }
     .lang { margin-bottom: 12px; }
@@ -112,9 +113,9 @@
     <p class="status" id="status"></p>
 
     <ul class="creed">
-      <li>由你記錄。我們不會去讀你的銀行帳戶。</li>
+      <li>一個<b>不會</b>去讀你銀行帳戶的記帳 App。</li>
       <li>就是比你的筆記本好用。</li>
-      <li>你會更了解自己的錢 —— 這是我們的承諾。</li>
+      <li>你會更了解你自己。</li>
     </ul>
 
     <footer>
