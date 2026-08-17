@@ -34,7 +34,11 @@
        scrubbing forward as you scroll, backward if you change your mind,
        ending exactly as the card screen arrives. No autoplay: the reader
        turns the planet. */
-    .cosmos-track { height: 300svh; scroll-snap-align: start; }
+    /* width: 100% is load-bearing: the body is a centred flex column, so
+       without it the track shrinks to fit-content — and its children are
+       all absolutely positioned, so "content" is nothing. WebKit rendered
+       the whole hero into a zero-width sliver; Chromium papered over it. */
+    .cosmos-track { width: 100%; height: 300svh; scroll-snap-align: start; }
     .cosmos {
       position: sticky; top: 0; width: 100%; height: 100svh; overflow: hidden;
       background: #000 url(/assets/planet.jpg) right center / cover no-repeat;
@@ -415,11 +419,15 @@
         .then(blob => { video.src = URL.createObjectURL(blob); video.load(); })
         .catch(() => video.load());
 
+      // Visibility flips on 'seeked', not loadedmetadata: metadata means
+      // "I know the duration", not "I have a frame", and a frameless video
+      // layer paints BLACK. seeked guarantees a painted frame; if it never
+      // fires, the photograph simply stays. Black is now impossible.
+      video.addEventListener('seeked', () => video.classList.add('ready'), { once: true });
       const activate = () => {
         ready = true;
         video.pause();
         video.currentTime = 0.001;
-        video.classList.add('ready');
         update();
       };
       video.addEventListener('loadedmetadata', activate, { once: true });
