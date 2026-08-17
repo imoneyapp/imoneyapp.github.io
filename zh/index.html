@@ -49,6 +49,9 @@
     .cosmos-cta:hover { opacity: 1; }
     /* The caret lives only while typing; the enter key waits for the last
        character before it fades in. */
+    /* The box holds the finished line's width from the first frame, so
+       the column never reflows and the mark above stays nailed down. */
+    .cta-text { display: inline-block; text-align: left; }
     .cosmos-cta.typing .cta-text::after { content: "|"; margin-left: 2px;
       color: var(--bone-dim); animation: cta-caret 1s steps(1) infinite; }
     @keyframes cta-caret { 50% { opacity: 0; } }
@@ -95,6 +98,7 @@
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
         cta.classList.add('typed'); return;
       }
+      el.style.minWidth = el.getBoundingClientRect().width + 'px';
       el.textContent = '';
       cta.classList.add('typing');
       let i = 0;
