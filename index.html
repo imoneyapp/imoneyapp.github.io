@@ -14,64 +14,71 @@
   <link rel="stylesheet" href="/assets/orb.css">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    /* One column, vertically centred between a pinned header and a pinned
+       footer. The old version stacked fixed margins and sized the ball with
+       `calc(100svh - 450px)`; on a short window that sum overflowed, the page
+       scrolled, and the ball got sliced off the top. Nothing here is a
+       subtraction — the hero takes a share of the height and the flexbox
+       does the arithmetic. */
     body {
       margin: 0; min-height: 100svh; background: var(--ink); color: var(--bone);
       font: 17px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
       display: flex; flex-direction: column; align-items: center;
-      padding: 28px 24px 0; text-align: center;
+      padding: 0 24px; text-align: center;
     }
-    /* Wide. The card is the page, so the column is sized to give the card
-       room rather than to keep a paragraph readable. */
-    .wrap { width: 100%; max-width: 760px; flex: 1; display: flex; flex-direction: column; }
+    .wrap { width: 100%; max-width: 760px; min-height: 100svh;
+            display: flex; flex-direction: column; }
 
-    header { display: flex; align-items: center; gap: 9px; align-self: flex-start; }
+    header { display: flex; align-items: center; gap: 9px; align-self: flex-start;
+             padding: 26px 0 0; flex: 0 0 auto; }
     header img { height: 26px; }
     header b { font-size: 17px; font-weight: 600; letter-spacing: -.2px; }
 
-    /* The card is the hero, but the field is the only thing to DO here —
-       so the card is sized from the height left over rather than a fixed
-       cap. Tall screen: big card. Laptop: it gives way so the form stays
-       above the fold. 1.586 is the card's aspect ratio. */
-    /* Square, so it's sized off whichever runs out first — height on a
-       laptop, width on a phone. */
-    /* max() floor: on a short window `100svh - 450px` goes to zero or
-       negative and the ball disappears completely rather than just getting
-       small. 210px is the smallest it still reads as an object. */
-    .orb-scene { margin: min(6vh, 50px) auto 0;
-                 max-width: min(100%, 430px, max(210px, calc(100svh - 450px))); }
+    /* The hero owns the leftover height and centres in it. gap replaces the
+       margins that used to stack up. */
+    main { flex: 1 1 auto; min-height: 0; overflow: visible;
+           display: flex; flex-direction: column; align-items: center;
+           justify-content: center; gap: clamp(16px, 3vh, 38px);
+           padding: clamp(16px, 3vh, 40px) 0; }
 
-    h1 { font-size: clamp(32px, 5.6vw, 54px); font-weight: 700; letter-spacing: -1.5px;
-         margin: clamp(30px, 4.6vh, 52px) 0 10px; }
-    .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px); margin: 0 0 28px; }
+    /* Height, not width — see assets/orb.css. It asks for 34vh and gives
+       ground first when the column is tight, so the pearl gets smaller
+       rather than the page getting longer. */
+    .orb-scene { height: min(34vh, 400px); max-width: 86vw; }
+
+    h1 { font-size: clamp(30px, 5.2vw, 52px); font-weight: 700; letter-spacing: -1.5px;
+         margin: 0; }
+    .say h1 { margin: 0; }
+    .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px);
+              margin: 10px 0 0; }
 
     .row { display: flex; gap: 9px; max-width: 300px; width: 100%; margin: 0 auto; }
     /* A lit well rather than a dark box. The old field was the same value as
        the page, so it read as decoration — this one is glass over ink, with
        a brighter rim, so it's obvious it's the thing you fill in. */
-    .field { flex: 1; display: flex; align-items: center; gap: 4px;
+    .field { flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px;
              background: rgba(244,241,234,.055);
              border: 1px solid rgba(244,241,234,.20); border-radius: 18px; padding: 0 22px;
              box-shadow: inset 0 1px 0 rgba(244,241,234,.06);
              transition: border-color .2s, background .2s; }
     .field:hover { background: rgba(244,241,234,.075); }
     .field:focus-within { border-color: var(--accent); background: rgba(244,241,234,.09); }
-    .field span { color: var(--bone-dim); font-size: clamp(19px, 2.3vw, 23px); font-weight: 600; }
+    .field span { color: var(--bone-dim); font-size: clamp(17px, 4.6vw, 23px); font-weight: 600; flex: 0 0 auto; }
     input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--bone);
-            font-weight: 600; font-size: clamp(19px, 2.3vw, 23px); line-height: 1; font-family: inherit; padding: 19px 0; letter-spacing: -.3px; }
+            font-weight: 600; font-size: clamp(17px, 4.6vw, 23px); line-height: 1; font-family: inherit; padding: 19px 0; letter-spacing: -.3px; }
     /* The placeholder is the instruction — dim to the point of invisible
        was the reason the field didn't read as a field. */
     input::placeholder { color: var(--bone-faint); opacity: 1; }
     button { background: var(--bone); color: var(--ink); border: 0; border-radius: 18px;
-             padding: 19px 22px; font-weight: 600; font-size: clamp(19px, 2.3vw, 23px); line-height: 1; font-family: inherit; cursor: pointer;
+             padding: 19px 20px; flex: 0 0 auto; font-weight: 600; font-size: clamp(17px, 4.6vw, 23px); line-height: 1; font-family: inherit; cursor: pointer;
              white-space: nowrap; letter-spacing: -.2px; }
     button:disabled { opacity: .4; cursor: default; }
 
-    .status { font-size: 14px; color: var(--bone-faint); margin-top: 16px; min-height: 20px; }
+    .status { font-size: 14px; color: var(--bone-faint); min-height: 20px; margin: 0; }
     .status.bad { color: var(--negative); }
     .status.good { color: var(--positive); }
 
-
-    footer { margin-top: auto; padding: 34px 0 24px; font-size: 13px; color: var(--bone-faint); }
+    footer { flex: 0 0 auto; padding: 0 0 26px; font-size: 13px; color: var(--bone-faint); }
     .lang { margin-bottom: 12px; }
     footer a { color: var(--bone-faint); text-decoration: none; }
     footer a:hover { color: var(--bone-dim); }
@@ -88,34 +95,38 @@
       <b>iMoney</b>
     </header>
 
-    <!-- The card is the whole page. It carries the mark, and the handle
-         appears on it live as you type — you watch your name land on the
-         object before you commit to anything. -->
-    <div class="orb-scene">
-      <div class="orb-float">
-        <div class="orb" id="orb">
-          <div class="orb-face">
-            <img class="orb-logo" src="/assets/logo-ink-star.png" alt="iMoney">
-            <div class="orb-handle placeholder" id="card-handle">@yourname</div>
-            <div class="orb-sub">August 2026</div>
+    <main>
+      <!-- The card is the whole page. It carries the mark, and the handle
+           appears on it live as you type — you watch your name land on the
+           object before you commit to anything. -->
+      <div class="orb-scene">
+        <div class="orb-float">
+          <div class="orb" id="orb">
+            <div class="orb-face">
+              <img class="orb-logo" src="/assets/logo-ink-star.png" alt="iMoney">
+              <div class="orb-handle placeholder" id="card-handle">@yourname</div>
+              <div class="orb-sub">August 2026</div>
+            </div>
           </div>
         </div>
+        <div class="orb-shadow"></div>
       </div>
-      <div class="orb-shadow"></div>
-    </div>
 
-    <h1 id="headline">Reserve <span id="head-handle">@yourname</span></h1>
-    <p class="slogan">A money app that does NOT read your bank.</p>
+      <div class="say">
+        <h1 id="headline">Reserve <span id="head-handle">@yourname</span></h1>
+        <p class="slogan">A money app that does NOT read your bank.</p>
+      </div>
 
-    <form class="row" id="form">
-      <label class="field">
-        <span>@</span>
-        <input id="handle" placeholder="yourname" autocapitalize="none" autocorrect="off"
-               spellcheck="false" maxlength="20" aria-label="Your handle">
-      </label>
-      <button id="go" type="submit" disabled>Reserve</button>
-    </form>
-    <p class="status" id="status"></p>
+      <form class="row" id="form">
+        <label class="field">
+          <span>@</span>
+          <input id="handle" placeholder="yourname" autocapitalize="none" autocorrect="off"
+                 spellcheck="false" maxlength="20" aria-label="Your handle">
+        </label>
+        <button id="go" type="submit" disabled>Reserve</button>
+      </form>
+      <p class="status" id="status"></p>
+    </main>
 
     <footer>
       <div class="lang"><a href="/zh/">繁體中文</a></div>
@@ -189,38 +200,9 @@
       location.href = '/reserve/?h=' + encodeURIComponent(h);
     });
   </script>
+  <script src="/assets/orb.js"></script>
   <script>
     (() => {
-      const orb  = document.getElementById('orb');
-      if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        // Turn the ball toward wherever you are. 26° because the marks
-        // ride the surface now — they swing bodily around the sphere, so
-        // the angle that still leaves the name readable is much smaller
-        // than it would be for a flat face pivoting in place.
-        const MAX = 26;
-        addEventListener('pointermove', e => {
-          const r = orb.getBoundingClientRect();
-          if (!r.width) return;
-          const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-          // Divisor sets the reach: it responds from about one ball-width
-          // away. Then the VECTOR is clamped to the unit disc, not each
-          // axis separately — clamping per-axis lets a corner reach
-          // MAX on both at once, and the two rotations compound into a
-          // swing that carries the name clean off the rim.
-          let x = (e.clientX - cx) / (r.width  * 1.1);
-          let y = (e.clientY - cy) / (r.height * 1.1);
-          const m = Math.hypot(x, y);
-          if (m > 1) { x /= m; y /= m; }
-          orb.classList.add('free');
-          orb.style.setProperty('--ry', (x * MAX) + 'deg');
-          orb.style.setProperty('--rx', (-y * MAX) + 'deg');
-        });
-        document.addEventListener('pointerleave', () => {
-          orb.classList.remove('free');
-          orb.style.removeProperty('--ry'); orb.style.removeProperty('--rx');
-        });
-      }
-
       // The ghost types itself. An empty field says "type something"; a
       // field quietly writing @ev, @kai, @yuki says "type a NAME" — and
       // it's the one thing on a still page that rewards watching.

@@ -2,14 +2,19 @@
    respond to the pointer and stay crisp at any size.
    Spheres are already iMoney's language — the achievements page is pearls
    and milestone spheres. A card is borrowed from fintech; this isn't. */
-.orb-scene { container-type: inline-size; width: 100%;
-             display: flex; flex-direction: column; align-items: center; }
+/* A square whose SIZE comes from its height, so it can be flex-shrunk when
+   the column runs out of room: width follows via aspect-ratio, and the
+   engraving scales with it because everything inside is in cqw. Sizing it by
+   width instead is what let it overflow a short window and get sliced off
+   the top. */
+.orb-scene { container-type: inline-size; position: relative;
+             aspect-ratio: 1; width: auto; flex: 0 1 auto; min-height: 0; }
 
-.orb-float { width: 100%; animation: orb-bob 6s ease-in-out infinite; }
+.orb-float { position: absolute; inset: 0; animation: orb-bob 6s ease-in-out infinite; }
 @keyframes orb-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
 
 .orb {
-  position: relative; width: 100%; aspect-ratio: 1; border-radius: 50%;
+  position: relative; width: 100%; height: 100%; border-radius: 50%;
   /* Clipped and never transformed: a rotated circle foreshortens into an
      ellipse, and a ball that changes shape as it turns stops being a ball.
      The rim stays perfectly round; what moves is what's ON it. */
@@ -17,14 +22,26 @@
   /* 2× the diameter — near enough to get real foreshortening, far enough
      that the near pole doesn't balloon. --k below is derived from it. */
   perspective: 200cqw;
-  /* Dark equator, light pole, warm bounce along the bottom rim — the three
-     cues that make a sphere read as metal rather than as a grey circle. */
+  cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+  /* DROP YOUR PEARL IN AT assets/pearl.png AND IT TAKES OVER — no code
+     change. Square, ~1200×1200, the pearl filling the frame on a
+     transparent or black background. Until that file exists the browser
+     skips the missing layer and falls through to the gradients below,
+     which are a stand-in, not the intended look. */
   background:
+    url(/assets/pearl.png) center / 100% 100% no-repeat,
     radial-gradient(circle at 34% 27%, #fffefb 0%, #ded7c9 12%, #9d9484 36%, #4f4a41 70%, #211f1b 100%),
     radial-gradient(circle at 72% 86%, rgba(217,179,106,.6) 0%, rgba(217,179,106,0) 44%);
   box-shadow: inset -16px -20px 40px rgba(0,0,0,.6),
               inset 12px 14px 30px rgba(255,255,255,.30);
 }
+
+/* Painted lighting, and ONLY for the gradient stand-in. A real pearl photo
+   arrives with its own highlight already in it; a second one painted on top
+   is exactly what makes a render look fake. orb.js adds .has-photo the
+   moment assets/pearl.png loads, and these switch themselves off. */
+.orb.has-photo::before, .orb.has-photo::after { display: none; }
+.orb.has-photo { box-shadow: none; }
 
 /* Specular. Anchored to the LIGHT, not the ball — so when the sphere turns
    under your pointer the highlight stays put and the surface moves beneath
@@ -58,12 +75,19 @@
    The scale undoes the enlargement from pushing the face nearer the eye:
    at perspective P and depth Z the near side magnifies by P/(P−Z), so the
    face is pre-scaled by (P−Z)/P = (200−38)/200 = .81. */
+.orb.grabbing { cursor: grabbing; }
+
 .orb-face {
   position: absolute; inset: 0; display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 3cqw;
   padding: 0 9%; text-align: center;
   transform: rotateY(var(--ry, 0deg)) rotateX(var(--rx, 0deg))
              translateZ(38cqw) scale(.81);
+  /* Past 90° the mark is on the far side of an opaque ball, so it has to
+     go. Without this it keeps painting, mirrored, straight through the
+     pearl — and you can spin all the way round now. */
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  pointer-events: none;
   transition: transform .5s cubic-bezier(.2,.8,.2,1);
   will-change: transform;
 }
@@ -86,8 +110,8 @@
    and darkens as the pearl falls and spreads as it rises — which is what
    tells you it's floating rather than pasted on. */
 .orb-shadow {
-  width: 62%; height: 5cqw; max-height: 26px; margin-top: 5cqw;
-  border-radius: 50%;
+  position: absolute; left: 19%; right: 19%; bottom: -9cqw;
+  height: 5cqw; max-height: 26px; border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(0,0,0,.62) 0%, rgba(0,0,0,0) 70%);
   animation: orb-shadow 6s ease-in-out infinite;
 }
