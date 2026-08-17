@@ -28,10 +28,6 @@
    transition below is what makes it settle back rather than snap. */
 .card.tilting { transition: none; }
 
-/* Tap: one full turn, landing on the face it started from. You get to see
-   the back without losing your place. */
-.card.flipping { animation: flip .9s cubic-bezier(.4,0,.2,1); }
-@keyframes flip { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
 .card.turning { animation: spin 26s linear infinite; transform: none; }
 .card.turning:hover, .card.turning:active { animation-play-state: paused; }
 @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
