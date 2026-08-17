@@ -10,7 +10,7 @@
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/assets/card.css?v=5">
+  <link rel="stylesheet" href="/assets/card.css?v=7">
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     /* One column, vertically centred between a pinned header and a pinned
@@ -26,7 +26,9 @@
       padding: 0 24px; text-align: center;
     }
     .wrap { width: 100%; max-width: 860px; height: 100svh;
-            display: flex; flex-direction: column; }
+            display: flex; flex-direction: column;
+            /* Named because the centring below has to do arithmetic on it. */
+            --card-h: min(42vh, 470px, calc(92vw / 1.586)); }
     header { display: flex; align-self: flex-start; padding: 26px 0 0; flex: 0 0 auto; }
     #brand { display: flex; align-items: center; gap: 9px; background: none; border: 0;
              padding: 0; margin: 0; color: inherit; font: inherit; cursor: default; }
@@ -48,8 +50,25 @@
        margins that used to stack up. */
     main { flex: 1 1 auto; min-height: 0; overflow: visible;
            display: flex; flex-direction: column; align-items: center;
-           justify-content: center; gap: clamp(18px, 3.2vh, 40px);
+           justify-content: center; gap: clamp(18px, 2.8vh, 34px);
            padding: clamp(24px, 8vh, 104px) 0 clamp(10px, 2vh, 36px); }
+
+    /* Tall enough to afford it: pin the CARD to the middle of the screen
+       rather than centring the whole column in the space left over. The
+       header is 52px, so the run-up is half the viewport minus half the
+       card minus the header. Everything below simply follows, and the
+       footer is allowed to fall past the fold — a landing page is read
+       from the top, and the field still lands above it.
+
+       Only above 800px, because below that the sum doesn't close: a
+       centred card puts the form off the bottom, and the form is the one
+       thing on this page anybody has to reach. */
+    @media (min-height: 800px) {
+      .wrap { height: auto; min-height: 100svh; }
+      main { flex: 0 0 auto; justify-content: flex-start;
+             padding-top: max(24px, calc(50svh - var(--card-h) / 2 - 52px)); }
+      footer { margin-top: auto; }
+    }
 
     /* Sized by HEIGHT with width following from the aspect ratio, so the
        card is the first thing to give ground when the column is tight — it
@@ -58,7 +77,7 @@
     /* The width cap has to be expressed as a height too, or the box stays
        at its vh height while the card inside it is only 92vw/1.586 — dead
        space under the card on a phone that reads as a spacing mistake. */
-    .scene { height: min(46vh, 500px, calc(92vw / 1.586));
+    .scene { height: var(--card-h);
              aspect-ratio: 1.586; width: auto;
              flex: 0 1 auto;
              /* A floor, because past this the card's own contents stop
@@ -72,25 +91,25 @@
     .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px);
               margin: 10px 0 0; }
 
-    .row { display: flex; gap: 10px; max-width: 390px; width: 100%; margin: 0 auto; }
+    .row { display: flex; gap: 9px; max-width: 330px; width: 100%; margin: 0 auto; }
     /* A lit well rather than a dark box. The old field was the same value as
        the page, so it read as decoration — this one is glass over ink, with
        a brighter rim, so it's obvious it's the thing you fill in. */
     .field { flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px;
              background: rgba(244,241,234,.055);
-             border: 1px solid rgba(244,241,234,.20); border-radius: 21px; padding: 0 24px;
+             border: 1px solid rgba(244,241,234,.20); border-radius: 17px; padding: 0 20px;
              box-shadow: inset 0 1px 0 rgba(244,241,234,.06);
              transition: border-color .2s, background .2s; }
     .field:hover { background: rgba(244,241,234,.075); }
     .field:focus-within { border-color: var(--accent); background: rgba(244,241,234,.09); }
-    .field span { color: var(--bone-dim); font-size: clamp(19px, 5.2vw, 27px); font-weight: 600; flex: 0 0 auto; }
+    .field span { color: var(--bone-dim); font-size: clamp(16px, 4.2vw, 19px); font-weight: 600; flex: 0 0 auto; }
     input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--bone);
-            font-weight: 600; font-size: clamp(19px, 5.2vw, 27px); line-height: 1; font-family: inherit; padding: 23px 0; letter-spacing: -.4px; }
+            font-weight: 600; font-size: clamp(16px, 4.2vw, 19px); line-height: 1; font-family: inherit; padding: 17px 0; letter-spacing: -.2px; }
     /* The placeholder is the instruction — dim to the point of invisible
        was the reason the field didn't read as a field. */
     input::placeholder { color: var(--bone-faint); opacity: 1; }
-    button { background: var(--bone); color: var(--ink); border: 0; border-radius: 21px;
-             padding: 23px 22px; flex: 0 0 auto; font-weight: 600; font-size: 17px;
+    button { background: var(--bone); color: var(--ink); border: 0; border-radius: 17px;
+             padding: 17px 18px; flex: 0 0 auto; font-weight: 600; font-size: 15px;
              line-height: 1; font-family: inherit; cursor: pointer;
              white-space: nowrap; letter-spacing: -.1px; }
     button:disabled { opacity: .4; cursor: default; }
@@ -137,13 +156,13 @@
             <div class="face front">
               <div class="card-inner">
                 <div class="card-top">
-                  <div class="card-meta left engraved">已預約</div>
+                  <img class="card-logo" src="/assets/logo-ink-star.png" alt="iMoney">
                   <div class="card-meta engraved">AUGUST<br>2026</div>
                 </div>
                 <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
                 <div class="card-foot">
                   <div class="quote engraved">設計來取代你的直覺估算。</div>
-                  <img class="card-logo" src="/assets/logo-ink-star.png" alt="iMoney">
+                  <div class="card-meta engraved">已預約</div>
                 </div>
               </div>
             </div>
@@ -240,7 +259,7 @@
       location.href = '/reserve/?lang=zh&h=' + encodeURIComponent(h);
     });
   </script>
-  <script src="/assets/still.js?v=5"></script>
+  <script src="/assets/still.js?v=7"></script>
   <script>
     (() => {
       // The ghost types itself. An empty field says "type something"; a

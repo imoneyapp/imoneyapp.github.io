@@ -80,7 +80,9 @@
    the star into one silhouette and stopped looking like the logo. Engraved
    with the same two edges as the text; the star keeps its own metal
    because it's in the artwork. */
-.card-logo { height: clamp(20px, 3.6cqw, 38px); width: auto; opacity: .78;
+/* Top-left corner now, and much bigger — it's the first thing on the card
+   rather than a signature in the corner. */
+.card-logo { height: clamp(32px, 9.2cqw, 94px); width: auto; opacity: .82;
              filter: drop-shadow(0 1px 0 rgba(255,255,255,.34))
                      drop-shadow(0 -1px 0 rgba(0,0,0,.26)); }
 
