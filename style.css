@@ -53,10 +53,16 @@ h1 { font-size: clamp(34px, 6vw, 46px); font-weight: 700; letter-spacing: -1.4px
      line-height: 1.1; margin-bottom: 10px; }
 .updated { color: var(--bone-faint); font-size: 14px; margin-bottom: clamp(36px, 6vh, 56px); }
 
-/* The opening line carries the whole document's tone — set it like a lede,
-   not like body copy. */
-p.lede { color: var(--bone); font-size: clamp(18px, 2.4vw, 21px); line-height: 1.55;
-         letter-spacing: -.2px; margin-bottom: 8px; }
+/* The opening lines set the tone quietly — smaller than body copy, not
+   larger. Premium type whispers; size is spent on the title alone. */
+p.lede { color: var(--bone); font-size: 16px; line-height: 1.8;
+         letter-spacing: -.1px; margin-bottom: 8px; }
+
+/* The intro's supporting lines and the promise list, a step quieter still. */
+p.fine { font-size: 14.5px; color: var(--bone-faint); }
+ul.fine { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 7px; }
+ul.fine li { font-size: 14.5px; color: var(--bone); display: flex; gap: 12px; }
+ul.fine li::before { content: "—"; color: var(--bone-faint); flex: 0 0 auto; }
 
 h2 { font-size: 23px; font-weight: 650; letter-spacing: -.4px; line-height: 1.3;
      margin: clamp(44px, 7vh, 68px) 0 14px; }
