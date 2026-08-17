@@ -390,9 +390,20 @@
                    .toUpperCase(), cx + cw - pad, cy + pad + cw * 0.030);
 
       ctx.textAlign = 'left';
-      ctx.fillStyle = '#0b0b0c';
-      ctx.font = '700 ' + Math.round(cw * 0.125) + 'px -apple-system, "SF Pro Display", system-ui, sans-serif';
-      ctx.fillText('@' + handle, cx + pad, cy + ch * 0.58);
+      /* Same cut as the live card: the depth is a gradient inside the
+         glyph (dark top wall, lighter floor) plus one hairline of light
+         on the bottom lip — never offset copies of the text. */
+      const hs = Math.round(cw * 0.125), hy = cy + ch * 0.58;
+      const cut = ctx.createLinearGradient(0, hy - hs * 0.72, 0, hy);
+      cut.addColorStop(0, '#34332f'); cut.addColorStop(0.38, '#413f3b');
+      cut.addColorStop(0.72, '#55534d'); cut.addColorStop(1, '#6b6862');
+      ctx.save();
+      ctx.shadowColor = 'rgba(255,255,255,.42)';
+      ctx.shadowOffsetY = Math.max(1, hs * 0.014); ctx.shadowBlur = 0;
+      ctx.fillStyle = cut;
+      ctx.font = '700 ' + hs + 'px -apple-system, "SF Pro Display", system-ui, sans-serif';
+      ctx.fillText('@' + handle, cx + pad, hy);
+      ctx.restore();
 
       ctx.fillStyle = 'rgba(11,11,12,.4)';
       ctx.font = '700 ' + Math.round(cw * 0.024) + 'px -apple-system, system-ui, sans-serif';
