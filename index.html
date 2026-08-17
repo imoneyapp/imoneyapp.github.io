@@ -111,7 +111,7 @@
     main { flex: 1 1 auto; min-height: 0; overflow: visible;
            display: flex; flex-direction: column; align-items: center;
            justify-content: center; gap: clamp(18px, 2.8vh, 34px);
-           padding: clamp(24px, 8vh, 104px) 0 clamp(10px, 2vh, 36px); }
+           padding: clamp(72px, 11vh, 130px) 0 clamp(10px, 2vh, 36px); }
 
 
     /* Sized by HEIGHT with width following from the aspect ratio, so the
@@ -387,40 +387,47 @@
     })();
   </script>
   <script>
-    // The video's clock is the scroll position. Target follows the scroll,
-    // playhead eases toward the target — hard sets on every scroll event
-    // stutter, the easing reads as weight. Seeks stay cheap because the
-    // file is encoded with a keyframe every quarter second (-g 6).
+    // The technique from evlynsu.com: fetch the whole video as a Blob and
+    // scrub a local object-URL. Every seek is against fully-local data, so
+    // Safari has nothing to stall on and paints frames without ever being
+    // played. Scroll events are rAF-throttled; currentTime maps straight
+    // onto scroll progress through the track.
     (() => {
       const track = document.querySelector('.cosmos-track');
       const video = document.querySelector('.cosmos-video');
       if (!track || !video) return;
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      let target = 0, shown = -1;
-      const tick = () => {
+
+      const src = video.getAttribute('src');
+      let ready = false, ticking = false;
+
+      const update = () => {
+        ticking = false;
         const span = track.offsetHeight - innerHeight;
-        if (span > 0 && video.duration) {
-          const p = Math.min(1, Math.max(0, -track.getBoundingClientRect().top / span));
-          target = p * (video.duration - 0.05);
-          const cur = video.currentTime;
-          const next = cur + (target - cur) * 0.22;
-          if (Math.abs(next - shown) > 0.02) { video.currentTime = next; shown = next; }
-        }
-        requestAnimationFrame(tick);
+        if (!ready || !video.duration || span <= 0) return;
+        const p = Math.min(1, Math.max(0, -track.getBoundingClientRect().top / span));
+        video.currentTime = p * video.duration * 0.97;
       };
-      // Safari renders nothing until play() has run once — loadeddata
-      // alone may never even fire for a video nobody plays. Prime it:
-      // play, pause immediately, then hand the clock to the scroll.
-      const ready = () => { video.currentTime = 0.001; video.classList.add('ready'); };
-      const primed = video.play();
-      if (primed && primed.then) {
-        primed.then(() => { video.pause(); ready(); })
-              .catch(() => video.addEventListener('loadeddata', ready, { once: true }));
-      } else {
+
+      fetch(src)
+        .then(r => r.blob())
+        .then(blob => { video.src = URL.createObjectURL(blob); video.load(); })
+        .catch(() => video.load());
+
+      const activate = () => {
+        ready = true;
         video.pause();
-        video.addEventListener('loadeddata', ready, { once: true });
-      }
-      requestAnimationFrame(tick);
+        video.currentTime = 0.001;
+        video.classList.add('ready');
+        update();
+      };
+      video.addEventListener('loadedmetadata', activate, { once: true });
+      if (video.readyState >= 1) activate();
+
+      addEventListener('scroll', () => {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }, { passive: true });
+      update();
     })();
   </script>
 </body>
