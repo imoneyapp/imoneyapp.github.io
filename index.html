@@ -26,7 +26,7 @@
        always settles on one of them — nobody can rest in the seam between
        the planet and the card. snap-stop keeps a hard fling from blowing
        through a screen entirely. */
-    html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+    html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
     .claim-screen { position: relative; width: 100%;
                     scroll-snap-align: start; scroll-snap-stop: always; }
     /* Scroll-driven rotation: the track is three screens tall, the hero
@@ -55,6 +55,11 @@
       opacity: .85; transition: opacity .25s;
     }
     .cosmos-cta:hover { opacity: 1; }
+    .cosmos-hint {
+      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+      font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
+      color: rgba(244,241,234,.45); transition: opacity .4s; pointer-events: none;
+    }
     /* Invisible until it has actually decoded a frame: a video element
        paints BLACK before that, and layered over the photograph it erased
        the planet. The photo underneath is the truth until the video can
@@ -204,11 +209,12 @@
   <div class="cosmos-track" id="top">
   <section class="cosmos" aria-label="iMoney">
     <video class="cosmos-video" muted playsinline preload="auto"
-           poster="/assets/planet.jpg" src="/assets/planet.mp4"></video>
+           src="/assets/planet.mp4"></video>
     <div class="cosmos-inner">
       <img class="cosmos-mark" src="/assets/logo-mark.png" alt="">
       <a class="cosmos-cta" href="#reserve">Reserve @yourname</a>
     </div>
+    <div class="cosmos-hint" id="cosmos-hint">Scroll</div>
   </section>
   </div>
 
@@ -424,7 +430,9 @@
       video.addEventListener('loadedmetadata', activate, { once: true });
       if (video.readyState >= 1) activate();
 
+      const hint = document.getElementById('cosmos-hint');
       addEventListener('scroll', () => {
+        if (hint) hint.style.opacity = scrollY > 80 ? '0' : '1';
         if (!ticking) { ticking = true; requestAnimationFrame(update); }
       }, { passive: true });
       update();
