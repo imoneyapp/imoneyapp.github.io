@@ -63,20 +63,21 @@
     .cosmos-cta .cta-enter { opacity: 0; transition: opacity .45s; }
     .cosmos-cta.typed .cta-enter { opacity: 1; }
     .cta-enter {
-      position: absolute; left: calc(100% + 10px); top: 50%;
+      position: absolute; left: calc(100% + 9px); top: 50%;
       transform: translateY(-50%);
-      width: 24px; height: 24px; border-radius: 50%;
+      width: 20px; height: 20px; border-radius: 50%;
       border: 1px solid rgba(244,241,234,.35);
       display: flex; align-items: center; justify-content: center;
       transition: border-color .25s, background .25s, color .25s;
     }
-    .cosmos-cta:hover .cta-enter { border-color: rgba(244,241,234,.7);
-                                   background: rgba(244,241,234,.08); }
+    /* Hover fills the key solid — bone circle, ink arrow. */
+    .cosmos-cta:hover .cta-enter { background: var(--bone); color: #0b0b0c;
+                                   border-color: var(--bone); }
     /* The press: the key inverts — bone fill, ink arrow — for as long as
        the finger or button is down. */
     .cosmos-cta:active .cta-enter { background: var(--bone); color: #0b0b0c;
                                     border-color: var(--bone); }
-    .cta-enter svg { width: 11px; height: 11px; display: block; }
+    .cta-enter svg { width: 9px; height: 9px; display: block; }
     @media (max-width: 700px) {
       .cosmos { background: #000 url(/assets/planetfull.jpg) center / cover no-repeat; }
       .cosmos-inner { left: 50%; transform: translate(-50%, -50%); }
@@ -94,27 +95,40 @@
   </section>
 
   <script>
-    // The line types itself. The full text is already in the markup for
-    // anyone without JS; with it, we clear and replay — and skip the whole
-    // act for reduced-motion, where the key just appears with the words.
+    // The line types itself, reconsiders, and finishes somewhere better:
+    // "Reserve @yourname" — a beat — the name comes back off, and "Reserve on @imoney"
+    // stands. Reduced-motion skips the theatre and shows the ending.
     (() => {
       const cta = document.querySelector('.cosmos-cta');
       const el = cta && cta.querySelector('.cta-text');
       if (!el) return;
-      const text = el.textContent;
+      const P1 = 'Reserve @yourname', DEL = 9, P2 = 'on @imoney';
+      const done = () => { cta.classList.remove('typing'); cta.classList.add('typed'); };
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        cta.classList.add('typed'); return;
+        el.textContent = 'Reserve on @imoney'; done(); return;
       }
-      el.style.minWidth = el.getBoundingClientRect().width + 'px';
+      // freeze the box at the wider of the two lines so nothing reflows
+      const w1 = el.getBoundingClientRect().width;
+      el.textContent = 'Reserve on @imoney';
+      const w2 = el.getBoundingClientRect().width;
+      el.style.minWidth = Math.ceil(Math.max(w1, w2)) + 'px';
       el.textContent = '';
       cta.classList.add('typing');
-      let i = 0;
-      const tick = () => {
-        el.textContent = text.slice(0, ++i);
-        if (i < text.length) setTimeout(tick, 62 + Math.random() * 48);
-        else { cta.classList.remove('typing'); cta.classList.add('typed'); }
+      const typeOut = (base, add, i, next) => {
+        el.textContent = base + add.slice(0, ++i);
+        if (i < add.length) setTimeout(() => typeOut(base, add, i, next), 58 + Math.random() * 46);
+        else next();
       };
-      setTimeout(tick, 500);
+      const erase = (n, next) => {
+        el.textContent = el.textContent.slice(0, -1);
+        if (--n > 0) setTimeout(() => erase(n, next), 34);
+        else next();
+      };
+      setTimeout(() => typeOut('', P1, 0, () =>
+        setTimeout(() => erase(DEL, () =>
+          setTimeout(() => typeOut(el.textContent, P2, 0, done), 260)
+        ), 950)
+      ), 500);
     })();
   </script>
 </body>
