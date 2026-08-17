@@ -34,7 +34,7 @@
       display: flex; flex-direction: column; align-items: center;
       text-align: center;
     }
-    .wrap { width: 100%; max-width: 860px; height: 100svh; margin: 0 auto;
+    .wrap { width: 100%; max-width: 860px; min-height: 100svh; margin: 0 auto;
             padding-left: 24px; padding-right: 24px;
             display: flex; flex-direction: column;
             /* Named because the centring below has to do arithmetic on it. */
@@ -55,8 +55,12 @@
        margins that used to stack up. */
     main { flex: 1 1 auto; min-height: 0; overflow: visible;
            display: flex; flex-direction: column; align-items: center;
-           justify-content: center; gap: clamp(18px, 2.8vh, 34px);
-           padding: clamp(72px, 11vh, 130px) 0 clamp(10px, 2vh, 36px); }
+           /* The card's midline IS the screen's midline: the stack starts
+              at half the viewport minus half the card. Short windows push
+              the form below the fold, which free scroll reaches. */
+           justify-content: flex-start;
+           padding: calc(50svh - var(--card-h) / 2) 0 clamp(20px, 3vh, 44px);
+           gap: clamp(24px, 3.8vh, 46px); }
 
 
     /* Sized by HEIGHT with width following from the aspect ratio, so the
@@ -70,7 +74,7 @@
        keyboard leaves (~430px), so typing shows the whole ritual — card,
        headline, field — with nothing hidden and nothing to scroll. */
     @media (max-width: 640px) {
-      main { padding-top: 10px; padding-bottom: 12px; gap: 16px; }
+      main { justify-content: center; padding-top: 10px; padding-bottom: 12px; gap: 16px; }
       .scene { margin: 12px 0; }
       /* Premium type whispers: the phone page steps everything down a
          size and lets the card carry the weight. */
@@ -84,16 +88,18 @@
     }
     .scene { height: var(--card-h);
              aspect-ratio: 1.586; width: auto;
-             flex: 0 1 auto;
+             /* rigid: the centring math assumes the card's real height, and
+                a shrinkable card was quietly eating 100px of it */
+             flex: 0 0 auto;
              /* A floor, because past this the card's own contents stop
                 fitting inside it and the handle disappears entirely — a
                 card too small to carry a name isn't worth showing. */
              min-height: 150px; }
 
-    h1 { font-size: clamp(30px, 5.2vw, 52px); font-weight: 700; letter-spacing: -1.5px;
+    h1 { font-size: clamp(24px, 2.8vw, 34px); font-weight: 700; letter-spacing: -.9px;
          margin: 0; }
     .say h1 { margin: 0; }
-    .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px);
+    .slogan { color: var(--bone-dim); font-size: clamp(13px, 1.3vw, 15px);
               margin: 10px 0 0; }
 
     .row { display: flex; gap: 9px; max-width: 330px; width: 100%; margin: 0 auto; }
