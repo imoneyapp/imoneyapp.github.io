@@ -27,11 +27,16 @@
        the planet and the card. snap-stop keeps a hard fling from blowing
        through a screen entirely. */
     html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
-    .cosmos { scroll-snap-align: start; scroll-snap-stop: always; }
     .claim-screen { position: relative; width: 100%;
                     scroll-snap-align: start; scroll-snap-stop: always; }
+    /* Scroll-driven rotation: the track is three screens tall, the hero
+       sticks for all of them, and the video's clock is the scroll bar —
+       scrubbing forward as you scroll, backward if you change your mind,
+       ending exactly as the card screen arrives. No autoplay: the reader
+       turns the planet. */
+    .cosmos-track { height: 300svh; scroll-snap-align: start; }
     .cosmos {
-      position: relative; width: 100%; height: 100svh;
+      position: sticky; top: 0; width: 100%; height: 100svh; overflow: hidden;
       background: #000 url(/assets/planet.jpg) right center / cover no-repeat;
     }
     .cosmos-inner {
@@ -50,10 +55,19 @@
       opacity: .85; transition: opacity .25s;
     }
     .cosmos-cta:hover { opacity: 1; }
+    .cosmos-video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: right center;
+    }
     @media (max-width: 700px) {
       .cosmos { background-image: url(/assets/planet-vertical.jpg);
                 background-position: center; }
+      .cosmos-video { object-position: 70% center; }
       .cosmos-inner { left: 50%; transform: translate(-50%, -50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cosmos-track { height: 100svh; }
+      .cosmos-video { display: none; }
     }
     @media (prefers-reduced-motion: reduce) { .cosmos-mark { animation: none; } }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -93,22 +107,6 @@
            justify-content: center; gap: clamp(18px, 2.8vh, 34px);
            padding: clamp(24px, 8vh, 104px) 0 clamp(10px, 2vh, 36px); }
 
-    /* Tall enough to afford it: pin the CARD to the middle of the screen
-       rather than centring the whole column in the space left over. The
-       header is 52px, so the run-up is half the viewport minus half the
-       card minus the header. Everything below simply follows, and the
-       footer is allowed to fall past the fold — a landing page is read
-       from the top, and the field still lands above it.
-
-       Only above 800px, because below that the sum doesn't close: a
-       centred card puts the form off the bottom, and the form is the one
-       thing on this page anybody has to reach. */
-    @media (min-height: 800px) {
-      .wrap { height: auto; min-height: 100svh; }
-      main { flex: 0 0 auto; justify-content: flex-start;
-             padding-top: max(24px, calc(50svh - var(--card-h) / 2)); }
-      footer { margin-top: auto; }
-    }
 
     /* Sized by HEIGHT with width following from the aspect ratio, so the
        card is the first thing to give ground when the column is tight — it
@@ -192,12 +190,16 @@
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2">
 </head>
 <body>
-  <section class="cosmos" id="top" aria-label="iMoney">
+  <div class="cosmos-track" id="top">
+  <section class="cosmos" aria-label="iMoney">
+    <video class="cosmos-video" muted playsinline preload="auto"
+           poster="/assets/planet.jpg" src="/assets/planet.mp4"></video>
     <div class="cosmos-inner">
       <img class="cosmos-mark" src="/assets/logo-mark.png" alt="">
       <a class="cosmos-cta" href="#reserve">預約 @yourname</a>
     </div>
   </section>
+  </div>
 
   <section class="claim-screen" id="reserve">
   <div class="wrap">
@@ -369,6 +371,32 @@
       inp.addEventListener('focus', () => {
         setTimeout(() => document.getElementById('reserve').scrollIntoView({ behavior: 'smooth' }), 60);
       });
+    })();
+  </script>
+  <script>
+    // The video's clock is the scroll position. Target follows the scroll,
+    // playhead eases toward the target — hard sets on every scroll event
+    // stutter, the easing reads as weight. Seeks stay cheap because the
+    // file is encoded with a keyframe every quarter second (-g 6).
+    (() => {
+      const track = document.querySelector('.cosmos-track');
+      const video = document.querySelector('.cosmos-video');
+      if (!track || !video) return;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      let target = 0, shown = -1;
+      const tick = () => {
+        const span = track.offsetHeight - innerHeight;
+        if (span > 0 && video.duration) {
+          const p = Math.min(1, Math.max(0, -track.getBoundingClientRect().top / span));
+          target = p * (video.duration - 0.05);
+          const cur = video.currentTime;
+          const next = cur + (target - cur) * 0.22;
+          if (Math.abs(next - shown) > 0.02) { video.currentTime = next; shown = next; }
+        }
+        requestAnimationFrame(tick);
+      };
+      video.pause();
+      requestAnimationFrame(tick);
     })();
   </script>
 </body>
