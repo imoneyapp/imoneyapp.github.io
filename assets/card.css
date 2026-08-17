@@ -121,10 +121,26 @@
              filter: drop-shadow(0 1px 0 rgba(255,255,255,.34))
                      drop-shadow(0 -1px 0 rgba(0,0,0,.26)); }
 
-.card-handle { font-size: clamp(30px, 11cqw, 84px); font-weight: 650; color: rgba(22,22,24,.96);
+/* A real cut has NO offset copies — zoom into any engraved card and the
+   glyph is one shape, shaded inside: dark at the top wall of the cut,
+   lighter where light reaches the floor. So the depth here is a gradient
+   CLIPPED TO THE LETTERFORMS, which survives any zoom because there is
+   nothing behind the glyph to separate from it. The single hairline of
+   light on the bottom lip comes from drop-shadow, which (unlike
+   text-shadow) still works when the fill is a clipped gradient. */
+.card-handle { font-size: clamp(30px, 11cqw, 84px); font-weight: 650;
                margin: auto 0; letter-spacing: -1.2px; overflow: hidden;
-               text-overflow: ellipsis; white-space: nowrap; }
-.card-handle.placeholder { color: rgba(11,11,12,.48); }
+               text-overflow: ellipsis; white-space: nowrap;
+               color: rgba(22,22,24,.96);
+               background: linear-gradient(180deg,
+                 #34332f 0%, #413f3b 38%, #55534d 72%, #6b6862 100%);
+               -webkit-background-clip: text; background-clip: text;
+               -webkit-text-fill-color: transparent;
+               filter: drop-shadow(0 1px 0 rgba(255,255,255,.42));
+               text-shadow: none; }
+/* `color` fades nothing once the fill is a clipped gradient — the whole
+   element steps back instead, cut and all. */
+.card-handle.placeholder { opacity: .52; }
 
 /* `flex-end` lines up the BOXES, and the two have different type sizes and
    line-heights, so their baselines landed ~2px apart — enough to see on a
