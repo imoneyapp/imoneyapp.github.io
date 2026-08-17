@@ -64,34 +64,22 @@
 }
 
 .card-top { display: flex; align-items: flex-start; justify-content: space-between; flex: 0 0 auto; }
-/* The mark, engraved. The silhouette is a MASK filled with dark gold rather
-   than a black PNG laid on top — black ink reads as printed, a tinted recess
-   reads as cut into the metal. Same two-edge shadow as .engraved text.
-   NEVER a percentage height here: a % against an indefinite parent makes the
-   image contribute its intrinsic 612px to the flex row and crushes the
-   handle and footer to zero. cq units resolve against a definite width. */
-.mark {
-  position: relative; flex: 0 0 auto;
-  width: clamp(22px, 3.9cqw, 40px); height: clamp(27px, 5cqw, 51px);
-}
-.mark::before {
-  content: ""; position: absolute; inset: 0;
-  background: rgba(11,11,12,.74);
-  -webkit-mask: url("logo-mark.png") center/contain no-repeat;
-          mask: url("logo-mark.png") center/contain no-repeat;
-  filter: drop-shadow(0 1px 0 rgba(255,255,255,.34)) drop-shadow(0 -1px 0 rgba(0,0,0,.30));
-}
-/* The star stays real metal — it's the one part of the lockup that catches
-   light rather than absorbing it, and flattening it into the recess would
-   lose the only highlight on the mark. */
-.mark::after {
-  content: ""; position: absolute; left: 50%; top: 50%;
-  width: 46%; aspect-ratio: 169/176; transform: translate(-50%, -50%);
-  background: url("star.png") center/contain no-repeat;
-  filter: drop-shadow(0 1px 0 rgba(0,0,0,.35));
-}
+/* NEVER a percentage height on card art: a % against an indefinite parent
+   makes the image contribute its intrinsic height to the flex row and
+   crushes everything below it. cq units resolve against a definite width. */
+
 .card-meta { font: 700 clamp(9px, 1.6cqw, 12px)/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
-             color: rgba(11,11,12,.5); letter-spacing: 1.4px; text-align: right; }
+             color: rgba(11,11,12,.5); letter-spacing: 1.4px; text-align: right;
+             text-transform: uppercase; }
+.card-meta.left { text-align: left; }
+
+/* The real lockup, not a mask of it — masking flattened the wordmark and
+   the star into one silhouette and stopped looking like the logo. Engraved
+   with the same two edges as the text; the star keeps its own metal
+   because it's in the artwork. */
+.card-logo { height: clamp(20px, 3.6cqw, 38px); width: auto; opacity: .78;
+             filter: drop-shadow(0 1px 0 rgba(255,255,255,.34))
+                     drop-shadow(0 -1px 0 rgba(0,0,0,.26)); }
 
 .card-handle { font-size: clamp(30px, 11cqw, 84px); font-weight: 700; color: rgba(11,11,12,.92);
                margin: auto 0; letter-spacing: -2px; overflow: hidden;

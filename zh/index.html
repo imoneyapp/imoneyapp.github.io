@@ -41,7 +41,7 @@
          margin: clamp(30px, 4.6vh, 52px) 0 10px; }
     .slogan { color: var(--bone-dim); font-size: clamp(15px, 1.7vw, 19px); margin: 0 0 28px; }
 
-    .row { display: flex; gap: 10px; max-width: 560px; width: 100%; margin: 0 auto; }
+    .row { display: flex; gap: 10px; max-width: 400px; width: 100%; margin: 0 auto; }
     /* A lit well rather than a dark box. The old field was the same value as
        the page, so it read as decoration — this one is glass over ink, with
        a brighter rim, so it's obvious it's the thing you fill in. */
@@ -90,13 +90,13 @@
           <div class="face front">
             <div class="card-inner">
               <div class="card-top">
-                <i class="mark" role="img" aria-label="iMoney"></i>
+                <div class="card-meta left engraved">上線前</div>
                 <div class="card-meta engraved">AUGUST<br>2026</div>
               </div>
               <div class="card-handle placeholder engraved" id="card-handle">@yourname</div>
               <div class="card-foot">
                 <div class="quote engraved" id="card-quote"></div>
-                <div class="right engraved" id="card-url">withimoney.com</div>
+                <img class="card-logo" src="/assets/logo-ink-star.png" alt="iMoney">
               </div>
             </div>
           </div>
@@ -154,9 +154,6 @@
       card.textContent = shown;
       card.classList.toggle('placeholder', !h);
       document.getElementById('head-handle').textContent = shown;
-      // The URL line reads as the address the name will actually live at.
-      document.getElementById('card-url').textContent =
-        h ? 'withimoney.com/@' + h : 'withimoney.com';
       go.disabled = h.length < 2;
       status.className = 'status';
       if (!h.length)         { status.textContent = DEFAULT; }
