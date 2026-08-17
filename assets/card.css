@@ -43,6 +43,18 @@
   box-shadow: 0 26px 60px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.12) inset;
   background: linear-gradient(135deg, rgba(217,179,106,.62), rgba(217,179,106,.24)), var(--ink);
 }
+/* A light that follows the pointer across the metal — strongest exactly
+   where you are, so hovering a corner lights that corner. Geometry never
+   moves; tilt was tried and rejected, and a sheen is what a real card does
+   under a lamp anyway. --mx/--my come from a few lines of JS. */
+.face.front::before {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%),
+              rgba(255,252,240,.22), transparent 65%);
+  opacity: 0; transition: opacity .35s;
+}
+.scene:hover .face.front::before { opacity: 1; }
+
 .face.back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
 .face.back img { width: 34%; opacity: .5;
                  filter: drop-shadow(0 1px 0 rgba(255,255,255,.25)); }
