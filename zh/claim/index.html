@@ -166,22 +166,12 @@
     /* Apple's footer grammar: one row, legal on the left, nav on the
        right, sharing a baseline. The row spans the viewport, not the
        centered column. */
-    .copyline { color: var(--bone-faint); }
-    /* Three columns: legal hugs the left gutter, the nav sits in the
-       TRUE center of the viewport (grid, so it can't drift with the
-       legal line's width), and the right column stays empty to balance. */
-    footer { width: 100vw; margin-left: calc(50% - 50vw);
-             box-sizing: border-box; padding-left: 24px; padding-right: 24px;
-             display: grid; grid-template-columns: 1fr auto 1fr;
-             align-items: baseline; gap: 16px; }
-    footer .copyline { grid-column: 1; justify-self: start; }
-    footer .foot-links { grid-column: 2; }
-    @media (max-width: 640px) {
-      footer { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-      /* Stacked, the legal line goes last — the bottom of the bottom. */
-      footer .copyline { width: 100%; text-align: left; order: 2; }
-      footer .foot-links { order: 1; }
-    }
+    .copyline { font-size: 12px; color: rgba(244,241,234,.26); order: 2; }
+    /* Two centered lines: the nav, then the legal line a whisper
+       beneath it — lighter than any other text on the page, present
+       without asking to be read. */
+    footer { display: flex; flex-direction: column; align-items: center;
+             gap: 13px; text-align: center; }
     /* Longhand on purpose: the shorthand was zeroing the row's side
        gutters set above. */
     footer { flex: 0 0 auto;
