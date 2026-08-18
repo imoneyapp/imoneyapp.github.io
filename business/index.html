@@ -41,6 +41,18 @@
                  font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; }
     .biz .send:disabled { opacity: .4; }
     .other-input { margin-top: 10px; }
+    /* A native select wearing the form's clothes — the OS supplies the
+       picker, we supply the chevron. */
+    .selectwrap { position: relative; }
+    .selectwrap select {
+      width: 100%; appearance: none; -webkit-appearance: none;
+      background: rgba(244,241,234,.055) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%23a8a49c' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 16px center;
+      color: var(--bone); border: 1px solid rgba(244,241,234,.16);
+      border-radius: 14px; padding: 14px 40px 14px 16px;
+      font-size: 16px; font-family: inherit; outline: none;
+    }
+    .selectwrap select:focus { border-color: var(--accent); }
+    .selectwrap select:invalid { color: var(--bone-dim); }
     .form-msg { min-height: 20px; font-size: 13.5px; margin-top: 12px; color: var(--bone-faint); }
     .form-msg.bad { color: #e64a3c; }
     .thanks { display: none; margin-top: 34px; }
@@ -70,14 +82,17 @@
     </div>
 
     <label class="q">Business type</label>
-    <div class="chips" id="who" data-single>
-      <button type="button" class="chip">Small business owner</button>
-      <button type="button" class="chip">Startup team</button>
-      <button type="button" class="chip">Restaurant / café</button>
-      <button type="button" class="chip">Retail / e-commerce</button>
-      <button type="button" class="chip">Agency / studio</button>
-      <button type="button" class="chip">Bank / financial institution</button>
-      <button type="button" class="chip" data-other>Other</button>
+    <div class="selectwrap">
+      <select id="who">
+        <option value="" selected disabled>Choose one</option>
+        <option>Small business owner</option>
+        <option>Startup team</option>
+        <option>Restaurant / café</option>
+        <option>Retail / e-commerce</option>
+        <option>Agency / studio</option>
+        <option>Bank / financial institution</option>
+        <option value="__other">Other</option>
+      </select>
     </div>
     <input type="text" id="who-other" class="other-input" maxlength="80"
            placeholder="Tell us who you are" hidden>
@@ -145,14 +160,18 @@
         }
       });
     });
+    $('who').addEventListener('change', () => {
+      const other = $('who-other');
+      other.hidden = $('who').value !== '__other';
+      if (!other.hidden) other.focus();
+    });
     $('biz').addEventListener('submit', async e => {
       e.preventDefault();
       const msg = $('form-msg');
       const picked = sel => [...document.querySelectorAll(sel + ' .chip[aria-pressed="true"]')].map(c => c.textContent);
       const otherText = id => { const el = $(id); return el && !el.hidden && el.value.trim(); };
-      let who = picked('#who')[0] || null;
-      const whoOther = otherText('who-other');
-      if (whoOther) who = whoOther;
+      const whoSel = $('who').value;
+      let who = whoSel === '__other' ? (otherText('who-other') || null) : (whoSel || null);
       const needs = picked('#needs');
       const needsOther = otherText('needs-other');
       const i = needs.indexOf(needs.find(n => /Something else|其他需求/.test(n)));
