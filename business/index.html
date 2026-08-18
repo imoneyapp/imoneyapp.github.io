@@ -69,19 +69,13 @@
   too. Let's get to know each other better?</p>
 
   <form class="biz" id="biz">
-    <label class="q">The basics</label>
-    <div class="two">
-      <div>
-        <input type="text" id="f-name" maxlength="120" autocomplete="name"
-               placeholder="Your name" required>
-      </div>
-      <div>
-        <input type="email" id="f-email" maxlength="200" autocomplete="email"
-               placeholder="Email" required>
-      </div>
-    </div>
+    <label class="q">Who are you?</label>
+    <input type="text" id="f-name" maxlength="120" autocomplete="name"
+           placeholder="Your name" required>
+    <input type="email" id="f-email" maxlength="200" autocomplete="email"
+           placeholder="Email" required style="margin-top: 10px;">
 
-    <label class="q">Business type</label>
+    <label class="q">Business Type</label>
     <div class="selectwrap">
       <select id="who">
         <option value="" selected disabled>Choose one</option>
@@ -125,7 +119,7 @@
     <input type="text" id="needs-other" class="other-input" maxlength="80"
            placeholder="Tell us what else" hidden>
 
-    <label class="q" for="f-msg">Tell us about your business. Ask anything about iMoney. Let’s work together.</label>
+    <label class="q" for="f-msg">Tell us about your business. Ask anything about iMoney and explore opportunities working together.</label>
     <textarea id="f-msg" maxlength="2000"></textarea>
 
     <button type="submit" class="send" id="send">Keep in touch</button>

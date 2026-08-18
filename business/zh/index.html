@@ -65,17 +65,11 @@
   <p class="lede">iMoney 也為企業量身打造金錢解決方案。讓我們更認識彼此一點？</p>
 
   <form class="biz" id="biz">
-    <label class="q">基本資料</label>
-    <div class="two">
-      <div>
-        <input type="text" id="f-name" maxlength="120" autocomplete="name"
-               placeholder="你的名字" required>
-      </div>
-      <div>
-        <input type="email" id="f-email" maxlength="200" autocomplete="email"
-               placeholder="電子郵件" required>
-      </div>
-    </div>
+    <label class="q">你是誰？</label>
+    <input type="text" id="f-name" maxlength="120" autocomplete="name"
+           placeholder="你的名字" required>
+    <input type="email" id="f-email" maxlength="200" autocomplete="email"
+           placeholder="電子郵件" required style="margin-top: 10px;">
 
     <label class="q">業務類型</label>
     <div class="selectwrap">
@@ -121,7 +115,7 @@
     <input type="text" id="needs-other" class="other-input" maxlength="80"
            placeholder="說說還需要什麼" hidden>
 
-    <label class="q" for="f-msg">聊聊你的生意，想問 iMoney 的儘管問。讓我們一起合作。</label>
+    <label class="q" for="f-msg">聊聊你的生意，想問 iMoney 的儘管問，一起探索合作的可能。</label>
     <textarea id="f-msg" maxlength="2000"></textarea>
 
     <button type="submit" class="send" id="send">保持聯絡</button>
