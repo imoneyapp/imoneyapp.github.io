@@ -88,12 +88,7 @@
       input { padding: 15px 0; }
       button { font-size: 13px; padding: 15px 16px; }
       .status { font-size: 12px; }
-      /* The legal line doesn't crowd the nav row — it sits alone at the
-       page's bottom-left, the way Apple parks theirs. */
-    .copyline { width: 100%; text-align: left; margin-top: 16px;
-                font-size: 11px; color: var(--bone-faint); }
-    footer { width: 100%; text-align: center; }
-    footer { font-size: 12px; }
+      footer { font-size: 12px; }
     }
     .scene { height: var(--card-h);
              aspect-ratio: 1.586; width: auto;
@@ -168,6 +163,14 @@
        margin on .status, so the gap is there whether or not the status has
        anything to say. */
 
+    /* The legal line leaves the nav row alone: it breaks out of the
+       centered column to the full viewport and parks at the page's
+       bottom-left, the way Apple's does. */
+    .copyline { width: 100vw; margin-left: calc(50% - 50vw);
+                box-sizing: border-box; padding: 0 24px;
+                text-align: left; margin-top: 22px;
+                font-size: 11px; color: var(--bone-faint); }
+    footer { width: 100%; text-align: center; }
     footer { flex: 0 0 auto; padding: clamp(30px, 6vh, 78px) 0 30px;
              font-size: 13px; color: var(--bone-faint); }
     footer a { color: var(--bone-faint); text-decoration: none; }
