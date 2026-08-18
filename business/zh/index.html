@@ -21,7 +21,11 @@
        enough air above that the eye rests between sections. */
     .biz label.q { display: block; font-size: 16px; font-weight: 650;
                    color: var(--bone); margin: 46px 0 14px;
-                   letter-spacing: -.1px; }
+                   letter-spacing: -.1px;
+                   /* Balanced wrapping: a long question breaks into two
+                      even lines instead of stranding its last word. */
+                   text-wrap: balance; }
+    .biz label.q .hint { color: var(--bone-dim); font-weight: 500; }
     .biz label.q:first-of-type { margin-top: 30px; }
     .biz input[type=text], .biz input[type=email], .biz textarea {
       width: 100%; background: rgba(244,241,234,.055); color: var(--bone);
