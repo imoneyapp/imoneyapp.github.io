@@ -32,6 +32,10 @@
     #brand { display: inline-block; color: var(--bone); text-decoration: none;
              font-family: ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", system-ui, sans-serif;
              font-size: 26px; font-weight: 800; letter-spacing: -.4px; }
+    #brand .mark { width: 54px; height: 54px; display: inline-block; }
+    #brand .brandword { display: none; }
+    #brand.worded .mark { display: none; }
+    #brand.worded .brandword { display: inline-block; }
 
     /* The member card — same anatomy as the one in the app, and it turns
        the same way. Two nested wrappers because a single element can't
@@ -166,10 +170,10 @@
 </head>
 <body>
   <div class="wrap">
-    <!-- The card already carries the mark twice (corner + back), so the
-         page header is the WORDMARK — the app's rounded voice, no third
-         drawing of the star. -->
-    <a href="/" id="brand" aria-label="iMoney home">iMoney</a>
+    <!-- The header is the MARK on every step — except the done page,
+         where the card already draws the star twice and the header
+         switches to the wordmark so it isn't a third. -->
+    <a href="/" id="brand" aria-label="iMoney home"><img class="mark" src="../assets/logo-mark.png" alt="iMoney"><span class="brandword">iMoney</span></a>
 
     <!-- 0. Already an iMoney account. Checked before reservations, because
          a real account outranks a held name — offering to reserve a handle
@@ -289,8 +293,12 @@
     } : null;
 
     const $ = id => document.getElementById(id);
-    const show = name => ['have','in','pick','done'].forEach(s =>
-      $('step-' + s).classList.toggle('hidden', s !== name));
+    const show = name => {
+      ['have','in','pick','done'].forEach(s =>
+        $('step-' + s).classList.toggle('hidden', s !== name));
+      // The header wears the mark everywhere except over the card.
+      document.getElementById('brand').classList.toggle('worded', name === 'done');
+    };
     const say = (text, kind) => { $('msg').textContent = text; $('msg').className = 'msg ' + (kind || ''); };
 
     // Padded to four digits so the corner never changes width as the queue
