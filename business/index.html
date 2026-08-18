@@ -79,13 +79,14 @@
     <input type="text" id="who-other" class="other-input" maxlength="80"
            placeholder="Tell us who you are" hidden>
 
-    <label class="q">How do you keep track today?</label>
-    <div class="chips" id="tracking" data-single>
+    <label class="q">How do you keep track today? Select all that apply.</label>
+    <div class="chips" id="tracking">
       <button type="button" class="chip">Paper ledger</button>
       <button type="button" class="chip">Spreadsheet</button>
       <button type="button" class="chip">POS / cashier system</button>
       <button type="button" class="chip">Another app</button>
       <button type="button" class="chip">Mostly memory</button>
+      <button type="button" class="chip">It's messy</button>
     </div>
 
     <label class="q">What would you like iMoney to manage? Select all that apply.</label>
@@ -102,7 +103,7 @@
     <label class="q" for="f-msg">Tell us about your business. Ask anything about iMoney. Let’s work together.</label>
     <textarea id="f-msg" maxlength="2000"></textarea>
 
-    <button type="submit" class="send" id="send">Let’s build yours</button>
+    <button type="submit" class="send" id="send">Keep in touch</button>
     <p class="form-msg" id="form-msg"></p>
   </form>
 
@@ -151,7 +152,7 @@
         email: $('f-email').value.trim(),
         who,
         needs,
-        tracking: picked('#tracking')[0] || null,
+        tracking: picked('#tracking').join(', ') || null,
         message: $('f-msg').value.trim() || null
       };
       if (!body.name || !body.email) { msg.textContent = 'Name and email, so we can write back.'; msg.className = 'form-msg bad'; return; }

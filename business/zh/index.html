@@ -75,13 +75,14 @@
     <input type="text" id="who-other" class="other-input" maxlength="80"
            placeholder="說說你是誰" hidden>
 
-    <label class="q">你現在怎麼記帳？</label>
-    <div class="chips" id="tracking" data-single>
+    <label class="q">你現在怎麼記帳？可複選。</label>
+    <div class="chips" id="tracking">
       <button type="button" class="chip">紙本帳簿</button>
       <button type="button" class="chip">試算表</button>
       <button type="button" class="chip">POS／收銀系統</button>
       <button type="button" class="chip">其他 App</button>
       <button type="button" class="chip">大多靠記憶</button>
+      <button type="button" class="chip">有點亂</button>
     </div>
 
     <label class="q">想讓 iMoney 為你管理哪些項目？可複選。</label>
@@ -98,7 +99,7 @@
     <label class="q" for="f-msg">聊聊你的生意，想問 iMoney 的儘管問。讓我們一起合作。</label>
     <textarea id="f-msg" maxlength="2000"></textarea>
 
-    <button type="submit" class="send" id="send">一起打造</button>
+    <button type="submit" class="send" id="send">保持聯絡</button>
     <p class="form-msg" id="form-msg"></p>
   </form>
 
@@ -146,7 +147,7 @@
         email: $('f-email').value.trim(),
         who,
         needs,
-        tracking: picked('#tracking')[0] || null,
+        tracking: picked('#tracking').join(', ') || null,
         message: $('f-msg').value.trim() || null
       };
       if (!body.name || !body.email) { msg.textContent = '留下名字和電子郵件，我們才回得了信。'; msg.className = 'form-msg bad'; return; }
