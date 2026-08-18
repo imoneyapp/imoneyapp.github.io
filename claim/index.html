@@ -107,7 +107,10 @@
          edge — quiet, anchored, dissolved well below the handle field. */
       body::after {
         background-image: url(/assets/smoke-v.jpg?v=1);
-        height: 34svh; bottom: 0; opacity: .17;
+        /* Overshoot the viewport: Safari's bottom bar floats above bottom:0,
+           so the layer dives 10svh past it — the dense base of the smoke
+           lives BEHIND the domain bar, rising from the screen's true edge. */
+        height: 44svh; bottom: -10svh; opacity: .17;
         -webkit-mask-image: linear-gradient(to top, black 0%, black 28%, transparent 80%);
         mask-image: linear-gradient(to top, black 0%, black 28%, transparent 80%);
       }
