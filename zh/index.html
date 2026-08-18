@@ -39,11 +39,15 @@
     }
     /* Not a flicker — a breath. The mark fades from near-transparent to
        fully lit and back, slow and even; nothing snaps. */
+    .mark-btn { background: none; border: 0; padding: 0; cursor: pointer;
+                display: block; line-height: 0; }
     .cosmos-mark { width: clamp(56px, 7vw, 92px); opacity: .25;
                    animation: cosmos-breathe 5s ease-in-out infinite; }
     @keyframes cosmos-breathe { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
     .cosmos-cta {
       color: var(--bone); text-decoration: none;
+      /* The app's own voice: SF Rounded, same as every title in iMoney. */
+      font-family: ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", system-ui, sans-serif;
       font-size: clamp(15px, 1.8vw, 20px); font-weight: 600; letter-spacing: -.2px;
       opacity: .85; transition: opacity .25s;
     }
@@ -101,7 +105,11 @@
 <body>
   <section class="cosmos" aria-label="iMoney">
     <div class="cosmos-inner">
-      <img class="cosmos-mark" src="/assets/logo-mark.png" alt="">
+      <!-- The mark is the reset switch: press it, the page (and the
+           typewriter) starts over. -->
+      <button class="mark-btn" onclick="location.reload()" aria-label="Restart">
+        <img class="cosmos-mark" src="/assets/logo-mark.png" alt="">
+      </button>
       <a class="cosmos-cta" href="/zh/claim/"><span class="cta-text">開放預留 @使用者名稱</span><span class="cta-enter" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v5a2 2 0 0 1-2 2H3.5"/><path d="M6 7 3 10l3 3"/></svg></span></a>
     </div>
   </section>
