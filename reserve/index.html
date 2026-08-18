@@ -133,6 +133,21 @@
     .oauth.primary { background: var(--bone); color: var(--ink); border-color: transparent; }
     .oauth svg { width: 18px; height: 18px; flex: 0 0 auto; }
     .note { font-size: 13px; color: var(--bone-faint); margin-top: 14px; }
+    /* The name in the title wears the planet, like the done page. */
+    #pick-handle {
+      background: linear-gradient(104deg,
+        #eefafa 0%, #9fd2d6 26%, #71aeb3 46%,
+        #b190ab 68%, #d09ab4 86%, #cf989d 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .rules { font-size: 13px; color: var(--bone-faint); margin: 10px 0 0; }
+    .pick-foot { display: flex; align-items: center; justify-content: center;
+                 gap: 2px; margin-top: 8px; }
+    .help { width: 26px; height: 26px; border-radius: 50%; line-height: 1;
+            background: rgba(255,255,255,.14); color: var(--bone-dim);
+            font-size: 13px; font-weight: 600; padding: 0; }
+    .help:hover { background: rgba(255,255,255,.22); color: var(--bone); }
     #share { margin-top: 20px; width: 100%; }
     .msg { font-size: 13px; margin-top: 12px; min-height: 18px; }
     .msg.bad { color: var(--negative); } .msg.good { color: var(--positive); }
@@ -175,20 +190,26 @@
         </svg>
         Continue with Google
       </button>
-      <p class="note">Designed to replace your estimate.</p>
     </section>
 
     <!-- 2. Signed in, choosing -->
     <section id="step-pick" class="hidden">
-      <h1>Pick your name</h1>
-      <p class="sub">2–20 characters: a–z, 0–9, _</p>
+      <!-- They already chose on /claim/ — this step is a confirmation with
+           an escape hatch, not a second naming ceremony. The title tracks
+           the field, the rules hide behind the ?, and the only other door
+           is Cancel. -->
+      <h1 id="pick-title"><span id="pick-handle">@yourname</span><span id="pick-rest"> is almost yours.</span></h1>
       <div class="row">
-        <input id="handle" placeholder="handle" autocapitalize="none" autocorrect="off"
+        <input id="handle" placeholder="yourname" autocapitalize="none" autocorrect="off"
                spellcheck="false" maxlength="20" inputmode="latin">
         <button id="claim">Reserve</button>
       </div>
       <p class="msg" id="msg"></p>
-      <button class="ghost" id="signout">Sign out</button>
+      <p class="rules hidden" id="rules">2–20 characters: a–z, 0–9, _</p>
+      <div class="pick-foot">
+        <button class="ghost" id="signout">Cancel</button>
+        <button class="ghost help" id="rules-btn" aria-label="Handle rules" aria-expanded="false">?</button>
+      </div>
     </section>
 
     <!-- 3. Done -->
@@ -246,13 +267,13 @@
     const ZH = param ? param.startsWith('zh')
                      : (navigator.language || '').toLowerCase().startsWith('zh');
     const T = ZH ? {
-      title: '開放預留 @使用者名稱', pickTitle: '選一個名字',
+      title: '開放預留 @使用者名稱',
       inTitle: '開放預留 @使用者名稱',
       inSub: '在 iMoney 上線前，先把名字定下來。',
-      pickSub: '2–20 個字元：a–z、0–9、_',
-      privacy: '為取代你的直覺而設計。',
+      rules: '2–20 個字元：a–z、0–9、_',
+      almost: ' 快是你的了。',
       apple: '用 Apple 繼續', google: '用 Google 繼續',
-      reserve: '預留', cancel: '取消', signout: '登出',
+      reserve: '預留', cancel: '取消',
       story: '限時動態', msg: '訊息', copy: '複製連結',
       haveSub: '已經是你的了。', haveNote: '保持專注，繼續成長。',
       haveSwitch: '換一個帳號',
@@ -266,6 +287,20 @@
     const show = name => ['have','in','pick','done'].forEach(s =>
       $('step-' + s).classList.toggle('hidden', s !== name));
     const say = (text, kind) => { $('msg').textContent = text; $('msg').className = 'msg ' + (kind || ''); };
+
+    // The title holds whatever name the field holds — they usually arrive
+    // with one from the landing page, and editing it edits the promise.
+    function syncPickTitle() {
+      const h = $('handle').value.trim().toLowerCase().replace(/^@/, '');
+      $('pick-handle').textContent = '@' + (h || $('handle').placeholder);
+    }
+    document.addEventListener('input', e => { if (e.target.id === 'handle') syncPickTitle(); });
+    document.addEventListener('click', e => {
+      if (e.target.id !== 'rules-btn') return;
+      const r = $('rules');
+      r.classList.toggle('hidden');
+      e.target.setAttribute('aria-expanded', String(!r.classList.contains('hidden')));
+    });
 
     // Padded to four digits so the corner never changes width as the queue
     // grows, and so the first person's card doesn't read as an afterthought.
@@ -310,6 +345,7 @@
       const mine = await myReservation();
       if (mine && mine.handle) { renderCard(mine.handle, mine.reservation_no); show('done'); return; }
       if (wanted && !$('handle').value) $('handle').value = wanted.replace(/^@/, '');
+      syncPickTitle();
       show('pick');
     }
 
@@ -537,13 +573,12 @@
       const set = (sel, txt) => { const el = document.querySelector(sel); if (el) el.textContent = txt; };
       set('#step-in h1', T.inTitle);
       set('#step-in .sub', T.inSub);
-      set('#step-pick h1', T.pickTitle);
-      set('#step-pick .sub', T.pickSub);
-      set('#step-in .note', T.privacy);
+      set('#pick-rest', T.almost);
+      set('#rules', T.rules);
       $('apple').lastChild.textContent = ' ' + T.apple;
       $('google').lastChild.textContent = ' ' + T.google;
       set('#claim', T.reserve);
-      set('#signout', T.signout);
+      set('#signout', T.cancel);
       set('#d-ig .lbl', T.story);
       set('#d-msg .lbl', T.msg);
       set('#d-copy .lbl', T.copy);
@@ -552,7 +587,8 @@
       set('#have-sub', T.haveSub);
       set('#have-note', T.haveNote);
       set('#have-signout', T.haveSwitch);
-      $('handle').placeholder = 'yourname';
+      $('handle').placeholder = '使用者名稱';
+      syncPickTitle();
     }
 
     // Fires on load AND after the OAuth redirect drops the session in.
