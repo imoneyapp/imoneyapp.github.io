@@ -49,6 +49,8 @@ header.site > a::before {
 header.site span { color: var(--bone-faint); font-size: 14px; }
 header.site span a { font-size: 14px; font-weight: 500; color: var(--bone-faint); }
 
+/* Page titles wear the wordmark's face — SF Rounded, like the app. */
+h1 { font-family: ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", system-ui, sans-serif; }
 h1 { font-size: clamp(34px, 6vw, 46px); font-weight: 700; letter-spacing: -1.4px;
      line-height: 1.1; margin-bottom: 10px; }
 .updated { color: var(--bone-faint); font-size: 14px; margin-bottom: clamp(36px, 6vh, 56px); }
@@ -165,14 +167,14 @@ footer a:hover { color: var(--bone-dim); }
    generic list rules on purpose: the panel's own dot geometry must win
    the cascade (the old fine-list lost it, and its bullets ended up
    absolutely positioned under the first letter). */
-.tldr { border: 1px solid rgba(217,179,106,.38);
-        background: rgba(217,179,106,.06);
-        border-radius: 16px; padding: 20px 24px; margin: 28px 0 30px; }
-.tldr-lead { margin: 0; font-size: 15px; font-weight: 700;
-             letter-spacing: -.1px; color: var(--accent); }
+.tldr { border: 1px solid var(--hairline);
+        background: rgba(244,241,234,.045);
+        border-radius: 16px; padding: 18px 22px; margin: 28px 0 30px; }
+.tldr-lead { margin: 0; font-size: 15px; font-weight: 650;
+             letter-spacing: -.1px; color: var(--bone); }
 .tldr ul { margin: 10px 0 0; padding: 0; list-style: none; }
 .tldr li { margin: 8px 0; padding-left: 18px; position: relative;
            font-size: 15.5px; color: var(--bone); }
 .tldr li::before { content: ""; position: absolute; left: 0; top: .5em;
                    width: 5px; height: 5px; border-radius: 50%;
-                   background: var(--accent); }
+                   background: var(--bone-faint); }
