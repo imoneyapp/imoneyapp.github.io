@@ -146,9 +146,12 @@
       }
       el.style.minWidth = Math.ceil(wMax) + 'px';
       el.textContent = '';
-      const typeOut = (add, i, next) => {
+      // The welcome is a hello, not the message — it lands a touch
+      // quicker; the reserve line keeps the deliberate pace.
+      const typeOut = (add, i, next, act) => {
         el.textContent = add.slice(0, ++i);
-        if (i < add.length) setTimeout(() => typeOut(add, i, next), 95 + Math.random() * 70);
+        const pace = act === 0 ? 68 + Math.random() * 50 : 95 + Math.random() * 70;
+        if (i < add.length) setTimeout(() => typeOut(add, i, next, act), pace);
         else next();
       };
       const erase = (next) => {
@@ -158,8 +161,8 @@
       };
       const act = (i) => typeOut(ACTS[i], 0, () => {
         if (i === ACTS.length - 1) return done();
-        setTimeout(() => erase(() => setTimeout(() => act(i + 1), 420)), 1250);
-      });
+        setTimeout(() => erase(() => setTimeout(() => act(i + 1), 420)), 1050);
+      }, i);
       setTimeout(() => act(0), 500);
     })();
   </script>

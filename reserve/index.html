@@ -33,12 +33,18 @@
        the same way. Two nested wrappers because a single element can't
        run a bob and a spin on `transform` at once without them fighting:
        .float owns the vertical drift, .card owns the rotation. */
-    /* Still. The spin read as a gimmick and WebKit made it messy — a
-       minimal card sits flat and lets the metal do the talking. Only the
-       slow vertical drift remains. */
-    .scene { width: 100%; margin-top: 30px; }
+    /* The slow turn, done cleanly this time. WebKit can neither cull
+       backfaces nor depth-sort the two faces, so which face is visible is
+       written into the spin's own clock: front owns the first and last
+       quarter-turn, the back (the mark, centered) owns the middle half.
+       The swap lands exactly when the card is edge-on, so it's invisible. */
+    .scene { perspective: 1400px; width: 100%; margin-top: 30px; }
     .float { animation: bob 7s ease-in-out infinite; }
-    .card { position: relative; width: 100%; aspect-ratio: 1.586; }
+    .card { position: relative; width: 100%; aspect-ratio: 1.586;
+            transform-style: preserve-3d;
+            animation: spin 18s linear infinite; }
+    .card:hover, .card:active { animation-play-state: paused; }
+    @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
     @keyframes bob  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
     .face {
@@ -54,8 +60,12 @@
                   inset -2.5px 0 1px -0.5px rgba(52,51,48,.6);
       background: linear-gradient(135deg, #e8e6e1 0%, #b9b7b2 30%, #d8d6d1 52%, #a7a5a1 76%, #6f6e6b 100%);
     }
-    /* A still card has no back worth rendering. */
-    .face.back { display: none; }
+    .face.back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
+    .face.front { animation: face-front 18s linear infinite; }
+    .face.back  { animation: face-back  18s linear infinite; }
+    @keyframes face-front { 0%, 24.99% { visibility: visible; } 25%, 74.99% { visibility: hidden; } 75%, 100% { visibility: visible; } }
+    @keyframes face-back  { 0%, 24.99% { visibility: hidden; } 25%, 74.99% { visibility: visible; } 75%, 100% { visibility: hidden; } }
+    .card:hover .face, .card:active .face { animation-play-state: paused; }
     .face.back img { width: 34%; opacity: .55; }
     .face::after {                    /* the travelling light seam */
       content: ""; position: absolute; inset: -30%;
@@ -99,7 +109,9 @@
     /* Someone who's asked for less motion gets a still card, not a
        spinning one — this is decoration, not information. */
     @media (prefers-reduced-motion: reduce) {
-      .float, .face::after { animation: none; }
+      .float, .card, .face, .face::after { animation: none; }
+      /* Still card: front only, or the back overpaints it. */
+      .face.back { display: none; }
     }
 
     .row { display: flex; gap: 8px; margin-top: 26px; }
