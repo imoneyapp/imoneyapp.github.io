@@ -40,6 +40,7 @@
                  color: #0b0b0c; border: 0; border-radius: 14px; padding: 15px;
                  font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; }
     .biz .send:disabled { opacity: .4; }
+    .other-input { margin-top: 10px; }
     .form-msg { min-height: 20px; font-size: 13.5px; margin-top: 12px; color: var(--bone-faint); }
     .form-msg.bad { color: #e64a3c; }
     .thanks { display: none; margin-top: 34px; }
@@ -52,11 +53,12 @@
 <main>
   <header class="site"><a href="/">iMoney</a><span>For Business</span></header>
   <h1>For Business</h1>
-  <p class="lede">iMoney builds custom expense-and-income tracking for
-  businesses that still run on cash — the register, the paper ledger, the
-  inventory sheet.</p>
-  <p class="lede">A clear picture of your cash flow, on your phone,
-  wherever you are.</p>
+  <p class="lede">The clearest picture of your business's money you've
+  ever had — every expense, every sale, live on your phone, wherever you
+  are.</p>
+  <p class="lede">Register, spreadsheet, paper ledger, pure memory —
+  however you run today, we shape iMoney around it: categories, budgets,
+  and reports that fit your business like they were born there.</p>
 
   <form class="biz" id="biz">
     <div class="two">
@@ -77,7 +79,21 @@
       <button type="button" class="chip">Startup team</button>
       <button type="button" class="chip">Café / restaurant</button>
       <button type="button" class="chip">Retail shop</button>
-      <button type="button" class="chip">Other</button>
+      <button type="button" class="chip">Online seller</button>
+      <button type="button" class="chip">Market vendor</button>
+      <button type="button" class="chip">Studio / agency</button>
+      <button type="button" class="chip" data-other>Other</button>
+    </div>
+    <input type="text" id="who-other" class="other-input" maxlength="80"
+           placeholder="Tell us who you are" hidden>
+
+    <label class="q">How do you keep track today?</label>
+    <div class="chips" id="tracking" data-single>
+      <button type="button" class="chip">Paper ledger</button>
+      <button type="button" class="chip">Spreadsheet</button>
+      <button type="button" class="chip">POS / cashier system</button>
+      <button type="button" class="chip">Another app</button>
+      <button type="button" class="chip">Mostly memory</button>
     </div>
 
     <label class="q">What would you like iMoney to manage? Select all that apply.</label>
@@ -88,13 +104,17 @@
       <button type="button" class="chip">Budgets per project</button>
       <button type="button" class="chip">Monthly reports</button>
       <button type="button" class="chip">Split costs with partners</button>
-      <button type="button" class="chip">Something else</button>
+      <button type="button" class="chip">Cash-flow overview</button>
+      <button type="button" class="chip">Exports for my accountant</button>
+      <button type="button" class="chip" data-other>Something else</button>
     </div>
+    <input type="text" id="needs-other" class="other-input" maxlength="80"
+           placeholder="Tell us what else" hidden>
 
-    <label class="q" for="f-msg">Tell us about your business, and how you want to keep track of it</label>
+    <label class="q" for="f-msg">Tell us about your business. Ask anything about iMoney. Let’s work together.</label>
     <textarea id="f-msg" maxlength="2000"></textarea>
 
-    <button type="submit" class="send" id="send">Send inquiry</button>
+    <button type="submit" class="send" id="send">Let’s build yours</button>
     <p class="form-msg" id="form-msg"></p>
   </form>
 
@@ -117,17 +137,33 @@
         if (single) group.querySelectorAll('.chip').forEach(c =>
           c.setAttribute('aria-pressed', c === chip && chip.getAttribute('aria-pressed') !== 'true' ? 'true' : 'false'));
         else chip.setAttribute('aria-pressed', chip.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+        // "Other" opens its own line — picked in, cleared out.
+        const other = group.parentElement.querySelector('#' + group.id + '-other');
+        if (other) {
+          const on = group.querySelector('.chip[data-other][aria-pressed="true"]');
+          other.hidden = !on;
+          if (on) other.focus();
+        }
       });
     });
     $('biz').addEventListener('submit', async e => {
       e.preventDefault();
       const msg = $('form-msg');
       const picked = sel => [...document.querySelectorAll(sel + ' .chip[aria-pressed="true"]')].map(c => c.textContent);
+      const otherText = id => { const el = $(id); return el && !el.hidden && el.value.trim(); };
+      let who = picked('#who')[0] || null;
+      const whoOther = otherText('who-other');
+      if (whoOther) who = whoOther;
+      const needs = picked('#needs');
+      const needsOther = otherText('needs-other');
+      const i = needs.indexOf(needs.find(n => /Something else|其他需求/.test(n)));
+      if (needsOther && i >= 0) needs[i] = needsOther;
       const body = {
         name: $('f-name').value.trim(),
         email: $('f-email').value.trim(),
-        who: picked('#who')[0] || null,
-        needs: picked('#needs'),
+        who,
+        needs,
+        tracking: picked('#tracking')[0] || null,
         message: $('f-msg').value.trim() || null
       };
       if (!body.name || !body.email) { msg.textContent = 'Name and email, so we can write back.'; msg.className = 'form-msg bad'; return; }

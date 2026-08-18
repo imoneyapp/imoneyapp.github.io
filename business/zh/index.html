@@ -37,6 +37,7 @@
                  color: #0b0b0c; border: 0; border-radius: 14px; padding: 15px;
                  font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; }
     .biz .send:disabled { opacity: .4; }
+    .other-input { margin-top: 10px; }
     .form-msg { min-height: 20px; font-size: 13.5px; margin-top: 12px; color: var(--bone-faint); }
     .form-msg.bad { color: #e64a3c; }
     .thanks { display: none; margin-top: 34px; }
@@ -49,9 +50,10 @@
 <main>
   <header class="site"><a href="/">iMoney</a><span>企業合作</span></header>
   <h1>企業合作</h1>
-  <p class="lede">iMoney 為仍以現金運作的生意——收銀機、紙本帳、盤點表——
-  量身打造收支追蹤系統。</p>
-  <p class="lede">你的現金流，一眼看清，在手機上，隨時隨地。</p>
+  <p class="lede">你生意的金流，從來沒有這麼清楚過——每一筆支出、每一筆進帳，
+  即時在手機上，隨時隨地。</p>
+  <p class="lede">收銀機、試算表、紙本帳、全憑記憶——不管你今天怎麼運作，
+  iMoney 都照著你的樣子打造：分類、預算、報表，像天生就屬於你的生意。</p>
 
   <form class="biz" id="biz">
     <div class="two">
@@ -72,7 +74,21 @@
       <button type="button" class="chip">新創團隊</button>
       <button type="button" class="chip">餐飲店家</button>
       <button type="button" class="chip">零售店家</button>
-      <button type="button" class="chip">其他</button>
+      <button type="button" class="chip">電商賣家</button>
+      <button type="button" class="chip">市集攤販</button>
+      <button type="button" class="chip">工作室</button>
+      <button type="button" class="chip" data-other>其他</button>
+    </div>
+    <input type="text" id="who-other" class="other-input" maxlength="80"
+           placeholder="說說你是誰" hidden>
+
+    <label class="q">你現在怎麼記帳？</label>
+    <div class="chips" id="tracking" data-single>
+      <button type="button" class="chip">紙本帳簿</button>
+      <button type="button" class="chip">試算表</button>
+      <button type="button" class="chip">POS／收銀系統</button>
+      <button type="button" class="chip">其他 App</button>
+      <button type="button" class="chip">大多靠記憶</button>
     </div>
 
     <label class="q">想讓 iMoney 為你管理哪些項目？可複選。</label>
@@ -83,13 +99,17 @@
       <button type="button" class="chip">各專案預算</button>
       <button type="button" class="chip">每月報表</button>
       <button type="button" class="chip">與夥伴分帳</button>
-      <button type="button" class="chip">其他需求</button>
+      <button type="button" class="chip">現金流總覽</button>
+      <button type="button" class="chip">匯出給會計</button>
+      <button type="button" class="chip" data-other>其他需求</button>
     </div>
+    <input type="text" id="needs-other" class="other-input" maxlength="80"
+           placeholder="說說還需要什麼" hidden>
 
-    <label class="q" for="f-msg">介紹一下你的生意，以及你想怎麼記錄收支</label>
+    <label class="q" for="f-msg">聊聊你的生意，想問 iMoney 的儘管問。讓我們一起合作。</label>
     <textarea id="f-msg" maxlength="2000"></textarea>
 
-    <button type="submit" class="send" id="send">送出</button>
+    <button type="submit" class="send" id="send">一起打造</button>
     <p class="form-msg" id="form-msg"></p>
   </form>
 
@@ -111,17 +131,33 @@
         if (single) group.querySelectorAll('.chip').forEach(c =>
           c.setAttribute('aria-pressed', c === chip && chip.getAttribute('aria-pressed') !== 'true' ? 'true' : 'false'));
         else chip.setAttribute('aria-pressed', chip.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+        // "Other" opens its own line — picked in, cleared out.
+        const other = group.parentElement.querySelector('#' + group.id + '-other');
+        if (other) {
+          const on = group.querySelector('.chip[data-other][aria-pressed="true"]');
+          other.hidden = !on;
+          if (on) other.focus();
+        }
       });
     });
     $('biz').addEventListener('submit', async e => {
       e.preventDefault();
       const msg = $('form-msg');
       const picked = sel => [...document.querySelectorAll(sel + ' .chip[aria-pressed="true"]')].map(c => c.textContent);
+      const otherText = id => { const el = $(id); return el && !el.hidden && el.value.trim(); };
+      let who = picked('#who')[0] || null;
+      const whoOther = otherText('who-other');
+      if (whoOther) who = whoOther;
+      const needs = picked('#needs');
+      const needsOther = otherText('needs-other');
+      const i = needs.indexOf(needs.find(n => /Something else|其他需求/.test(n)));
+      if (needsOther && i >= 0) needs[i] = needsOther;
       const body = {
         name: $('f-name').value.trim(),
         email: $('f-email').value.trim(),
-        who: picked('#who')[0] || null,
-        needs: picked('#needs'),
+        who,
+        needs,
+        tracking: picked('#tracking')[0] || null,
         message: $('f-msg').value.trim() || null
       };
       if (!body.name || !body.email) { msg.textContent = '留下名字和電子郵件，我們才回得了信。'; msg.className = 'form-msg bad'; return; }
