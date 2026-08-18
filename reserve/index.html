@@ -29,7 +29,9 @@
     .wrap { width: 100%; max-width: 420px; }
     h1 { font-size: 27px; font-weight: 700; margin: 22px 0 6px; letter-spacing: -.3px; }
     p.sub { color: var(--bone-dim); font-size: 14px; margin: 0 0 26px; }
-    .mark { width: 54px; height: 54px; }
+    #brand { display: inline-block; color: var(--bone); text-decoration: none;
+             font-family: ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", system-ui, sans-serif;
+             font-size: 26px; font-weight: 800; letter-spacing: -.4px; }
 
     /* The member card — same anatomy as the one in the app, and it turns
        the same way. Two nested wrappers because a single element can't
@@ -56,7 +58,6 @@
 
     .face {
       position: absolute; inset: 0; border-radius: 22px; overflow: hidden;
-      backface-visibility: hidden; -webkit-backface-visibility: hidden;
       /* Same milled rim as the claim card: bright wall top/left, shaded
          wall bottom/right, dark outer ring for the side that turns away. */
       border: 1px solid rgba(70,68,64,.9);
@@ -165,7 +166,10 @@
 </head>
 <body>
   <div class="wrap">
-    <a href="/" aria-label="iMoney home"><img class="mark" src="../assets/logo-mark.png" alt="iMoney"></a>
+    <!-- The card already carries the mark twice (corner + back), so the
+         page header is the WORDMARK — the app's rounded voice, no third
+         drawing of the star. -->
+    <a href="/" id="brand" aria-label="iMoney home">iMoney</a>
 
     <!-- 0. Already an iMoney account. Checked before reservations, because
          a real account outranks a held name — offering to reserve a handle
