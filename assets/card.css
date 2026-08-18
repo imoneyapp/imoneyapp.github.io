@@ -214,12 +214,8 @@
   .card-foot .card-meta.plate { display: none; }
   .card-foot .quote { max-width: none; white-space: nowrap; }
 }
-/* Smaller still and it has nowhere to go — three lines even at that size,
-   and the foot pushes up through the handle. The name is the point of the
-   card; the line is a nicety, so the line goes. */
-@container (max-width: 330px) {
-  .card-foot .quote { display: none; }
-}
+/* The old nine-word sentence had to go below 330px; the three-beat line
+   fits any card that can carry a name, so it stays at every size. */
 
 /* Decoration, not information — nobody needs it spinning to understand it. */
 @media (prefers-reduced-motion: reduce) {

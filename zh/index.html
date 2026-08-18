@@ -68,11 +68,17 @@
       /* 1.18em IS the text's line box (measured 23.6px at 20px type), so
          the circle's top and bottom sit exactly on the glyph bounds. */
       width: 1.18em; height: 1.18em; border-radius: 50%;
-      /* The ring is the planet's ramp — a gradient can't sit on
-         border-color, so it's painted border-box under an ink core. */
-      border: 1px solid transparent;
-      background: linear-gradient(#000, #000) padding-box,
-                  linear-gradient(135deg, #9fd2d6 0%, #b190ab 55%, #d09ab4 100%) border-box;
+      /* A glass bubble, not a drawn ring: light pools at the upper left
+         the way it does on a real bead of glass, the page blurs through
+         it, and a hairline of white catches the top edge. */
+      border: 1px solid rgba(255,255,255,.32);
+      background: radial-gradient(120% 120% at 30% 22%,
+                    rgba(255,255,255,.42) 0%, rgba(255,255,255,.10) 42%,
+                    rgba(255,255,255,.03) 72%, rgba(255,255,255,.10) 100%);
+      backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.55),
+                  inset 0 -1px 2px rgba(255,255,255,.10),
+                  0 4px 14px rgba(0,0,0,.4);
       display: flex; align-items: center; justify-content: center;
       transition: border-color .25s, background .25s, color .25s;
     }

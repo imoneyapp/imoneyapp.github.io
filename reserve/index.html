@@ -8,7 +8,7 @@
   <meta property="og:title" content="Reserve @yourname on iMoney">
   <meta property="og:description" content="Claim your name before it launches.">
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
-  <link rel="stylesheet" href="../assets/card.css?v=34">
+  <link rel="stylesheet" href="../assets/card.css?v=35">
   <style>
     /* Palette mirrors the app: ink ground, bone type, the gold accent. */
     :root {
@@ -33,15 +33,12 @@
        the same way. Two nested wrappers because a single element can't
        run a bob and a spin on `transform` at once without them fighting:
        .float owns the vertical drift, .card owns the rotation. */
-    .scene { perspective: 1400px; width: 100%; margin-top: 30px; }
+    /* Still. The spin read as a gimmick and WebKit made it messy — a
+       minimal card sits flat and lets the metal do the talking. Only the
+       slow vertical drift remains. */
+    .scene { width: 100%; margin-top: 30px; }
     .float { animation: bob 7s ease-in-out infinite; }
-    .card {
-      position: relative; width: 100%; aspect-ratio: 1.586;
-      transform-style: preserve-3d;
-      animation: spin 24s linear infinite;
-    }
-    .card:hover, .card:active { animation-play-state: paused; }
-    @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+    .card { position: relative; width: 100%; aspect-ratio: 1.586; }
     @keyframes bob  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
     .face {
@@ -57,18 +54,8 @@
                   inset -2.5px 0 1px -0.5px rgba(52,51,48,.6);
       background: linear-gradient(135deg, #e8e6e1 0%, #b9b7b2 30%, #d8d6d1 52%, #a7a5a1 76%, #6f6e6b 100%);
     }
-    /* WebKit fails BOTH ways to pick the visible face of a spinning card:
-       backface-visibility doesn't cull, and z-separation doesn't depth-
-       sort — the back always painted over the front. So which face shows
-       is written into the spin's own clock: the front owns the first and
-       last quarter-turn, the back owns the middle half. Same duration,
-       same start, same pause — they cannot drift. */
-    .face.back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
-    .face.front { animation: face-front 24s linear infinite; }
-    .face.back  { animation: face-back  24s linear infinite; }
-    @keyframes face-front { 0%, 24.99% { visibility: visible; } 25%, 74.99% { visibility: hidden; } 75%, 100% { visibility: visible; } }
-    @keyframes face-back  { 0%, 24.99% { visibility: hidden; } 25%, 74.99% { visibility: visible; } 75%, 100% { visibility: hidden; } }
-    .card:hover .face, .card:active .face { animation-play-state: paused; }
+    /* A still card has no back worth rendering. */
+    .face.back { display: none; }
     .face.back img { width: 34%; opacity: .55; }
     .face::after {                    /* the travelling light seam */
       content: ""; position: absolute; inset: -30%;
@@ -122,10 +109,7 @@
     /* Someone who's asked for less motion gets a still card, not a
        spinning one — this is decoration, not information. */
     @media (prefers-reduced-motion: reduce) {
-      .float, .card, .face, .face::after { animation: none; }
-      .card { transform: rotateY(-9deg); }
-      /* Still card, and the back would overpaint the front again. */
-      .face.back { display: none; }
+      .float, .face::after { animation: none; }
     }
 
     .row { display: flex; gap: 8px; margin-top: 26px; }
@@ -268,7 +252,7 @@
       pickSub: '2–20 個字元：a–z、0–9、_',
       privacy: '為取代你的直覺而設計。',
       apple: '用 Apple 繼續', google: '用 Google 繼續',
-      reserve: '預約', cancel: '取消', signout: '登出',
+      reserve: '預留', cancel: '取消', signout: '登出',
       story: '限時動態', msg: '訊息', copy: '複製連結',
       haveSub: '已經是你的了。', haveNote: '保持專注，繼續成長。',
       haveSwitch: '換一個帳號',
