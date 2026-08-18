@@ -246,8 +246,8 @@
     const ZH = param ? param.startsWith('zh')
                      : (navigator.language || '').toLowerCase().startsWith('zh');
     const T = ZH ? {
-      title: '搶先預留 @使用者名稱', pickTitle: '選一個名字',
-      inTitle: '搶先預留 @使用者名稱',
+      title: '開放預留 @使用者名稱', pickTitle: '選一個名字',
+      inTitle: '開放預留 @使用者名稱',
       inSub: '在 iMoney 上線前，先把名字定下來。',
       pickSub: '2–20 個字元：a–z、0–9、_',
       privacy: '為取代你的直覺而設計。',
@@ -498,7 +498,7 @@
     // is one tap); the text destinations use their real intent URLs.
     const myHandle = () => $('card-handle').textContent.replace(/^@/, '');
     const shareLink = () => 'https://withimoney.com/i/?u=' + myHandle();
-    const shareText = () => (T ? '我在 iMoney 搶先預留了 @' + myHandle() + '。'
+    const shareText = () => (T ? '我在 iMoney 預留了 @' + myHandle() + '。'
                                : 'Reserved @' + myHandle() + ' on iMoney.');
 
     $('d-ig').onclick = async () => {
