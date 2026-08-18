@@ -35,18 +35,23 @@
        the same way. Two nested wrappers because a single element can't
        run a bob and a spin on `transform` at once without them fighting:
        .float owns the vertical drift, .card owns the rotation. */
-    /* The slow turn, done cleanly this time. WebKit can neither cull
-       backfaces nor depth-sort the two faces, so which face is visible is
-       written into the spin's own clock: front owns the first and last
-       quarter-turn, the back (the mark, centered) owns the middle half.
-       The swap lands exactly when the card is edge-on, so it's invisible. */
-    .scene { perspective: 1400px; width: 100%; margin-top: 30px; }
+    /* The turn, ported from the app's card: ONE JavaScript clock owns the
+       angle. Face visibility is a JS decision (no CSS animation sync to
+       drift), the back face counter-mirrors so it reads right, and the
+       thickness is real: metal sheets behind the card, offset in SCREEN
+       space by sin(angle) — invisible face-on, a solid milled side
+       edge-on. Two sides only: the engraving, and the mark. */
+    .scene { width: 100%; margin-top: 30px; }
     .float { animation: bob 7s ease-in-out infinite; }
-    .card { position: relative; width: 100%; aspect-ratio: 1.586;
-            transform-style: preserve-3d;
-            animation: spin 18s linear infinite; }
-    .card:hover, .card:active { animation-play-state: paused; }
-    @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+    .stack { position: relative; width: 100%; aspect-ratio: 1.586; }
+    .layer { position: absolute; inset: 0; perspective: 1400px; }
+    .plane { position: absolute; inset: 0; border-radius: 22px;
+             will-change: transform; }
+    .sheet .plane {
+      background: linear-gradient(180deg, #e2dfd9 0%, #a5a29c 55%, #5f5e5a 100%);
+      border: 1px solid rgba(70,68,64,.9);
+    }
+    .card { position: absolute; inset: 0; }
     @keyframes bob  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
     .face {
@@ -62,12 +67,12 @@
                   inset -2.5px 0 1px -0.5px rgba(52,51,48,.6);
       background: linear-gradient(135deg, #e8e6e1 0%, #b9b7b2 30%, #d8d6d1 52%, #a7a5a1 76%, #6f6e6b 100%);
     }
-    .face.back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
-    .face.front { animation: face-front 18s linear infinite; }
-    .face.back  { animation: face-back  18s linear infinite; }
-    @keyframes face-front { 0%, 24.99% { visibility: visible; } 25%, 74.99% { visibility: hidden; } 75%, 100% { visibility: visible; } }
-    @keyframes face-back  { 0%, 24.99% { visibility: hidden; } 25%, 74.99% { visibility: visible; } 75%, 100% { visibility: hidden; } }
-    .card:hover .face, .card:active .face { animation-play-state: paused; }
+    /* Both faces sit on the same plane; JS decides which one exists.
+       Past 90° the plane shows its reverse, so the mark face wears a
+       counter-mirror to read the right way round. */
+    .face.back { display: none; align-items: center; justify-content: center; }
+    .card.showback .face.front { display: none; }
+    .card.showback .face.back { display: flex; transform: scaleX(-1); }
     .face.back img { width: 34%; opacity: .55; }
     .face::after {                    /* the travelling light seam */
       content: ""; position: absolute; inset: -30%;
@@ -111,9 +116,7 @@
     /* Someone who's asked for less motion gets a still card, not a
        spinning one — this is decoration, not information. */
     @media (prefers-reduced-motion: reduce) {
-      .float, .card, .face, .face::after { animation: none; }
-      /* Still card: front only, or the back overpaints it. */
-      .face.back { display: none; }
+      .float, .face::after { animation: none; }
     }
 
     .row { display: flex; gap: 8px; margin-top: 26px; }
@@ -212,7 +215,13 @@
     <section id="step-done" class="hidden">
       <div class="scene">
         <div class="float">
-          <div class="card turning">
+          <div class="stack" id="cardstack">
+            <div class="layer sheet"><div class="plane"></div></div>
+            <div class="layer sheet"><div class="plane"></div></div>
+            <div class="layer sheet"><div class="plane"></div></div>
+            <div class="layer sheet"><div class="plane"></div></div>
+            <div class="layer cardlayer">
+              <div class="plane card" id="turncard">
             <div class="face front">
               <div class="card-inner">
                 <div class="card-top">
@@ -228,6 +237,8 @@
             </div>
             <div class="face back">
               <img src="../assets/logo-ink-star.png" alt="">
+            </div>
+              </div>
             </div>
           </div>
         </div>
@@ -542,6 +553,38 @@
       set('#have-signout', T.haveSwitch);
 
     }
+
+    // The card's turn: one clock, owned here. 20°/s; a finger or pointer
+    // on the card holds it; the sheets fan out by sin(angle) so the side
+    // of the card is metal, not absence.
+    (() => {
+      const stack = document.getElementById('cardstack');
+      const card = document.getElementById('turncard');
+      if (!stack || !card) return;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const sheets = [...stack.querySelectorAll('.sheet .plane')];
+      const fracs = [1, 0.75, 0.5, 0.25];
+      let angle = 0, last = null, held = false;
+      stack.addEventListener('pointerenter', () => { held = true; });
+      stack.addEventListener('pointerleave', () => { held = false; });
+      stack.addEventListener('touchstart', () => { held = true; }, { passive: true });
+      stack.addEventListener('touchend', () => { held = false; });
+      const tick = (now) => {
+        if (last == null) last = now;
+        if (!held) angle = (angle + (now - last) / 1000 * 20) % 360;
+        last = now;
+        const rad = angle * Math.PI / 180;
+        const th = Math.sin(rad) * stack.clientWidth * 0.026;
+        const turn = 'rotateY(' + angle.toFixed(2) + 'deg)';
+        sheets.forEach((pl, i) => {
+          pl.style.transform = 'translateX(' + (-th * fracs[i]).toFixed(2) + 'px) ' + turn;
+        });
+        card.style.transform = turn;
+        card.classList.toggle('showback', Math.cos(rad) < 0);
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    })();
 
     // Fires on load AND after the OAuth redirect drops the session in.
     sb.auth.onAuthStateChange(() => refresh());
