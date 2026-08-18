@@ -208,9 +208,10 @@
    line beside the plate — wrapping a nine-word sentence looks like an
    accident at any size. Measured: 10px covers 375px phones and up. */
 @container (max-width: 460px) {
-  /* A phone-sized card drops the plate entirely — OPEN TO RESERVE was the
-     crowding. The line keeps the foot alone, at full width. */
-  .card-foot .card-meta { display: none; }
+  /* A phone-sized card drops the PLATE (open to reserve) — but only the
+     plate: the reserve page's MEMBER / NO. corner uses the same class and
+     must survive. */
+  .card-foot .card-meta.plate { display: none; }
   .card-foot .quote { max-width: none; white-space: nowrap; }
 }
 /* Smaller still and it has nowhere to go — three lines even at that size,

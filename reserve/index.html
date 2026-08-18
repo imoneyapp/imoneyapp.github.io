@@ -8,7 +8,7 @@
   <meta property="og:title" content="Reserve @yourname on iMoney">
   <meta property="og:description" content="Claim your name before it launches.">
   <meta property="og:image" content="https://withimoney.com/assets/appicon.png">
-  <link rel="stylesheet" href="../assets/card.css?v=33">
+  <link rel="stylesheet" href="../assets/card.css?v=34">
   <style>
     /* Palette mirrors the app: ink ground, bone type, the gold accent. */
     :root {
@@ -57,7 +57,18 @@
                   inset -2.5px 0 1px -0.5px rgba(52,51,48,.6);
       background: linear-gradient(135deg, #e8e6e1 0%, #b9b7b2 30%, #d8d6d1 52%, #a7a5a1 76%, #6f6e6b 100%);
     }
+    /* WebKit fails BOTH ways to pick the visible face of a spinning card:
+       backface-visibility doesn't cull, and z-separation doesn't depth-
+       sort — the back always painted over the front. So which face shows
+       is written into the spin's own clock: the front owns the first and
+       last quarter-turn, the back owns the middle half. Same duration,
+       same start, same pause — they cannot drift. */
     .face.back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
+    .face.front { animation: face-front 24s linear infinite; }
+    .face.back  { animation: face-back  24s linear infinite; }
+    @keyframes face-front { 0%, 24.99% { visibility: visible; } 25%, 74.99% { visibility: hidden; } 75%, 100% { visibility: visible; } }
+    @keyframes face-back  { 0%, 24.99% { visibility: hidden; } 25%, 74.99% { visibility: visible; } 75%, 100% { visibility: hidden; } }
+    .card:hover .face, .card:active .face { animation-play-state: paused; }
     .face.back img { width: 34%; opacity: .55; }
     .face::after {                    /* the travelling light seam */
       content: ""; position: absolute; inset: -30%;
@@ -78,28 +89,43 @@
        painting small — which crushed the handle and footer to zero. */
     .card-top img { height: clamp(22px, 8vw, 34px); width: auto; }
     .card-handle, .card-foot { flex: 0 0 auto; min-height: 0; }
-    .card-date { font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-                 color: rgba(11,11,12,.55); letter-spacing: .8px; }
-    /* Date and foot are cut from the same stock as the handle — one
-       texture across every engraving on the card. */
-    .card-date, .card-foot {
-      background: linear-gradient(180deg, #34332f 0%, #413f3b 38%, #55534d 72%, #6b6862 100%);
-      -webkit-background-clip: text; background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 1px 0 rgba(255,255,255,.4));
-    }
+    /* Corner text is styled ENTIRELY by card.css — the same .card-meta
+       classes the claim card uses, so the two cards are one design. */
     .card-handle { font-size: clamp(26px, 12.5vw, 46px); font-weight: 700; color: var(--ink);
                    margin: auto 0; letter-spacing: -1px; overflow: hidden; text-overflow: ellipsis;
                    white-space: nowrap; }
-    .card-foot { font-size: 11px; color: rgba(11,11,12,.62); }
-    .card-foot span { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1.2px;
-                      text-transform: uppercase; color: rgba(11,11,12,.4); margin-bottom: 2px; }
+
+    /* The reserved name below the card wears the planet, like the claim
+       page headline. */
+    #done-handle {
+      background: linear-gradient(104deg,
+        #eefafa 0%, #9fd2d6 26%, #71aeb3 46%,
+        #b190ab 68%, #d09ab4 86%, #cf989d 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Share destinations: the sheet's row, on the web. IG Story leads
+       with the planet ramp; the rest are quiet circles. */
+    .dests { display: flex; justify-content: center; gap: 16px; margin-top: 26px; }
+    .dest { background: none; border: 0; padding: 0; display: flex; flex-direction: column;
+            align-items: center; gap: 7px; color: var(--bone-dim); font-size: 11px;
+            font-family: inherit; cursor: pointer; }
+    .dest .ic { width: 50px; height: 50px; border-radius: 50%; background: var(--ink-raised);
+                border: 1px solid var(--hairline); display: flex; align-items: center;
+                justify-content: center; color: var(--bone); }
+    .dest.primary .ic { background: linear-gradient(135deg, #9fd2d6 0%, #b190ab 55%, #d09ab4 100%);
+                        color: #0b0b0c; border-color: transparent; }
+    .dest .ic svg { width: 21px; height: 21px; display: block; }
+    .dest:active .ic { transform: scale(.94); }
 
     /* Someone who's asked for less motion gets a still card, not a
        spinning one — this is decoration, not information. */
     @media (prefers-reduced-motion: reduce) {
-      .float, .card, .face::after { animation: none; }
+      .float, .card, .face, .face::after { animation: none; }
       .card { transform: rotateY(-9deg); }
+      /* Still card, and the back would overpaint the front again. */
+      .face.back { display: none; }
     }
 
     .row { display: flex; gap: 8px; margin-top: 26px; }
@@ -190,12 +216,11 @@
               <div class="card-inner">
                 <div class="card-top">
                   <img src="../assets/logo-ink-star.png" alt="iMoney">
-                  <div class="card-date" id="card-date"></div>
+                  <div class="card-meta engraved" id="card-date"></div>
                 </div>
                 <div class="card-handle" id="card-handle">@you</div>
                 <div class="card-foot">
-                  <span>Member</span>
-                  <div id="card-no">—</div>
+                  <div class="card-meta left engraved">Member<br><span id="card-no">—</span></div>
                 </div>
               </div>
             </div>
@@ -207,10 +232,15 @@
       </div>
 
       <h1 id="done-handle">@you</h1>
-      <p class="sub">is yours.</p>
+      <p class="sub">is reserved for you.</p>
       <p class="note">Spending is the art of knowing yourself.</p>
-      <button id="share">Share my card</button>
-      <button class="ghost" id="change">Change my name</button>
+      <div class="dests">
+        <button class="dest primary" id="d-ig"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5.4"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></span><span class="lbl">Story</span></button>
+        <button class="dest" id="d-threads"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.6"/><path d="M15.6 12v1.4a2.2 2.2 0 0 0 4.4 0V12"/></svg></span><span class="lbl">Threads</span></button>
+        <button class="dest" id="d-msg"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5c0 4.1-4 7.5-9 7.5-1 0-2-.14-2.9-.4L4 20l1.3-3.1C3.9 15.5 3 13.6 3 11.5 3 7.4 7 4 12 4s9 3.4 9 7.5z"/></svg></span><span class="lbl">Messages</span></button>
+        <button class="dest" id="d-fb"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7h2.4l.5-3h-2.9V9.1c0-.9.3-1.6 1.7-1.6H16V4.8c-.3 0-1.2-.1-2.2-.1-2.2 0-3.8 1.4-3.8 3.9V11H7.6v3H10v7z"/></svg></span><span class="lbl">Facebook</span></button>
+        <button class="dest" id="d-copy"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10.5 13.5 13.5 10.5"/><path d="M8.3 12.2 6.4 14a3.4 3.4 0 0 0 4.8 4.8l1.9-1.9"/><path d="M15.7 11.8l1.9-1.9a3.4 3.4 0 0 0-4.8-4.8l-1.9 1.9"/></svg></span><span class="lbl">Copy link</span></button>
+      </div>
     </section>
   </div>
 
@@ -239,10 +269,10 @@
       privacy: '為取代你的直覺而設計。',
       apple: '用 Apple 繼續', google: '用 Google 繼續',
       reserve: '預約', cancel: '取消', signout: '登出',
-      change: '換一個名字', share: '分享我的卡片',
+      story: '限時動態', msg: '訊息', copy: '複製連結',
       haveSub: '已經是你的了。', haveNote: '保持專注，繼續成長。',
       haveSwitch: '換一個帳號',
-      isYours: '是你的了。', slogan: '花錢，是一門認識自己的藝術。',
+      isYours: '已為你保留。', slogan: '花錢，是一門認識自己的藝術。',
       bad: '只能用 2–20 個 a–z、0–9、_。',
       taken: '這個名字已經有人用了，換一個？',
       failed: '預約失敗，再試一次？', checking: '檢查中…'
@@ -262,8 +292,11 @@
       $('card-handle').textContent = '@' + handle;
       $('done-handle').textContent = '@' + handle;
       if (no != null) { reservationNo = no; $('card-no').textContent = cardNo(no); }
+      // "Aug. 2026", exactly as the claim card engraves it — the CSS
+      // uppercases it into the plate style.
+      const d = new Date();
       $('card-date').textContent =
-        new Date().toLocaleDateString(undefined, { month: 'short', year: 'numeric' }).toUpperCase();
+        d.toLocaleDateString('en-US', { month: 'short' }) + '. ' + d.getFullYear();
     }
 
     // handle + number in one call. my_handle_reservation() is left alone —
@@ -315,7 +348,6 @@
     const signOut = async () => { await sb.auth.signOut(); show('in'); };
     $('signout').onclick = signOut;
     $('have-signout').onclick = signOut;
-    $('change').onclick = () => { $('handle').value = ''; show('pick'); say(''); };
 
     $('claim').onclick = async () => {
       const handle = $('handle').value.trim().toLowerCase().replace(/^@/, '');
@@ -431,7 +463,8 @@
       ctx.fillStyle = '#4a4842';
       ctx.font = '700 ' + Math.round(cw * 0.030) + 'px ui-monospace, Menlo, monospace';
       ctx.textAlign = 'right';
-      ctx.fillText(new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+      const dd = new Date();
+      ctx.fillText((dd.toLocaleDateString('en-US', { month: 'short' }) + '. ' + dd.getFullYear())
                    .toUpperCase(), cx + cw - pad, cy + pad + cw * 0.030);
       ctx.restore();
 
@@ -454,10 +487,10 @@
       ctx.save();
       ctx.shadowColor = 'rgba(255,255,255,.4)'; ctx.shadowOffsetY = 1; ctx.shadowBlur = 0;
       ctx.fillStyle = '#55534d';
-      ctx.font = '700 ' + Math.round(cw * 0.024) + 'px -apple-system, system-ui, sans-serif';
+      ctx.font = '600 ' + Math.round(cw * 0.024) + 'px ui-monospace, Menlo, monospace';
       ctx.fillText('MEMBER', cx + pad, cy + ch - pad - cw * 0.042);
       ctx.fillStyle = '#45433e';
-      ctx.font = '600 ' + Math.round(cw * 0.036) + 'px -apple-system, system-ui, sans-serif';
+      ctx.font = '600 ' + Math.round(cw * 0.030) + 'px ui-monospace, Menlo, monospace';
       ctx.fillText(reservationNo != null ? cardNo(reservationNo) : 'Reserved',
                    cx + pad, cy + ch - pad);
       ctx.restore();
@@ -476,21 +509,42 @@
       return cv;
     }
 
-    $('share').onclick = async () => {
-      const handle = $('card-handle').textContent.replace(/^@/, '');
-      const canvas = drawCard(handle);
+    // One row, five doors. The web can't post INTO Instagram's composer,
+    // so Story hands the card image to the native sheet (where Instagram
+    // is one tap); the text destinations use their real intent URLs.
+    const myHandle = () => $('card-handle').textContent.replace(/^@/, '');
+    const shareLink = () => 'https://withimoney.com/i/?u=' + myHandle();
+    const shareText = () => (T ? '我在 iMoney 搶先預留了 @' + myHandle() + '。'
+                               : 'Reserved @' + myHandle() + ' on iMoney.');
+
+    $('d-ig').onclick = async () => {
+      const canvas = drawCard(myHandle());
       const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-      const file = new File([blob], 'imoney-' + handle + '.png', { type: 'image/png' });
-      // Native sheet where it exists (iOS Safari, Android); a download
-      // everywhere else, so desktop still gets the file.
+      const file = new File([blob], 'imoney-' + myHandle() + '.png', { type: 'image/png' });
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        try { await navigator.share({ files: [file] }); return; } catch { return; }
+        try { await navigator.share({ files: [file] }); } catch {}
+        return;
       }
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = file.name;
       a.click();
       URL.revokeObjectURL(a.href);
+    };
+    $('d-threads').onclick = () =>
+      open('https://www.threads.net/intent/post?text=' +
+           encodeURIComponent(shareText() + ' ' + shareLink()), '_blank');
+    $('d-msg').onclick = () =>
+      location.href = 'sms:?&body=' + encodeURIComponent(shareText() + ' ' + shareLink());
+    $('d-fb').onclick = () =>
+      open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareLink()),
+           '_blank', 'width=580,height=520');
+    $('d-copy').onclick = async () => {
+      try { await navigator.clipboard.writeText(shareLink()); } catch { return; }
+      const l = document.querySelector('#d-copy .lbl');
+      const orig = l.textContent;
+      l.textContent = T ? '已複製' : 'Copied';
+      setTimeout(() => { l.textContent = orig; }, 1400);
     };
 
     if (T) {
@@ -506,8 +560,9 @@
       $('google').lastChild.textContent = ' ' + T.google;
       set('#claim', T.reserve);
       set('#signout', T.signout);
-      set('#change', T.change);
-      set('#share', T.share);
+      set('#d-ig .lbl', T.story);
+      set('#d-msg .lbl', T.msg);
+      set('#d-copy .lbl', T.copy);
       set('#step-done .sub', T.isYours);
       set('#step-done .note', T.slogan);
       set('#have-sub', T.haveSub);
