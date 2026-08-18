@@ -161,15 +161,24 @@
        real air above it or the two read as one block. Padding rather than a
        margin on .status, so the gap is there whether or not the status has
        anything to say. */
-    /* The legal line leaves the nav row alone: it breaks out of the
-       centered column to the full viewport and parks at the page's
-       bottom-left, the way Apple's does. */
-    .copyline { width: 100vw; margin-left: calc(50% - 50vw);
-                box-sizing: border-box; padding: 0 24px;
-                text-align: left; margin-top: 22px;
-                font-size: 11px; color: var(--bone-faint); }
-    footer { width: 100%; text-align: center; }
-    footer { flex: 0 0 auto; padding: clamp(30px, 6vh, 78px) 0 30px;
+    /* Apple's footer grammar: one row, legal on the left, nav on the
+       right, sharing a baseline. The row spans the viewport, not the
+       centered column. */
+    .copyline { font-size: 11px; color: var(--bone-faint); }
+    footer { width: 100vw; margin-left: calc(50% - 50vw);
+             box-sizing: border-box; padding-left: 24px; padding-right: 24px;
+             display: flex; justify-content: space-between;
+             align-items: baseline; gap: 16px; }
+    @media (max-width: 640px) {
+      footer { flex-direction: column; align-items: center; gap: 12px; }
+      /* Stacked, the legal line goes last — the bottom of the bottom. */
+      footer .copyline { width: 100%; text-align: left; order: 2; }
+      footer .foot-links { order: 1; }
+    }
+    /* Longhand on purpose: the shorthand was zeroing the row's side
+       gutters set above. */
+    footer { flex: 0 0 auto;
+             padding-top: clamp(30px, 6vh, 78px); padding-bottom: 30px;
              font-size: 13px; color: var(--bone-faint); }
     footer a { color: var(--bone-faint); text-decoration: none; }
     footer a:hover { color: var(--bone-dim); }
@@ -237,11 +246,13 @@
     </main>
 
     <footer>
+<div class="copyline">Copyright © 2026 iMoney. All rights reserved.</div>
+      <nav class="foot-links">
       <a href="/privacy/">Privacy</a><span class="sep">·</span>
       <a href="/support/">Support</a><span class="sep">·</span>
       <a href="mailto:upappco@gmail.com">Contact</a><span class="sep">·</span>
       <a href="/business/">For Business</a>
-      <div class="copyline">Copyright © 2026 iMoney. All rights reserved.</div>
+      </nav>
     </footer>
   </div>
   </section>
