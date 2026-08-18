@@ -33,9 +33,11 @@
       content: ""; position: fixed; left: -8%; right: -8%; bottom: -6%;
       height: 52vh; pointer-events: none; z-index: 2;
       background: url(/assets/smoke.jpg?v=1) bottom center / cover no-repeat;
-      opacity: .24; mix-blend-mode: screen; filter: brightness(1.15);
-      -webkit-mask-image: linear-gradient(to top, black 0%, black 38%, transparent 92%);
-      mask-image: linear-gradient(to top, black 0%, black 38%, transparent 92%);
+      /* Atmosphere, not a subject: barely-there, so the eye stays on the
+         card and the field. */
+      opacity: .13; mix-blend-mode: screen;
+      -webkit-mask-image: linear-gradient(to top, black 0%, black 30%, transparent 80%);
+      mask-image: linear-gradient(to top, black 0%, black 30%, transparent 80%);
       animation: smoke-rise 22s ease-in-out infinite alternate;
       transform-origin: bottom center;
     }
@@ -110,7 +112,7 @@
         /* Overshoot the viewport: Safari's bottom bar floats above bottom:0,
            so the layer dives 10svh past it — the dense base of the smoke
            lives BEHIND the domain bar, rising from the screen's true edge. */
-        height: 44svh; bottom: -10svh; opacity: .17;
+        height: 44svh; bottom: -10svh; opacity: .11;
         -webkit-mask-image: linear-gradient(to top, black 0%, black 28%, transparent 80%);
         mask-image: linear-gradient(to top, black 0%, black 28%, transparent 80%);
       }
