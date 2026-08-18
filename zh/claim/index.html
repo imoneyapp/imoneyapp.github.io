@@ -24,6 +24,21 @@
     html { background: #0b0b0c; }
     .claim-screen { position: relative; width: 100%; }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    /* Smoke along the page's floor: screen-blended so only the wisps
+       glow, faint enough to be atmosphere rather than weather, drifting
+       a few percent side to side on a slow breath. */
+    body::after {
+      content: ""; position: fixed; left: -6%; right: -6%; bottom: 0;
+      height: 44vh; pointer-events: none; z-index: 2;
+      background: url(/assets/smoke.jpg?v=1) bottom center / cover no-repeat;
+      opacity: .24; mix-blend-mode: screen; filter: brightness(1.15);
+      animation: smoke-drift 28s ease-in-out infinite alternate;
+    }
+    @keyframes smoke-drift {
+      from { transform: translateX(-2%); }
+      to   { transform: translateX(2%); }
+    }
+    @media (prefers-reduced-motion: reduce) { body::after { animation: none; } }
     /* One column, vertically centred between a pinned header and a pinned
        footer. An earlier version stacked fixed margins and sized the hero
        with `calc(100svh - 470px)`; on a short window that sum overflowed,
