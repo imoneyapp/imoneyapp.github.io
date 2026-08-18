@@ -88,7 +88,10 @@
       <button type="button" class="chip">Another app</button>
       <button type="button" class="chip">Mostly memory</button>
       <button type="button" class="chip">It's messy</button>
+      <button type="button" class="chip" data-other>Other</button>
     </div>
+    <input type="text" id="tracking-other" class="other-input" maxlength="80"
+           placeholder="Tell us how" hidden>
 
     <label class="q">What would you like iMoney to manage? Select all that apply.</label>
     <div class="chips" id="needs">
@@ -157,7 +160,13 @@
         email: $('f-email').value.trim(),
         who,
         needs,
-        tracking: picked('#tracking').join(', ') || null,
+        tracking: (() => {
+          const list = picked('#tracking');
+          const extra = otherText('tracking-other');
+          const oi = list.findIndex(n => n === 'Other' || n === '其他');
+          if (extra && oi >= 0) list[oi] = extra;
+          return list.join(', ') || null;
+        })(),
         message: $('f-msg').value.trim() || null
       };
       if (!body.name || !body.email) { msg.textContent = 'Name and email, so we can write back.'; msg.className = 'form-msg bad'; return; }

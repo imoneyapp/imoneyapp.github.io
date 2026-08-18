@@ -84,7 +84,10 @@
       <button type="button" class="chip">其他 App</button>
       <button type="button" class="chip">大多靠記憶</button>
       <button type="button" class="chip">有點亂</button>
+      <button type="button" class="chip" data-other>其他</button>
     </div>
+    <input type="text" id="tracking-other" class="other-input" maxlength="80"
+           placeholder="說說你怎麼記" hidden>
 
     <label class="q">想讓 iMoney 為你管理哪些項目？可複選。</label>
     <div class="chips" id="needs">
@@ -152,7 +155,13 @@
         email: $('f-email').value.trim(),
         who,
         needs,
-        tracking: picked('#tracking').join(', ') || null,
+        tracking: (() => {
+          const list = picked('#tracking');
+          const extra = otherText('tracking-other');
+          const oi = list.findIndex(n => n === 'Other' || n === '其他');
+          if (extra && oi >= 0) list[oi] = extra;
+          return list.join(', ') || null;
+        })(),
         message: $('f-msg').value.trim() || null
       };
       if (!body.name || !body.email) { msg.textContent = '留下名字和電子郵件，我們才回得了信。'; msg.className = 'form-msg bad'; return; }
