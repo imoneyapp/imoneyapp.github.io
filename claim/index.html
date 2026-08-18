@@ -96,11 +96,19 @@
        keyboard leaves (~430px), so typing shows the whole ritual — card,
        headline, field — with nothing hidden and nothing to scroll. */
     @media (max-width: 640px) {
-      main { justify-content: center; padding-top: 14px; padding-bottom: 16px; gap: 22px;
+      main { justify-content: center; padding-top: 20px; padding-bottom: 16px; gap: 22px;
              /* Air, not size: the card cedes a little width and height so
                 the stack stops touching itself. */
              --card-h: min(38vh, calc(87vw / 1.586)); }
-      .scene { margin: 14px 0; }
+      /* More breath around the card: below the logo, and below the card
+         so the headline sits a step lower. */
+      .scene { margin: 26px 0 30px; }
+      /* The phone gets the PORTRAIT smoke, tall enough that its wisps
+         reach almost to the handle field's underside. */
+      body::after {
+        background-image: url(/assets/smoke-v.jpg?v=1);
+        height: 52svh; bottom: -4%;
+      }
       /* Premium type whispers: the phone page steps everything down a
          size and lets the card carry the weight. */
       .say h1 { font-size: 22px; letter-spacing: -.6px; }
