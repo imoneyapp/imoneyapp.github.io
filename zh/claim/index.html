@@ -88,8 +88,11 @@
       input { padding: 15px 0; }
       button { font-size: 13px; padding: 15px 16px; }
       .status { font-size: 12px; }
-      .copyline { width: 100%; text-align: center; margin-top: 10px;
+      /* The legal line doesn't crowd the nav row — it sits alone at the
+       page's bottom-left, the way Apple parks theirs. */
+    .copyline { width: 100%; text-align: left; margin-top: 16px;
                 font-size: 11px; color: var(--bone-faint); }
+    footer { width: 100%; text-align: center; }
     footer { font-size: 12px; }
     }
     .scene { height: var(--card-h);

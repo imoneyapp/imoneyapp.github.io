@@ -156,7 +156,7 @@
       };
       const erase = (next) => {
         el.textContent = el.textContent.slice(0, -1);
-        if (el.textContent) setTimeout(() => erase(next), 52);
+        if (el.textContent) setTimeout(() => erase(next), 34);
         else next();
       };
       const act = (i) => typeOut(ACTS[i], 0, () => {
