@@ -38,6 +38,10 @@
                  font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; }
     .biz .send:disabled { opacity: .4; }
     .other-input { margin-top: 10px; }
+    /* The identity fields don't need the page's full reach — half is
+       enough for a name, an email, a type. Phones keep the full width. */
+    #f-name, #f-email, .selectwrap { width: 50%; }
+    @media (max-width: 540px) { #f-name, #f-email, .selectwrap { width: 100%; } }
     /* A native select wearing the form's clothes — the OS supplies the
        picker, we supply the chevron. */
     .selectwrap { position: relative; }
