@@ -141,13 +141,11 @@
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .rules { font-size: 13px; color: var(--bone-faint); margin: 10px 0 0; }
-    .pick-foot { display: flex; align-items: center; justify-content: center;
-                 gap: 2px; margin-top: 8px; }
-    .help { width: 26px; height: 26px; border-radius: 50%; line-height: 1;
-            background: rgba(255,255,255,.14); color: var(--bone-dim);
-            font-size: 13px; font-weight: 600; padding: 0; }
-    .help:hover { background: rgba(255,255,255,.22); color: var(--bone); }
+    #pick-handle { font-size: 36px; margin-bottom: 4px;
+                   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #step-pick .sub { margin-bottom: 22px; }
+    #step-pick #claim { width: 100%; }
+    #step-pick .ghost { margin-top: 10px; }
     #share { margin-top: 20px; width: 100%; }
     .msg { font-size: 13px; margin-top: 12px; min-height: 18px; }
     .msg.bad { color: var(--negative); } .msg.good { color: var(--positive); }
@@ -194,22 +192,16 @@
 
     <!-- 2. Signed in, choosing -->
     <section id="step-pick" class="hidden">
-      <!-- They already chose on /claim/ — this step is a confirmation with
-           an escape hatch, not a second naming ceremony. The title tracks
-           the field, the rules hide behind the ?, and the only other door
-           is Cancel. -->
-      <h1 id="pick-title"><span id="pick-handle">@yourname</span><span id="pick-rest"> is almost yours.</span></h1>
-      <div class="row">
-        <input id="handle" placeholder="yourname" autocapitalize="none" autocorrect="off"
-               spellcheck="false" maxlength="20" inputmode="latin">
-        <button id="claim">Reserve</button>
-      </div>
+      <!-- They chose on /claim/ and signed in — nothing is left to type.
+           The name stands alone, the promise sits under it, and the only
+           choices are through or back. Arriving with no name (or one that
+           turns out taken) routes back to the claim page, where names are
+           actually chosen. -->
+      <h1 id="pick-handle">@yourname</h1>
+      <p class="sub" id="pick-rest">is almost yours.</p>
       <p class="msg" id="msg"></p>
-      <p class="rules hidden" id="rules">2–20 characters: a–z, 0–9, _</p>
-      <div class="pick-foot">
-        <button class="ghost" id="signout">Cancel</button>
-        <button class="ghost help" id="rules-btn" aria-label="Handle rules" aria-expanded="false">?</button>
-      </div>
+      <button id="claim">Continue</button>
+      <button class="ghost" id="signout">Cancel</button>
     </section>
 
     <!-- 3. Done -->
@@ -270,10 +262,10 @@
       title: '開放預留 @使用者名稱',
       inTitle: '開放預留 @使用者名稱',
       inSub: '在 iMoney 上線前，先把名字定下來。',
-      rules: '2–20 個字元：a–z、0–9、_',
-      almost: ' 快是你的了。',
+      cont: '繼續',
+      almost: '快是你的了。',
       apple: '用 Apple 繼續', google: '用 Google 繼續',
-      reserve: '預留', cancel: '取消',
+      cancel: '取消',
       story: '限時動態', msg: '訊息', copy: '複製連結',
       haveSub: '已經是你的了。', haveNote: '保持專注，繼續成長。',
       haveSwitch: '換一個帳號',
@@ -287,20 +279,6 @@
     const show = name => ['have','in','pick','done'].forEach(s =>
       $('step-' + s).classList.toggle('hidden', s !== name));
     const say = (text, kind) => { $('msg').textContent = text; $('msg').className = 'msg ' + (kind || ''); };
-
-    // The title holds whatever name the field holds — they usually arrive
-    // with one from the landing page, and editing it edits the promise.
-    function syncPickTitle() {
-      const h = $('handle').value.trim().toLowerCase().replace(/^@/, '');
-      $('pick-handle').textContent = '@' + (h || $('handle').placeholder);
-    }
-    document.addEventListener('input', e => { if (e.target.id === 'handle') syncPickTitle(); });
-    document.addEventListener('click', e => {
-      if (e.target.id !== 'rules-btn') return;
-      const r = $('rules');
-      r.classList.toggle('hidden');
-      e.target.setAttribute('aria-expanded', String(!r.classList.contains('hidden')));
-    });
 
     // Padded to four digits so the corner never changes width as the queue
     // grows, and so the first person's card doesn't read as an afterthought.
@@ -344,8 +322,11 @@
 
       const mine = await myReservation();
       if (mine && mine.handle) { renderCard(mine.handle, mine.reservation_no); show('done'); return; }
-      if (wanted && !$('handle').value) $('handle').value = wanted.replace(/^@/, '');
-      syncPickTitle();
+      const name = (wanted || '').trim().toLowerCase().replace(/^@/, '');
+      if (!/^[a-z0-9_]{2,20}$/.test(name)) {
+        location.replace(ZH ? '/zh/claim/' : '/claim/'); return;
+      }
+      $('pick-handle').textContent = '@' + name;
       show('pick');
     }
 
@@ -370,17 +351,18 @@
     $('have-signout').onclick = signOut;
 
     $('claim').onclick = async () => {
-      const handle = $('handle').value.trim().toLowerCase().replace(/^@/, '');
-      if (!/^[a-z0-9_]{2,20}$/.test(handle)) {
-        return say(T ? T.bad : '2–20 characters, and only a–z, 0–9, _', 'bad');
-      }
+      const handle = $('pick-handle').textContent.replace(/^@/, '');
       $('claim').disabled = true; say(T ? T.checking : 'Checking…');
       const { data, error } = await sb.rpc('reserve_handle', { p_handle: handle });
       $('claim').disabled = false;
       if (error) {
         const taken = /handle_taken/.test(error.message);
-        return say(taken ? (T ? T.taken : 'That one’s gone. Try another?')
-                         : (T ? T.failed : 'Couldn’t reserve that. Try again?'), 'bad');
+        say(taken ? (T ? T.taken : 'That one’s gone. Try another?')
+                  : (T ? T.failed : 'Couldn’t reserve that. Try again?'), 'bad');
+        // With no field on this page, "another" lives back on the claim
+        // page — carry them there after the message lands.
+        if (taken) setTimeout(() => location.replace(ZH ? '/zh/claim/' : '/claim/'), 1800);
+        return;
       }
       // reserve_handle returns the handle; the number comes back from the
       // row it just wrote.
@@ -388,8 +370,6 @@
       renderCard(data, mine && mine.reservation_no);
       show('done');
     };
-
-    $('handle').addEventListener('keydown', e => { if (e.key === 'Enter') $('claim').click(); });
 
     // --- Share -------------------------------------------------------------
     // Drawn on a canvas rather than screenshotting the DOM: no html2canvas
@@ -574,10 +554,9 @@
       set('#step-in h1', T.inTitle);
       set('#step-in .sub', T.inSub);
       set('#pick-rest', T.almost);
-      set('#rules', T.rules);
+      set('#claim', T.cont);
       $('apple').lastChild.textContent = ' ' + T.apple;
       $('google').lastChild.textContent = ' ' + T.google;
-      set('#claim', T.reserve);
       set('#signout', T.cancel);
       set('#d-ig .lbl', T.story);
       set('#d-msg .lbl', T.msg);
@@ -587,8 +566,7 @@
       set('#have-sub', T.haveSub);
       set('#have-note', T.haveNote);
       set('#have-signout', T.haveSwitch);
-      $('handle').placeholder = '使用者名稱';
-      syncPickTitle();
+
     }
 
     // Fires on load AND after the OAuth redirect drops the session in.
