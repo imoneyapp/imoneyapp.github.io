@@ -4,28 +4,139 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>企業合作 — iMoney</title>
-  <meta name="description" content="為企業量身打造的記帳系統——iMoney 的記帳引擎，按照你團隊實際的花費方式裁剪。">
+  <meta name="description" content="告訴我們你的生意——iMoney 為小型團隊量身打造記帳系統。">
   <link rel="stylesheet" href="../../style.css?v=12">
   <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png?v=2">
   <link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon-256.png?v=2">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2">
+  <style>
+    /* The form speaks Apple: quiet labels above grouped rounded fields,
+       choices as pills you tap rather than menus you open, one bone
+       button at the end. */
+    .biz { margin-top: 8px; }
+    .biz label.q { display: block; font-size: 13px; font-weight: 600;
+                   color: var(--bone-dim); margin: 26px 0 10px;
+                   letter-spacing: .1px; }
+    .biz input[type=text], .biz input[type=email], .biz textarea {
+      width: 100%; background: rgba(244,241,234,.055); color: var(--bone);
+      border: 1px solid rgba(244,241,234,.16); border-radius: 14px;
+      padding: 14px 16px; font-size: 16px; font-family: inherit; outline: none;
+      transition: border-color .2s, background .2s;
+    }
+    .biz input:focus, .biz textarea:focus { border-color: var(--accent);
+                                            background: rgba(244,241,234,.09); }
+    .biz textarea { min-height: 120px; resize: vertical; line-height: 1.5; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { border: 1px solid rgba(244,241,234,.18); background: none;
+            color: var(--bone-dim); border-radius: 999px; padding: 9px 16px;
+            font-size: 14px; font-family: inherit; cursor: pointer;
+            transition: background .15s, color .15s, border-color .15s; }
+    .chip[aria-pressed="true"] { background: var(--bone); color: #0b0b0c;
+                                 border-color: var(--bone); font-weight: 600; }
+    .biz .send { width: 100%; margin-top: 30px; background: var(--bone);
+                 color: #0b0b0c; border: 0; border-radius: 14px; padding: 15px;
+                 font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; }
+    .biz .send:disabled { opacity: .4; }
+    .form-msg { min-height: 20px; font-size: 13.5px; margin-top: 12px; color: var(--bone-faint); }
+    .form-msg.bad { color: #e64a3c; }
+    .thanks { display: none; margin-top: 34px; }
+    .thanks h2 { margin-top: 0; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 540px) { .two { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
 <main>
   <header class="site"><a href="/">iMoney</a><span>企業合作</span></header>
   <h1>企業合作</h1>
+  <p class="lede">為你的生意量身打造的記帳系統。告訴我們你在經營什麼，我們會回信給你。</p>
 
-  <p class="lede">iMoney 的記帳引擎——記錄、分類、預算、月報表——
-  可以按照你生意實際的花費方式量身裁剪。</p>
-  <p class="lede">特別適合小型企業：不必串接銀行、沒有授權座位費，
-  就是一套照著你既有工作方式打造的系統。</p>
+  <form class="biz" id="biz">
+    <div class="two">
+      <div>
+        <label class="q" for="f-name">你的名字</label>
+        <input type="text" id="f-name" maxlength="120" autocomplete="name" required>
+      </div>
+      <div>
+        <label class="q" for="f-email">電子郵件</label>
+        <input type="email" id="f-email" maxlength="200" autocomplete="email" required>
+      </div>
+    </div>
 
-  <p class="fine">告訴我們你在經營什麼、每個月需要看到什麼——
-  系統就照著這個樣子做。</p>
+    <label class="q">你是誰？</label>
+    <div class="chips" id="who" data-single>
+      <button type="button" class="chip">小型企業主</button>
+      <button type="button" class="chip">自由工作者</button>
+      <button type="button" class="chip">新創團隊</button>
+      <button type="button" class="chip">餐飲店家</button>
+      <button type="button" class="chip">零售店家</button>
+      <button type="button" class="chip">其他</button>
+    </div>
 
-  <p><a href="mailto:upappco@gmail.com?subject=iMoney%20%E4%BC%81%E6%A5%AD%E5%90%88%E4%BD%9C">upappco@gmail.com</a></p>
+    <label class="q">想要 iMoney 幫你做什麼？可複選。</label>
+    <div class="chips" id="needs">
+      <button type="button" class="chip">記錄日常支出</button>
+      <button type="button" class="chip">記錄收入</button>
+      <button type="button" class="chip">團隊花費</button>
+      <button type="button" class="chip">各專案預算</button>
+      <button type="button" class="chip">每月報表</button>
+      <button type="button" class="chip">與夥伴分帳</button>
+      <button type="button" class="chip">其他需求</button>
+    </div>
+
+    <label class="q" for="f-msg">介紹一下你的生意，以及你想怎麼記錄收支</label>
+    <textarea id="f-msg" maxlength="2000"></textarea>
+
+    <button type="submit" class="send" id="send">送出</button>
+    <p class="form-msg" id="form-msg"></p>
+  </form>
+
+  <div class="thanks" id="thanks">
+    <h2>謝謝你。</h2>
+    <p>已經收到了。每一封我們都會讀，很快會回信給你。</p>
+  </div>
 
   <footer>© 2026 iMoney · <a href="../../privacy/zh/">隱私權政策</a> · <a href="../../support/zh/">支援</a></footer>
 </main>
+<script>
+  (() => {
+    const $ = id => document.getElementById(id);
+    document.querySelectorAll('.chips').forEach(group => {
+      group.addEventListener('click', e => {
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+        const single = group.hasAttribute('data-single');
+        if (single) group.querySelectorAll('.chip').forEach(c =>
+          c.setAttribute('aria-pressed', c === chip && chip.getAttribute('aria-pressed') !== 'true' ? 'true' : 'false'));
+        else chip.setAttribute('aria-pressed', chip.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+      });
+    });
+    $('biz').addEventListener('submit', async e => {
+      e.preventDefault();
+      const msg = $('form-msg');
+      const picked = sel => [...document.querySelectorAll(sel + ' .chip[aria-pressed="true"]')].map(c => c.textContent);
+      const body = {
+        name: $('f-name').value.trim(),
+        email: $('f-email').value.trim(),
+        who: picked('#who')[0] || null,
+        needs: picked('#needs'),
+        message: $('f-msg').value.trim() || null
+      };
+      if (!body.name || !body.email) { msg.textContent = '留下名字和電子郵件，我們才回得了信。'; msg.className = 'form-msg bad'; return; }
+      $('send').disabled = true; msg.textContent = '送出中…'; msg.className = 'form-msg';
+      const res = await fetch('https://cpsdkarncveeemrfmkll.supabase.co/rest/v1/business_inquiries', {
+        method: 'POST',
+        headers: {
+          apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc2RrYXJuY3ZlZWVtcmZta2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NzQ3NzAsImV4cCI6MjA5NjE1MDc3MH0.zzHVArTaz2OdW1pYEzMIlrgcyuXWm4MNnR-bizyRhdY',
+          'Content-Type': 'application/json', Prefer: 'return=minimal'
+        },
+        body: JSON.stringify(body)
+      }).catch(() => null);
+      $('send').disabled = false;
+      if (res && res.ok) { $('biz').style.display = 'none'; $('thanks').style.display = 'block'; }
+      else { msg.textContent = '沒有送出去，再試一次？'; msg.className = 'form-msg bad'; }
+    });
+  })();
+</script>
 </body>
 </html>

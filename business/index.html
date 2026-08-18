@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>For Business — iMoney</title>
-  <meta name="description" content="Custom money tracking systems for businesses — iMoney's engine, shaped around how your team actually spends.">
+  <meta name="description" content="Tell us about your business — iMoney builds custom money tracking systems for small teams.">
   <link rel="stylesheet" href="../style.css?v=12">
   <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png?v=2">
   <link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon-256.png?v=2">
@@ -12,25 +12,136 @@
   <script>
     if (/^zh/i.test(navigator.language)) location.replace('zh/');
   </script>
+  <style>
+    /* The form speaks Apple: quiet labels above grouped rounded fields,
+       choices as pills you tap rather than menus you open, one bone
+       button at the end. */
+    .biz { margin-top: 8px; }
+    .biz label.q { display: block; font-size: 13px; font-weight: 600;
+                   color: var(--bone-dim); margin: 26px 0 10px;
+                   letter-spacing: .1px; }
+    .biz input[type=text], .biz input[type=email], .biz textarea {
+      width: 100%; background: rgba(244,241,234,.055); color: var(--bone);
+      border: 1px solid rgba(244,241,234,.16); border-radius: 14px;
+      padding: 14px 16px; font-size: 16px; font-family: inherit; outline: none;
+      transition: border-color .2s, background .2s;
+    }
+    .biz input:focus, .biz textarea:focus { border-color: var(--accent);
+                                            background: rgba(244,241,234,.09); }
+    .biz textarea { min-height: 120px; resize: vertical; line-height: 1.5; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { border: 1px solid rgba(244,241,234,.18); background: none;
+            color: var(--bone-dim); border-radius: 999px; padding: 9px 16px;
+            font-size: 14px; font-family: inherit; cursor: pointer;
+            transition: background .15s, color .15s, border-color .15s; }
+    .chip[aria-pressed="true"] { background: var(--bone); color: #0b0b0c;
+                                 border-color: var(--bone); font-weight: 600; }
+    .biz .send { width: 100%; margin-top: 30px; background: var(--bone);
+                 color: #0b0b0c; border: 0; border-radius: 14px; padding: 15px;
+                 font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; }
+    .biz .send:disabled { opacity: .4; }
+    .form-msg { min-height: 20px; font-size: 13.5px; margin-top: 12px; color: var(--bone-faint); }
+    .form-msg.bad { color: #e64a3c; }
+    .thanks { display: none; margin-top: 34px; }
+    .thanks h2 { margin-top: 0; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 540px) { .two { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
 <main>
   <header class="site"><a href="/">iMoney</a><span>For Business</span></header>
   <h1>For Business</h1>
+  <p class="lede">Custom money tracking, shaped around your business.
+  Tell us what you run — we'll write back.</p>
 
-  <p class="lede">The tracking engine inside iMoney — logging, categories,
-  budgets, monthly reports — shaped around how your business actually
-  spends.</p>
-  <p class="lede">Especially built for small teams: no bank integrations to
-  wrangle, no seats to license, just a system that fits the way you already
-  work.</p>
+  <form class="biz" id="biz">
+    <div class="two">
+      <div>
+        <label class="q" for="f-name">Your name</label>
+        <input type="text" id="f-name" maxlength="120" autocomplete="name" required>
+      </div>
+      <div>
+        <label class="q" for="f-email">Email</label>
+        <input type="email" id="f-email" maxlength="200" autocomplete="email" required>
+      </div>
+    </div>
 
-  <p class="fine">Tell us what you run and what you need to see each month —
-  we'll shape the system around it.</p>
+    <label class="q">Who are you?</label>
+    <div class="chips" id="who" data-single>
+      <button type="button" class="chip">Small business owner</button>
+      <button type="button" class="chip">Freelancer</button>
+      <button type="button" class="chip">Startup team</button>
+      <button type="button" class="chip">Café / restaurant</button>
+      <button type="button" class="chip">Retail shop</button>
+      <button type="button" class="chip">Other</button>
+    </div>
 
-  <p><a href="mailto:upappco@gmail.com?subject=iMoney%20for%20Business">upappco@gmail.com</a></p>
+    <label class="q">What do you want iMoney to do? Pick any.</label>
+    <div class="chips" id="needs">
+      <button type="button" class="chip">Track daily expenses</button>
+      <button type="button" class="chip">Track income</button>
+      <button type="button" class="chip">Team spending</button>
+      <button type="button" class="chip">Budgets per project</button>
+      <button type="button" class="chip">Monthly reports</button>
+      <button type="button" class="chip">Split costs with partners</button>
+      <button type="button" class="chip">Something else</button>
+    </div>
+
+    <label class="q" for="f-msg">Tell us about your business, and how you want to keep track of it</label>
+    <textarea id="f-msg" maxlength="2000"></textarea>
+
+    <button type="submit" class="send" id="send">Send inquiry</button>
+    <p class="form-msg" id="form-msg"></p>
+  </form>
+
+  <div class="thanks" id="thanks">
+    <h2>Thank you.</h2>
+    <p>Your inquiry is in. We read every one, and we'll write back to your
+    email soon.</p>
+  </div>
 
   <footer>© 2026 iMoney · <a href="../privacy/">Privacy</a> · <a href="../support/">Support</a></footer>
 </main>
+<script>
+  (() => {
+    const $ = id => document.getElementById(id);
+    document.querySelectorAll('.chips').forEach(group => {
+      group.addEventListener('click', e => {
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+        const single = group.hasAttribute('data-single');
+        if (single) group.querySelectorAll('.chip').forEach(c =>
+          c.setAttribute('aria-pressed', c === chip && chip.getAttribute('aria-pressed') !== 'true' ? 'true' : 'false'));
+        else chip.setAttribute('aria-pressed', chip.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+      });
+    });
+    $('biz').addEventListener('submit', async e => {
+      e.preventDefault();
+      const msg = $('form-msg');
+      const picked = sel => [...document.querySelectorAll(sel + ' .chip[aria-pressed="true"]')].map(c => c.textContent);
+      const body = {
+        name: $('f-name').value.trim(),
+        email: $('f-email').value.trim(),
+        who: picked('#who')[0] || null,
+        needs: picked('#needs'),
+        message: $('f-msg').value.trim() || null
+      };
+      if (!body.name || !body.email) { msg.textContent = 'Name and email, so we can write back.'; msg.className = 'form-msg bad'; return; }
+      $('send').disabled = true; msg.textContent = 'Sending…'; msg.className = 'form-msg';
+      const res = await fetch('https://cpsdkarncveeemrfmkll.supabase.co/rest/v1/business_inquiries', {
+        method: 'POST',
+        headers: {
+          apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc2RrYXJuY3ZlZWVtcmZta2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NzQ3NzAsImV4cCI6MjA5NjE1MDc3MH0.zzHVArTaz2OdW1pYEzMIlrgcyuXWm4MNnR-bizyRhdY',
+          'Content-Type': 'application/json', Prefer: 'return=minimal'
+        },
+        body: JSON.stringify(body)
+      }).catch(() => null);
+      $('send').disabled = false;
+      if (res && res.ok) { $('biz').style.display = 'none'; $('thanks').style.display = 'block'; }
+      else { msg.textContent = 'Couldn’t send that. Try again?'; msg.className = 'form-msg bad'; }
+    });
+  })();
+</script>
 </body>
 </html>
