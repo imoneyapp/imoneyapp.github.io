@@ -16,16 +16,14 @@
     .biz { margin-top: 8px; }
     /* The two opening lines are one thought — a breath apart, not a
        paragraph apart. */
-    .lede + .lede { margin-top: 2px; }
+    .lede + .lede { margin-top: 0; }
     /* Each question is its own room: full-ink headings a size up, and
        enough air above that the eye rests between sections. */
     .biz label.q { display: block; font-size: 16px; font-weight: 650;
                    color: var(--bone); margin: 46px 0 14px;
-                   letter-spacing: -.1px;
-                   /* Balanced wrapping: a long question breaks into two
-                      even lines instead of stranding its last word. */
-                   text-wrap: balance; }
+                   letter-spacing: -.1px; }
     .biz label.q .hint { color: var(--bone-dim); font-weight: 500; }
+    .biz label.q .req { color: var(--bone-dim); font-weight: 500; }
     .biz label.q:first-of-type { margin-top: 30px; }
     .biz input[type=text], .biz input[type=email], .biz textarea {
       width: 100%; background: rgba(244,241,234,.055); color: var(--bone);
@@ -80,13 +78,13 @@
   <p class="lede">讓我們更認識彼此一點。</p>
 
   <form class="biz" id="biz">
-    <label class="q">你是誰？</label>
+    <label class="q">你是誰？ <span class="req">*</span></label>
     <input type="text" id="f-name" maxlength="120" autocomplete="name"
            placeholder="你的全名" required>
     <input type="email" id="f-email" maxlength="200" autocomplete="email"
            placeholder="電子郵件" required style="margin-top: 10px;">
 
-    <label class="q">業務類型</label>
+    <label class="q">業務類型 <span class="req">*</span></label>
     <div class="selectwrap">
       <select id="who">
         <option value="" selected disabled>請選擇</option>
@@ -95,6 +93,7 @@
         <option>餐飲店家</option>
         <option>零售／電商</option>
         <option>工作室／代理商</option>
+        <option>教育／補習班</option>
         <option>銀行／金融機構</option>
         <option value="__other">其他</option>
       </select>
@@ -130,7 +129,7 @@
     <input type="text" id="needs-other" class="other-input" maxlength="80"
            placeholder="說說還需要什麼" hidden>
 
-    <label class="q" for="f-msg">聊聊你的生意，想問 iMoney 的儘管問，一起探索合作的可能。</label>
+    <label class="q" for="f-msg">聊聊你的生意，想問 iMoney 的儘管問，一起探索合作的可能。 <span class="req">*</span></label>
     <textarea id="f-msg" maxlength="2000"></textarea>
 
     <button type="submit" class="send" id="send">保持聯絡</button>
@@ -194,7 +193,10 @@
         })(),
         message: $('f-msg').value.trim() || null
       };
-      if (!body.name || !body.email) { msg.textContent = '留下名字和電子郵件，我們才回得了信。'; msg.className = 'form-msg bad'; return; }
+      const incomplete = !body.name || !body.email || !who ||
+        picked('#tracking').length === 0 || needs.length === 0 || !body.message;
+      if (incomplete) { msg.textContent = '請完成必填欄位。'; msg.className = 'form-msg bad'; return; }
+      if (false) { msg.textContent = '留下名字和電子郵件，我們才回得了信。'; msg.className = 'form-msg bad'; return; }
       $('send').disabled = true; msg.textContent = '送出中…'; msg.className = 'form-msg';
       const res = await fetch('https://cpsdkarncveeemrfmkll.supabase.co/rest/v1/business_inquiries', {
         method: 'POST',
