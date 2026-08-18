@@ -25,18 +25,23 @@
     .claim-screen { position: relative; width: 100%; }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     /* Smoke along the page's floor: screen-blended so only the wisps
-       glow, faint enough to be atmosphere rather than weather, drifting
-       a few percent side to side on a slow breath. */
+       glow. The layer is MASKED — it dissolves to nothing well before its
+       own bounding box, so no edge of the image can ever print as a hard
+       line — and it BILLOWS UPWARD on a slow breath, the way smoke moves,
+       swelling slightly as it rises. */
     body::after {
-      content: ""; position: fixed; left: -6%; right: -6%; bottom: 0;
-      height: 44vh; pointer-events: none; z-index: 2;
+      content: ""; position: fixed; left: -8%; right: -8%; bottom: -6%;
+      height: 52vh; pointer-events: none; z-index: 2;
       background: url(/assets/smoke.jpg?v=1) bottom center / cover no-repeat;
       opacity: .24; mix-blend-mode: screen; filter: brightness(1.15);
-      animation: smoke-drift 28s ease-in-out infinite alternate;
+      -webkit-mask-image: linear-gradient(to top, black 0%, black 38%, transparent 92%);
+      mask-image: linear-gradient(to top, black 0%, black 38%, transparent 92%);
+      animation: smoke-rise 22s ease-in-out infinite alternate;
+      transform-origin: bottom center;
     }
-    @keyframes smoke-drift {
-      from { transform: translateX(-2%); }
-      to   { transform: translateX(2%); }
+    @keyframes smoke-rise {
+      from { transform: translateY(3%) scale(1); }
+      to   { transform: translateY(-4%) scale(1.05); }
     }
     @media (prefers-reduced-motion: reduce) { body::after { animation: none; } }
     /* One column, vertically centred between a pinned header and a pinned
