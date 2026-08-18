@@ -94,7 +94,8 @@
 
     /* Share destinations: the sheet's row, on the web. IG Story leads
        with the planet ramp; the rest are quiet circles. */
-    .dests { display: flex; justify-content: center; gap: 16px; margin-top: 26px; }
+    #share-toggle { width: 100%; margin-top: 24px; }
+    .dests { display: flex; justify-content: center; gap: 22px; margin-top: 20px; }
     .dest { background: none; border: 0; padding: 0; display: flex; flex-direction: column;
             align-items: center; gap: 7px; color: var(--bone-dim); font-size: 11px;
             font-family: inherit; cursor: pointer; }
@@ -217,7 +218,8 @@
                 </div>
                 <div class="card-handle" id="card-handle">@you</div>
                 <div class="card-foot">
-                  <div class="card-meta left engraved">Member<br><span id="card-no">—</span></div>
+                  <div class="card-meta left engraved">Member</div>
+                  <div class="card-meta engraved" id="card-no">—</div>
                 </div>
               </div>
             </div>
@@ -230,12 +232,10 @@
 
       <h1 id="done-handle">@you</h1>
       <p class="sub">is reserved for you.</p>
-      <p class="note">Spending is the art of knowing yourself.</p>
-      <div class="dests">
+      <button id="share-toggle">Share my card</button>
+      <div class="dests hidden" id="dests">
         <button class="dest primary" id="d-ig"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5.4"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></span><span class="lbl">Story</span></button>
-        <button class="dest" id="d-threads"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.6"/><path d="M15.6 12v1.4a2.2 2.2 0 0 0 4.4 0V12"/></svg></span><span class="lbl">Threads</span></button>
-        <button class="dest" id="d-msg"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5c0 4.1-4 7.5-9 7.5-1 0-2-.14-2.9-.4L4 20l1.3-3.1C3.9 15.5 3 13.6 3 11.5 3 7.4 7 4 12 4s9 3.4 9 7.5z"/></svg></span><span class="lbl">Messages</span></button>
-        <button class="dest" id="d-fb"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7h2.4l.5-3h-2.9V9.1c0-.9.3-1.6 1.7-1.6H16V4.8c-.3 0-1.2-.1-2.2-.1-2.2 0-3.8 1.4-3.8 3.9V11H7.6v3H10v7z"/></svg></span><span class="lbl">Facebook</span></button>
+        <button class="dest" id="d-save"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v10"/><path d="m8 10.5 4 4 4-4"/><path d="M5 19h14"/></svg></span><span class="lbl">Save my card</span></button>
         <button class="dest" id="d-copy"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10.5 13.5 13.5 10.5"/><path d="M8.3 12.2 6.4 14a3.4 3.4 0 0 0 4.8 4.8l1.9-1.9"/><path d="M15.7 11.8l1.9-1.9a3.4 3.4 0 0 0-4.8-4.8l-1.9 1.9"/></svg></span><span class="lbl">Copy link</span></button>
       </div>
     </section>
@@ -266,10 +266,10 @@
       almost: '快是你的了。',
       apple: '用 Apple 繼續', google: '用 Google 繼續',
       cancel: '取消',
-      story: '限時動態', msg: '訊息', copy: '複製連結',
+      story: '限時動態', save: '儲存卡片', copy: '複製連結', share: '分享我的卡片',
       haveSub: '已經是你的了。', haveNote: '保持專注，繼續成長。',
       haveSwitch: '換一個帳號',
-      isYours: '已為你保留。', slogan: '花錢，是一門認識自己的藝術。',
+      isYours: '已為你保留。',
       bad: '只能用 2–20 個 a–z、0–9、_。',
       taken: '這個名字已經有人用了，換一個？',
       failed: '預約失敗，再試一次？', checking: '檢查中…'
@@ -486,22 +486,18 @@
 
       ctx.save();
       ctx.shadowColor = 'rgba(255,255,255,.4)'; ctx.shadowOffsetY = 1; ctx.shadowBlur = 0;
-      ctx.fillStyle = '#55534d';
-      ctx.font = '600 ' + Math.round(cw * 0.024) + 'px ui-monospace, Menlo, monospace';
-      ctx.fillText('MEMBER', cx + pad, cy + ch - pad - cw * 0.042);
       ctx.fillStyle = '#45433e';
-      ctx.font = '600 ' + Math.round(cw * 0.030) + 'px ui-monospace, Menlo, monospace';
+      ctx.font = '600 ' + Math.round(cw * 0.026) + 'px ui-monospace, Menlo, monospace';
+      ctx.fillText('MEMBER', cx + pad, cy + ch - pad);
+      ctx.textAlign = 'right';
       ctx.fillText(reservationNo != null ? cardNo(reservationNo) : 'Reserved',
-                   cx + pad, cy + ch - pad);
+                   cx + cw - pad, cy + ch - pad);
       ctx.restore();
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#f4f1ea';
       ctx.font = '700 ' + Math.round(W * 0.085) + 'px -apple-system, "SF Pro Display", system-ui, sans-serif';
       ctx.fillText('@' + handle, W / 2, cy + ch + W * 0.19);
-      ctx.fillStyle = '#a8a49c';
-      ctx.font = '500 ' + Math.round(W * 0.036) + 'px -apple-system, system-ui, sans-serif';
-      ctx.fillText('Spending is the art of knowing yourself.', W / 2, cy + ch + W * 0.255);
       ctx.fillStyle = 'rgba(244,241,234,.62)';
       ctx.font = '600 ' + Math.round(W * 0.038) + 'px -apple-system, system-ui, sans-serif';
       ctx.fillText('withimoney.com', W / 2, H - W * 0.10);
@@ -531,14 +527,16 @@
       a.click();
       URL.revokeObjectURL(a.href);
     };
-    $('d-threads').onclick = () =>
-      open('https://www.threads.net/intent/post?text=' +
-           encodeURIComponent(shareText() + ' ' + shareLink()), '_blank');
-    $('d-msg').onclick = () =>
-      location.href = 'sms:?&body=' + encodeURIComponent(shareText() + ' ' + shareLink());
-    $('d-fb').onclick = () =>
-      open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareLink()),
-           '_blank', 'width=580,height=520');
+    $('share-toggle').onclick = () => $('dests').classList.toggle('hidden');
+    $('d-save').onclick = async () => {
+      const canvas = drawCard(myHandle());
+      const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'imoney-' + myHandle() + '.png';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    };
     $('d-copy').onclick = async () => {
       try { await navigator.clipboard.writeText(shareLink()); } catch { return; }
       const l = document.querySelector('#d-copy .lbl');
@@ -559,10 +557,10 @@
       $('google').lastChild.textContent = ' ' + T.google;
       set('#signout', T.cancel);
       set('#d-ig .lbl', T.story);
-      set('#d-msg .lbl', T.msg);
+      set('#d-save .lbl', T.save);
       set('#d-copy .lbl', T.copy);
+      set('#share-toggle', T.share);
       set('#step-done .sub', T.isYours);
-      set('#step-done .note', T.slogan);
       set('#have-sub', T.haveSub);
       set('#have-note', T.haveNote);
       set('#have-signout', T.haveSwitch);
