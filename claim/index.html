@@ -102,12 +102,14 @@
              --card-h: min(38vh, calc(87vw / 1.586)); }
       /* More breath around the card: below the logo, and below the card
          so the headline sits a step lower. */
-      .scene { margin: 26px 0 30px; }
-      /* The phone gets the PORTRAIT smoke, tall enough that its wisps
-         reach almost to the handle field's underside. */
+      .scene { margin: 44px 0 30px; }
+      /* The phone's smoke is a low bank rising FROM the screen's bottom
+         edge — quiet, anchored, dissolved well below the handle field. */
       body::after {
         background-image: url(/assets/smoke-v.jpg?v=1);
-        height: 52svh; bottom: -4%;
+        height: 34svh; bottom: 0; opacity: .17;
+        -webkit-mask-image: linear-gradient(to top, black 0%, black 28%, transparent 80%);
+        mask-image: linear-gradient(to top, black 0%, black 28%, transparent 80%);
       }
       /* Premium type whispers: the phone page steps everything down a
          size and lets the card carry the weight. */
