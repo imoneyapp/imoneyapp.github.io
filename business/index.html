@@ -13,6 +13,14 @@
     if (/^zh/i.test(navigator.language)) location.replace('zh/');
   </script>
   <style>
+    /* The orb in the lava pool: grained, dimmed, and sunk under an ink
+       veil so the page glows at the edges without ever fighting the form. */
+    body {
+      background:
+        linear-gradient(rgba(11,11,12,.72), rgba(11,11,12,.86)),
+        #0b0b0c url(/assets/forbusiness-bg.jpg?v=1) center / cover no-repeat;
+      background-blend-mode: normal;
+    }
     /* The form speaks Apple: quiet labels above grouped rounded fields,
        choices as pills you tap rather than menus you open, one bone
        button at the end. */
