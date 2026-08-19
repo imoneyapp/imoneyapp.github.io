@@ -35,15 +35,20 @@
       background: url(/assets/smoke.jpg?v=1) bottom center / cover no-repeat;
       /* Atmosphere, not a subject: barely-there, so the eye stays on the
          card and the field. */
-      opacity: .13; mix-blend-mode: screen;
+      --smoke-o: .13; opacity: var(--smoke-o); mix-blend-mode: screen;
       -webkit-mask-image: linear-gradient(to top, black 0%, black 30%, transparent 80%);
       mask-image: linear-gradient(to top, black 0%, black 30%, transparent 80%);
-      animation: smoke-rise 22s ease-in-out infinite alternate;
+      animation: smoke-rise 26s linear infinite;
       transform-origin: bottom center;
     }
+    /* One direction only: each breath RISES and dissolves at its top;
+       the next fades in low. The fades hide the loop's restart, so the
+       smoke never visibly sinks. */
     @keyframes smoke-rise {
-      from { transform: translateY(3%) scale(1); }
-      to   { transform: translateY(-4%) scale(1.05); }
+      0%   { transform: translateY(4%) scale(1); opacity: 0; }
+      20%  { opacity: var(--smoke-o); }
+      70%  { opacity: var(--smoke-o); }
+      100% { transform: translateY(-5%) scale(1.06); opacity: 0; }
     }
     @media (prefers-reduced-motion: reduce) { body::after { animation: none; } }
     /* One column, vertically centred between a pinned header and a pinned
@@ -116,7 +121,7 @@
       body { position: relative; }
       body::after {
         background-image: url(/assets/smoke-v.jpg?v=1);
-        position: absolute; height: 62svh; bottom: -4svh; opacity: .20;
+        position: absolute; height: 62svh; bottom: -4svh; --smoke-o: .20;
         -webkit-mask-image: linear-gradient(to top, black 0%, black 32%, transparent 88%);
         mask-image: linear-gradient(to top, black 0%, black 32%, transparent 88%);
       }
