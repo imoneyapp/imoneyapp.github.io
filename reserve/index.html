@@ -541,9 +541,22 @@
       const pad = cw * 0.062;
       if (logo.complete && logo.naturalWidth) {
         const lh = cw * 0.085, lw = lh * (logo.naturalWidth / logo.naturalHeight);
+        // Stepped downscale: one 7× jump smears the ink; halve toward the
+        // target and make the final placement a short hop — crisp mark.
+        let src = logo, sw = logo.naturalWidth, sh = logo.naturalHeight;
+        while (sh / 2 > lh) {
+          const c2 = document.createElement('canvas');
+          c2.width = Math.max(1, Math.round(sw / 2));
+          c2.height = Math.max(1, Math.round(sh / 2));
+          const c2x = c2.getContext('2d');
+          c2x.imageSmoothingEnabled = true;
+          c2x.drawImage(src, 0, 0, c2.width, c2.height);
+          src = c2; sw = c2.width; sh = c2.height;
+        }
         ctx.save();
         ctx.globalAlpha = 0.78;   // the engraving's ink, not printer black
-        ctx.drawImage(logo, cx + pad, cy + pad, lw, lh);
+        ctx.imageSmoothingEnabled = true;
+        ctx.drawImage(src, cx + pad, cy + pad, lw, lh);
         ctx.restore();
       }
       ctx.save();
