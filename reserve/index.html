@@ -320,7 +320,7 @@
       // uppercases it into the plate style.
       const d = new Date();
       $('card-date').textContent =
-        d.toLocaleDateString('en-US', { month: 'short' }) + '. ' + d.getFullYear();
+        d.toLocaleDateString('en-US', { month: 'short' }) + ' ' + d.getFullYear();
     }
 
     // handle + number in one call. my_handle_reservation() is left alone —
@@ -558,7 +558,7 @@
       ctx.font = '600 ' + Math.round(cw * 0.026) + 'px ui-monospace, Menlo, monospace';
       ctx.textAlign = 'right';
       const dd = new Date();
-      ctx.fillText((dd.toLocaleDateString('en-US', { month: 'short' }) + '. ' + dd.getFullYear())
+      ctx.fillText((dd.toLocaleDateString('en-US', { month: 'short' }) + ' ' + dd.getFullYear())
                    .toUpperCase(), cx + cw - pad, cy + pad + cw * 0.026);
       ctx.restore();
 
@@ -622,7 +622,11 @@
     // Instagram, Messages, Save Image, Copy — so the page doesn't repaint
     // it. The card PNG rides along; desktop without a sheet gets the file.
     const myHandle = () => $('card-handle').textContent.replace(/^@/, '');
-    const shareLink = () => 'https://withimoney.com/i/?u=' + myHandle();
+    // Pre-launch, the card invites people to RESERVE — the /i/ "add me"
+    // page is for the app era. Point at the site and say the line.
+    const shareLink = () => 'https://withimoney.com/';
+    const shareText = () => ZH ? '在 iMoney 預留你的 @名字'
+                               : 'Reserve @yourname on iMoney';
 
     $('share').onclick = async () => {
       try { await cursive.decode(); } catch {}
@@ -630,7 +634,7 @@
       const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
       const file = new File([blob], 'imoney-' + myHandle() + '.png', { type: 'image/png' });
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        try { await navigator.share({ files: [file], url: shareLink() }); return; } catch {}
+        try { await navigator.share({ files: [file], text: shareText(), url: shareLink() }); return; } catch {}
         return;
       }
       const a = document.createElement('a');
