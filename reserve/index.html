@@ -102,7 +102,9 @@
     /* NOT a percentage height. A % height against an indefinite parent makes
        the image contribute its INTRINSIC height (612px) to the flex row while
        painting small — which crushed the handle and footer to zero. */
-    .card-top img { height: clamp(22px, 8vw, 34px); width: auto; }
+    /* Same ink weight as the engraving — full black floated off the
+       metal and shouted over the handle. */
+    .card-top img { height: clamp(22px, 8vw, 34px); width: auto; opacity: .78; }
     .card-handle, .card-foot { flex: 0 0 auto; min-height: 0; }
     /* Corner text is styled ENTIRELY by card.css — the same .card-meta
        classes the claim card uses, so the two cards are one design. */
@@ -539,7 +541,10 @@
       const pad = cw * 0.062;
       if (logo.complete && logo.naturalWidth) {
         const lh = cw * 0.085, lw = lh * (logo.naturalWidth / logo.naturalHeight);
+        ctx.save();
+        ctx.globalAlpha = 0.78;   // the engraving's ink, not printer black
         ctx.drawImage(logo, cx + pad, cy + pad, lw, lh);
+        ctx.restore();
       }
       ctx.save();
       ctx.shadowColor = 'rgba(255,255,255,.4)'; ctx.shadowOffsetY = 1; ctx.shadowBlur = 0;
