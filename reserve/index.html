@@ -41,27 +41,28 @@
        the same way. Two nested wrappers because a single element can't
        run a bob and a spin on `transform` at once without them fighting:
        .float owns the vertical drift, .card owns the rotation. */
-    /* The turn, ported from the app's card: ONE JavaScript clock owns the
-       angle. Face visibility is a JS decision (no CSS animation sync to
-       drift), the back face counter-mirrors so it reads right, and the
-       thickness is real: metal sheets behind the card, offset in SCREEN
-       space by sin(angle) — invisible face-on, a solid milled side
-       edge-on. Two sides only: the engraving, and the mark. */
+    /* The turn: honest 3D this time. ONE preserve-3d turner owns the
+       rotation; the metal sheets are real planes spread along Z inside
+       it, so they can never slip or tilt against the card — edge-on they
+       fan into a milled side, face-on they hide behind the face. The
+       faces sit at ±Z with true backface culling: no swap, no mirror
+       hack, no pop at 90°. */
     .scene { width: 100%; margin-top: 30px; }
     .float { animation: bob 7s ease-in-out infinite; }
-    .stack { position: relative; width: 100%; aspect-ratio: 1.586; }
-    .layer { position: absolute; inset: 0; perspective: 1400px; }
-    .plane { position: absolute; inset: 0; border-radius: 22px;
-             will-change: transform; }
-    .sheet .plane {
+    .stack { position: relative; width: 100%; aspect-ratio: 1.586;
+             perspective: 1400px; }
+    .turn3d { position: absolute; inset: 0; transform-style: preserve-3d;
+              will-change: transform; }
+    .plane { position: absolute; inset: 0; border-radius: 22px; }
+    .sheet-pl {
       background: linear-gradient(180deg, #e2dfd9 0%, #a5a29c 55%, #5f5e5a 100%);
       border: 1px solid rgba(70,68,64,.9);
     }
-    .card { position: absolute; inset: 0; }
     @keyframes bob  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
     .face {
       position: absolute; inset: 0; border-radius: 22px; overflow: hidden;
+      -webkit-backface-visibility: hidden; backface-visibility: hidden;
       /* Same milled rim as the claim card: bright wall top/left, shaded
          wall bottom/right, dark outer ring for the side that turns away. */
       border: 1px solid rgba(70,68,64,.9);
@@ -72,12 +73,17 @@
                   inset -2.5px 0 1px -0.5px rgba(52,51,48,.6);
       background: linear-gradient(135deg, #e8e6e1 0%, #b9b7b2 30%, #d8d6d1 52%, #a7a5a1 76%, #6f6e6b 100%);
     }
-    /* Both faces sit on the same plane; JS decides which one exists.
-       Past 90° the plane shows its reverse, so the mark face wears a
-       counter-mirror to read the right way round. */
-    .face.back { display: none; align-items: center; justify-content: center; }
-    .card.showback .face.front { display: none; }
-    .card.showback .face.back { display: flex; transform: scaleX(-1); }
+    /* The card's two skins: front floats at +Z, back at -Z pre-turned
+       180° so it reads correctly when the rotation brings it around.
+       WebKit's backface culling is unreliable here (the back's mark
+       bleeds through the front as a ghost — the same bug card.css works
+       around), so JS shows one skin at a time; the swap lands at 90°,
+       when the card is a sliver and nothing can be seen changing. */
+    .face.front { transform: translateZ(4.2px); }
+    .face.back  { display: none; align-items: center; justify-content: center;
+                  transform: rotateY(180deg) translateZ(4.2px); }
+    .turn3d.showback .face.front { display: none; }
+    .turn3d.showback .face.back  { display: flex; }
     .face.back img { width: 34%; opacity: .55; }
     .face::after {                    /* the travelling light seam */
       content: ""; position: absolute; inset: -30%;
@@ -224,28 +230,26 @@
       <div class="scene">
         <div class="float">
           <div class="stack" id="cardstack">
-            <div class="layer sheet"><div class="plane"></div></div>
-            <div class="layer sheet"><div class="plane"></div></div>
-            <div class="layer sheet"><div class="plane"></div></div>
-            <div class="layer sheet"><div class="plane"></div></div>
-            <div class="layer cardlayer">
-              <div class="plane card" id="turncard">
-            <div class="face front">
-              <div class="card-inner">
-                <div class="card-top">
-                  <img src="../assets/logo-ink-star.png" alt="iMoney">
-                  <div class="card-meta engraved" id="card-date"></div>
-                </div>
-                <div class="card-handle" id="card-handle">@you</div>
-                <div class="card-foot">
-                  <div class="card-meta left engraved">Member</div>
-                  <div class="card-meta engraved" id="card-no">—</div>
+            <div class="turn3d" id="turncard">
+              <div class="plane sheet-pl" style="transform:translateZ(-3px)"></div>
+              <div class="plane sheet-pl" style="transform:translateZ(-1px)"></div>
+              <div class="plane sheet-pl" style="transform:translateZ(1px)"></div>
+              <div class="plane sheet-pl" style="transform:translateZ(3px)"></div>
+              <div class="face front">
+                <div class="card-inner">
+                  <div class="card-top">
+                    <img src="../assets/logo-ink-star.png" alt="iMoney">
+                    <div class="card-meta engraved" id="card-date"></div>
+                  </div>
+                  <div class="card-handle" id="card-handle">@you</div>
+                  <div class="card-foot">
+                    <div class="card-meta left engraved">Member</div>
+                    <div class="card-meta engraved" id="card-no">—</div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="face back">
-              <img src="../assets/logo-ink-star.png" alt="">
-            </div>
+              <div class="face back">
+                <img src="../assets/logo-ink-star.png" alt="">
               </div>
             </div>
           </div>
@@ -398,6 +402,10 @@
     // card shared from the web and one shared from the app are one artifact.
     const logo = new Image();
     logo.src = '../assets/logo-ink-star.png';
+    // The cursive iMoney for the save-photo title — the ink alone, lifted
+    // off its paper into a transparent PNG, so no plate ever prints.
+    const cursive = new Image();
+    cursive.src = '../assets/cursive-ink.png?v=1';
 
     function roundRect(ctx, x, y, w, h, r) {
       ctx.beginPath();
@@ -409,118 +417,53 @@
       ctx.closePath();
     }
 
+    /* The save photo, redesigned: gallery-white paper, the cursive
+       iMoney as the title, the handle wearing the dusk gradient, and one
+       line under it. Nothing else — the picture is the calm after the
+       spinning metal, not a copy of it. */
     function drawCard(handle) {
       const W = 1080, H = 1920;
       const cv = document.createElement('canvas');
       cv.width = W; cv.height = H;
       const ctx = cv.getContext('2d');
 
-      ctx.fillStyle = '#0b0b0c';
+      ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, W, H);
-      // Warm bloom behind the card, same as the app's story view.
-      const bloom = ctx.createRadialGradient(W/2, H*0.42, 0, W/2, H*0.42, W*0.9);
-      bloom.addColorStop(0, 'rgba(232,230,225,.22)');
-      bloom.addColorStop(1, 'rgba(232,230,225,0)');
-      ctx.fillStyle = bloom; ctx.fillRect(0, 0, W, H);
 
-      // The card, ID-1 proportions.
-      const cw = W * 0.82, ch = cw / 1.586;
-      const cx = (W - cw) / 2, cy = H * 0.30 - ch / 2;
-      ctx.save();
-      ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 60; ctx.shadowOffsetY = 30;
-      roundRect(ctx, cx, cy, cw, ch, cw * 0.055);
-      const face = ctx.createLinearGradient(cx, cy, cx + cw, cy + ch);
-      face.addColorStop(0, '#e8e6e1'); face.addColorStop(0.5, '#c9c7c2'); face.addColorStop(1, '#777672');
-      ctx.fillStyle = face; ctx.fill();
-      ctx.restore();
-
-      // Light seam across the face.
-      ctx.save();
-      roundRect(ctx, cx, cy, cw, ch, cw * 0.055); ctx.clip();
-      const seam = ctx.createLinearGradient(cx + cw * 0.15, cy, cx + cw * 0.75, cy + ch);
-      seam.addColorStop(0,   'rgba(255,255,255,0)');
-      seam.addColorStop(0.45,'rgba(255,255,255,.34)');
-      seam.addColorStop(0.6, 'rgba(255,255,255,.10)');
-      seam.addColorStop(1,   'rgba(255,255,255,0)');
-      ctx.fillStyle = seam; ctx.fillRect(cx, cy, cw, ch);
-
-      // Grain, so the saved card has the same tooth as the live one: a
-      // small noise tile, laid over the face at low alpha.
-      const gt = document.createElement('canvas');
-      gt.width = gt.height = 128;
-      const gc = gt.getContext('2d');
-      const gd = gc.createImageData(128, 128);
-      for (let i = 0; i < gd.data.length; i += 4) {
-        const v = 128 + (Math.random() - 0.5) * 255;
-        gd.data[i] = gd.data[i+1] = gd.data[i+2] = v; gd.data[i+3] = 255;
+      // Title: the cursive wordmark's bare ink.
+      if (cursive.complete && cursive.naturalWidth) {
+        const tw = W * 0.66, th = tw * cursive.naturalHeight / cursive.naturalWidth;
+        ctx.drawImage(cursive, (W - tw) / 2, H * 0.31 - th / 2, tw, th);
       }
-      gc.putImageData(gd, 0, 0);
-      ctx.save();
-      ctx.globalAlpha = 0.05; ctx.globalCompositeOperation = 'overlay';
-      ctx.fillStyle = ctx.createPattern(gt, 'repeat');
-      ctx.fillRect(cx, cy, cw, ch);
-      ctx.restore();
 
-      // The milled rim, matching the live card: a wall of light along the
-      // top-left edge falling to shadow at the bottom-right, stroked just
-      // inside the face, with a dark outer ring where the side turns away.
-      const rim = ctx.createLinearGradient(cx, cy, cx + cw * 0.4, cy + ch);
-      rim.addColorStop(0, 'rgba(255,255,255,.95)');
-      rim.addColorStop(0.5, 'rgba(255,255,255,.25)');
-      rim.addColorStop(1, 'rgba(42,41,38,.8)');
-      roundRect(ctx, cx + 2, cy + 2, cw - 4, ch - 4, cw * 0.055 - 2);
-      ctx.strokeStyle = rim; ctx.lineWidth = 4; ctx.stroke();
-      ctx.restore();
-      roundRect(ctx, cx, cy, cw, ch, cw * 0.055);
-      ctx.strokeStyle = 'rgba(70,68,64,.9)'; ctx.lineWidth = 2; ctx.stroke();
-
-      const pad = cw * 0.062;
-      if (logo.complete && logo.naturalWidth) {
-        const lh = cw * 0.085, lw = lh * (logo.naturalWidth / logo.naturalHeight);
-        ctx.drawImage(logo, cx + pad, cy + pad, lw, lh);
-      }
-      ctx.save();
-      ctx.shadowColor = 'rgba(255,255,255,.4)'; ctx.shadowOffsetY = 1; ctx.shadowBlur = 0;
-      ctx.fillStyle = '#4a4842';
-      ctx.font = '700 ' + Math.round(cw * 0.030) + 'px ui-monospace, Menlo, monospace';
-      ctx.textAlign = 'right';
-      const dd = new Date();
-      ctx.fillText((dd.toLocaleDateString('en-US', { month: 'short' }) + '. ' + dd.getFullYear())
-                   .toUpperCase(), cx + cw - pad, cy + pad + cw * 0.030);
-      ctx.restore();
-
-      ctx.textAlign = 'left';
-      /* Same cut as the live card: the depth is a gradient inside the
-         glyph (dark top wall, lighter floor) plus one hairline of light
-         on the bottom lip — never offset copies of the text. */
-      const hs = Math.round(cw * 0.125), hy = cy + ch * 0.58;
-      const cut = ctx.createLinearGradient(0, hy - hs * 0.72, 0, hy);
-      cut.addColorStop(0, '#34332f'); cut.addColorStop(0.38, '#413f3b');
-      cut.addColorStop(0.72, '#55534d'); cut.addColorStop(1, '#6b6862');
-      ctx.save();
-      ctx.shadowColor = 'rgba(255,255,255,.42)';
-      ctx.shadowOffsetY = Math.max(1, hs * 0.014); ctx.shadowBlur = 0;
-      ctx.fillStyle = cut;
-      ctx.font = '700 ' + hs + 'px -apple-system, "SF Pro Display", system-ui, sans-serif';
-      ctx.fillText('@' + handle, cx + pad, hy);
-      ctx.restore();
-
-      ctx.save();
-      ctx.shadowColor = 'rgba(255,255,255,.4)'; ctx.shadowOffsetY = 1; ctx.shadowBlur = 0;
-      ctx.fillStyle = '#45433e';
-      ctx.font = '600 ' + Math.round(cw * 0.026) + 'px ui-monospace, Menlo, monospace';
-      ctx.fillText('MEMBER', cx + pad, cy + ch - pad);
-      ctx.textAlign = 'right';
-      ctx.fillText(reservationNo != null ? cardNo(reservationNo) : 'Reserved',
-                   cx + cw - pad, cy + ch - pad);
-      ctx.restore();
-
+      // The handle, in the same dusk ramp as the site's headlines —
+      // shrunk to fit if the name runs long.
       ctx.textAlign = 'center';
-      ctx.fillStyle = '#f4f1ea';
-      ctx.font = '700 ' + Math.round(W * 0.085) + 'px -apple-system, "SF Pro Display", system-ui, sans-serif';
-      ctx.fillText('@' + handle, W / 2, cy + ch + W * 0.19);
-      ctx.fillStyle = 'rgba(244,241,234,.62)';
-      ctx.font = '600 ' + Math.round(W * 0.038) + 'px -apple-system, system-ui, sans-serif';
+      let hs = Math.round(W * 0.105);
+      const name = '@' + handle;
+      const fontFor = s => '700 ' + s + 'px -apple-system, "SF Pro Display", system-ui, sans-serif';
+      ctx.font = fontFor(hs);
+      while (ctx.measureText(name).width > W * 0.86 && hs > 40) {
+        hs -= 4; ctx.font = fontFor(hs);
+      }
+      const nw = ctx.measureText(name).width;
+      const hy = H * 0.53;
+      const dusk = ctx.createLinearGradient(W/2 - nw/2, hy - hs, W/2 + nw/2, hy);
+      dusk.addColorStop(0,    '#ff9357');
+      dusk.addColorStop(0.38, '#f6aed3');
+      dusk.addColorStop(0.72, '#5b9bd4');
+      dusk.addColorStop(1,    '#2f6ba6');
+      ctx.fillStyle = dusk;
+      ctx.fillText(name, W / 2, hy);
+
+      // One quiet line beneath.
+      ctx.fillStyle = '#8a8880';
+      ctx.font = '500 ' + Math.round(W * 0.036) + 'px -apple-system, system-ui, sans-serif';
+      ctx.fillText(T ? '很快見。裡面見。' : 'See you soon. And inside.',
+                   W / 2, hy + W * 0.085);
+
+      ctx.fillStyle = '#b8b5ad';
+      ctx.font = '600 ' + Math.round(W * 0.034) + 'px -apple-system, system-ui, sans-serif';
       ctx.fillText('withimoney.com', W / 2, H - W * 0.10);
 
       return cv;
@@ -533,6 +476,7 @@
     const shareLink = () => 'https://withimoney.com/i/?u=' + myHandle();
 
     $('share').onclick = async () => {
+      try { await cursive.decode(); } catch {}
       const canvas = drawCard(myHandle());
       const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
       const file = new File([blob], 'imoney-' + myHandle() + '.png', { type: 'image/png' });
@@ -566,16 +510,14 @@
 
     }
 
-    // The card's turn: one clock, owned here. 20°/s; a finger or pointer
-    // on the card holds it; the sheets fan out by sin(angle) so the side
-    // of the card is metal, not absence.
+    // The card's turn: one clock, one element. 20°/s on the preserve-3d
+    // turner; a finger or pointer on the card holds it. The 3D scene does
+    // the rest — faces cull themselves, sheets make the milled side.
     (() => {
       const stack = document.getElementById('cardstack');
-      const card = document.getElementById('turncard');
-      if (!stack || !card) return;
+      const turner = document.getElementById('turncard');
+      if (!stack || !turner) return;
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      const sheets = [...stack.querySelectorAll('.sheet .plane')];
-      const fracs = [1, 0.75, 0.5, 0.25];
       let angle = 0, last = null, held = false;
       stack.addEventListener('pointerenter', () => { held = true; });
       stack.addEventListener('pointerleave', () => { held = false; });
@@ -585,14 +527,8 @@
         if (last == null) last = now;
         if (!held) angle = (angle + (now - last) / 1000 * 20) % 360;
         last = now;
-        const rad = angle * Math.PI / 180;
-        const th = Math.sin(rad) * stack.clientWidth * 0.026;
-        const turn = 'rotateY(' + angle.toFixed(2) + 'deg)';
-        sheets.forEach((pl, i) => {
-          pl.style.transform = 'translateX(' + (-th * fracs[i]).toFixed(2) + 'px) ' + turn;
-        });
-        card.style.transform = turn;
-        card.classList.toggle('showback', Math.cos(rad) < 0);
+        turner.style.transform = 'rotateY(' + angle.toFixed(2) + 'deg)';
+        turner.classList.toggle('showback', Math.cos(angle * Math.PI / 180) < 0);
         requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
