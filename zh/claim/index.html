@@ -99,22 +99,26 @@
        headline, field — with nothing hidden and nothing to scroll. */
     @media (max-width: 640px) {
       main { justify-content: center; padding-top: 20px; padding-bottom: 16px; gap: 22px;
+             /* The hero KEEPS its full screen: without this, the tall
+                below-the-fold footer eats main's flex share and the card
+                crawls back up under the logo. */
+             min-height: 100svh;
              /* Air, not size: the card cedes a little width and height so
                 the stack stops touching itself. */
              --card-h: min(38vh, calc(87vw / 1.586)); }
       /* More breath around the card: below the logo, and below the card
          so the headline sits a step lower. */
       .scene { margin: 44px 0 30px; }
-      /* The phone's smoke is a low bank rising FROM the screen's bottom
-         edge — quiet, anchored, dissolved well below the handle field. */
+      /* The phone's smoke belongs to the PAGE now, not the viewport: a
+         deep bank anchored at the document's bottom, so the first screen
+         only catches its highest wisps and scrolling down is a descent
+         into it — thickest right where the copyright rests. */
+      body { position: relative; }
       body::after {
         background-image: url(/assets/smoke-v.jpg?v=1);
-        /* Dropped to the floor: the layer dives deep past the viewport so
-           only its last fading breath shows — a low band that starts right
-           where the domain bar ends and dies before the footer clears. */
-        height: 40svh; bottom: -15svh; opacity: .11;
-        -webkit-mask-image: linear-gradient(to top, black 0%, black 28%, transparent 80%);
-        mask-image: linear-gradient(to top, black 0%, black 28%, transparent 80%);
+        position: absolute; height: 62svh; bottom: -4svh; opacity: .20;
+        -webkit-mask-image: linear-gradient(to top, black 0%, black 32%, transparent 88%);
+        mask-image: linear-gradient(to top, black 0%, black 32%, transparent 88%);
       }
       /* Premium type whispers: the phone page steps everything down a
          size and lets the card carry the weight. */
@@ -214,11 +218,11 @@
     footer { flex: 0 0 auto;
              padding-top: clamp(30px, 6vh, 78px); padding-bottom: 30px;
              font-size: 13px; color: var(--bone-faint); }
-    /* Phones: the footer sinks toward the bottom edge — more open smoke
-       above it, links just clear of the domain bar. (Lives BELOW the base
+    /* Phones: the footer lives BELOW the fold — reaching the copyright
+       takes a short scroll through deepening smoke. (Lives BELOW the base
        rule: same specificity, so order is what makes it win.) */
     @media (max-width: 640px) {
-      footer { padding-top: 54px; padding-bottom: 14px; }
+      footer { padding-top: 42svh; padding-bottom: 14px; }
     }
     footer a { color: var(--bone-faint); text-decoration: none; }
     footer a:hover { color: var(--bone-dim); }
