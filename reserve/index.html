@@ -332,7 +332,21 @@
     // nobody types their own name twice.
     const wanted = new URLSearchParams(location.search).get('h');
 
+    // A quiet demo door: ?demo=ev (optionally &no=1) shows the finished
+    // card without any account — for recording the spin, IG stories,
+    // design checks. It only renders pixels; it can reserve nothing and
+    // reads nothing, so there is nothing here to abuse.
+    const demoName = (new URLSearchParams(location.search).get('demo') || '')
+                     .trim().toLowerCase().replace(/^@/, '');
+    const DEMO = /^[a-z0-9_]{2,20}$/.test(demoName);
+    if (DEMO) {
+      const dn = parseInt(new URLSearchParams(location.search).get('no'), 10);
+      renderCard(demoName, Number.isFinite(dn) ? dn : null);
+      show('done');
+    }
+
     async function refresh() {
+      if (DEMO) return;   // the demo card is the whole page
       const { data: { session } } = await sb.auth.getSession();
       if (!session) { show('in'); return; }
       // A real profile means this identity already IS an iMoney user — the
