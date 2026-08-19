@@ -439,53 +439,152 @@
       ctx.closePath();
     }
 
-    /* The save photo, redesigned: gallery-white paper, the cursive
-       iMoney as the title, the handle wearing the dusk gradient, and one
-       line under it. Nothing else — the picture is the calm after the
-       spinning metal, not a copy of it. */
+    /* The save photo: the done page itself, held still — the silver
+       card face-on with the dusk glancing off it, the handle in the
+       gradient beneath, "is reserved for you.", the domain. No button,
+       no chrome: the moment, framed. */
     function drawCard(handle) {
       const W = 1080, H = 1920;
       const cv = document.createElement('canvas');
       cv.width = W; cv.height = H;
       const ctx = cv.getContext('2d');
 
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = '#0b0b0c';
       ctx.fillRect(0, 0, W, H);
+      // Warm bloom behind the card, same as the page's night.
+      const bloom = ctx.createRadialGradient(W/2, H*0.40, 0, W/2, H*0.40, W*0.9);
+      bloom.addColorStop(0, 'rgba(232,230,225,.20)');
+      bloom.addColorStop(1, 'rgba(232,230,225,0)');
+      ctx.fillStyle = bloom; ctx.fillRect(0, 0, W, H);
 
-      // Title: the cursive wordmark's bare ink.
-      if (cursive.complete && cursive.naturalWidth) {
-        const tw = W * 0.66, th = tw * cursive.naturalHeight / cursive.naturalWidth;
-        ctx.drawImage(cursive, (W - tw) / 2, H * 0.31 - th / 2, tw, th);
-      }
-
-      // The handle, in the same dusk ramp as the site's headlines —
-      // shrunk to fit if the name runs long.
+      // The wordmark, quietly presiding.
       ctx.textAlign = 'center';
-      let hs = Math.round(W * 0.105);
+      ctx.fillStyle = 'rgba(244,241,234,.92)';
+      ctx.font = '600 ' + Math.round(W * 0.045) + 'px ui-rounded, -apple-system, "SF Pro Rounded", system-ui, sans-serif';
+      ctx.fillText('iMoney', W / 2, H * 0.115);
+
+      // The card, ID-1 proportions, face-on.
+      const cw = W * 0.82, ch = cw / 1.586;
+      const cx = (W - cw) / 2, cy = H * 0.34 - ch / 2;
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 60; ctx.shadowOffsetY = 26;
+      roundRect(ctx, cx, cy, cw, ch, cw * 0.055);
+      const face = ctx.createLinearGradient(cx, cy, cx + cw, cy + ch);
+      face.addColorStop(0, '#e8e6e1'); face.addColorStop(0.5, '#c9c7c2'); face.addColorStop(1, '#777672');
+      ctx.fillStyle = face; ctx.fill();
+      ctx.restore();
+
+      ctx.save();
+      roundRect(ctx, cx, cy, cw, ch, cw * 0.055); ctx.clip();
+      // Light seam across the face.
+      const seam = ctx.createLinearGradient(cx + cw * 0.15, cy, cx + cw * 0.75, cy + ch);
+      seam.addColorStop(0,   'rgba(255,255,255,0)');
+      seam.addColorStop(0.45,'rgba(255,255,255,.34)');
+      seam.addColorStop(0.6, 'rgba(255,255,255,.10)');
+      seam.addColorStop(1,   'rgba(255,255,255,0)');
+      ctx.fillStyle = seam; ctx.fillRect(cx, cy, cw, ch);
+
+      // The dusk, glancing off the metal — the arch: orange rim, white-pink
+      // glow, blue, a navy depth. Thin, so the silver stays silver.
+      const dusk = ctx.createLinearGradient(cx, cy, cx + cw * 0.9, cy + ch);
+      dusk.addColorStop(0,    'rgba(242,107,41,.14)');
+      dusk.addColorStop(0.28, 'rgba(255,230,230,.18)');
+      dusk.addColorStop(0.5,  'rgba(247,168,204,.16)');
+      dusk.addColorStop(0.75, 'rgba(56,133,204,.16)');
+      dusk.addColorStop(1,    'rgba(38,36,72,.14)');
+      ctx.fillStyle = dusk; ctx.fillRect(cx, cy, cw, ch);
+
+      // Grain, so the still has the same tooth as the live card.
+      const gt = document.createElement('canvas');
+      gt.width = gt.height = 128;
+      const gc = gt.getContext('2d');
+      const gd = gc.createImageData(128, 128);
+      for (let i2 = 0; i2 < gd.data.length; i2 += 4) {
+        const v = 128 + (Math.random() - 0.5) * 255;
+        gd.data[i2] = gd.data[i2+1] = gd.data[i2+2] = v; gd.data[i2+3] = 255;
+      }
+      gc.putImageData(gd, 0, 0);
+      ctx.save();
+      ctx.globalAlpha = 0.05; ctx.globalCompositeOperation = 'overlay';
+      ctx.fillStyle = ctx.createPattern(gt, 'repeat');
+      ctx.fillRect(cx, cy, cw, ch);
+      ctx.restore();
+
+      // The milled rim.
+      const rim = ctx.createLinearGradient(cx, cy, cx + cw * 0.4, cy + ch);
+      rim.addColorStop(0, 'rgba(255,255,255,.95)');
+      rim.addColorStop(0.5, 'rgba(255,255,255,.25)');
+      rim.addColorStop(1, 'rgba(42,41,38,.8)');
+      roundRect(ctx, cx + 2, cy + 2, cw - 4, ch - 4, cw * 0.055 - 2);
+      ctx.strokeStyle = rim; ctx.lineWidth = 4; ctx.stroke();
+      ctx.restore();
+      roundRect(ctx, cx, cy, cw, ch, cw * 0.055);
+      ctx.strokeStyle = 'rgba(70,68,64,.9)'; ctx.lineWidth = 2; ctx.stroke();
+
+      const pad = cw * 0.062;
+      if (logo.complete && logo.naturalWidth) {
+        const lh = cw * 0.085, lw = lh * (logo.naturalWidth / logo.naturalHeight);
+        ctx.drawImage(logo, cx + pad, cy + pad, lw, lh);
+      }
+      ctx.save();
+      ctx.shadowColor = 'rgba(255,255,255,.4)'; ctx.shadowOffsetY = 1; ctx.shadowBlur = 0;
+      ctx.fillStyle = '#4a4842';
+      ctx.font = '700 ' + Math.round(cw * 0.030) + 'px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'right';
+      const dd = new Date();
+      ctx.fillText((dd.toLocaleDateString('en-US', { month: 'short' }) + '. ' + dd.getFullYear())
+                   .toUpperCase(), cx + cw - pad, cy + pad + cw * 0.030);
+      ctx.restore();
+
+      ctx.textAlign = 'left';
+      /* Engraved handle: gradient inside the glyph, one hairline of light. */
+      const hs = Math.round(cw * 0.125), hy = cy + ch * 0.58;
+      const cut = ctx.createLinearGradient(0, hy - hs * 0.72, 0, hy);
+      cut.addColorStop(0, '#34332f'); cut.addColorStop(0.38, '#413f3b');
+      cut.addColorStop(0.72, '#55534d'); cut.addColorStop(1, '#6b6862');
+      ctx.save();
+      ctx.shadowColor = 'rgba(255,255,255,.42)';
+      ctx.shadowOffsetY = Math.max(1, hs * 0.014); ctx.shadowBlur = 0;
+      ctx.fillStyle = cut;
+      ctx.font = '700 ' + hs + 'px -apple-system, "SF Pro Display", system-ui, sans-serif';
+      ctx.fillText('@' + handle, cx + pad, hy);
+      ctx.restore();
+
+      ctx.save();
+      ctx.shadowColor = 'rgba(255,255,255,.4)'; ctx.shadowOffsetY = 1; ctx.shadowBlur = 0;
+      ctx.fillStyle = '#45433e';
+      ctx.font = '600 ' + Math.round(cw * 0.026) + 'px ui-monospace, Menlo, monospace';
+      ctx.fillText('MEMBER', cx + pad, cy + ch - pad);
+      ctx.textAlign = 'right';
+      ctx.fillText(reservationNo != null ? cardNo(reservationNo) : 'Reserved',
+                   cx + cw - pad, cy + ch - pad);
+      ctx.restore();
+
+      // Below the card: the handle in the dusk, then the line.
+      ctx.textAlign = 'center';
+      let hs2 = Math.round(W * 0.09);
       const name = '@' + handle;
-      const fontFor = s => '700 ' + s + 'px -apple-system, "SF Pro Display", system-ui, sans-serif';
-      ctx.font = fontFor(hs);
-      while (ctx.measureText(name).width > W * 0.86 && hs > 40) {
-        hs -= 4; ctx.font = fontFor(hs);
+      const fontFor = sz => '700 ' + sz + 'px -apple-system, "SF Pro Display", system-ui, sans-serif';
+      ctx.font = fontFor(hs2);
+      while (ctx.measureText(name).width > W * 0.84 && hs2 > 40) {
+        hs2 -= 4; ctx.font = fontFor(hs2);
       }
       const nw = ctx.measureText(name).width;
-      const hy = H * 0.53;
-      const dusk = ctx.createLinearGradient(W/2 - nw/2, hy - hs, W/2 + nw/2, hy);
-      dusk.addColorStop(0,    '#ff9357');
-      dusk.addColorStop(0.38, '#f6aed3');
-      dusk.addColorStop(0.72, '#5b9bd4');
-      dusk.addColorStop(1,    '#2f6ba6');
-      ctx.fillStyle = dusk;
-      ctx.fillText(name, W / 2, hy);
+      const ny = cy + ch + W * 0.17;
+      const ramp = ctx.createLinearGradient(W/2 - nw/2, ny - hs2, W/2 + nw/2, ny);
+      ramp.addColorStop(0,    '#ff9357');
+      ramp.addColorStop(0.38, '#f6aed3');
+      ramp.addColorStop(0.72, '#5b9bd4');
+      ramp.addColorStop(1,    '#2f6ba6');
+      ctx.fillStyle = ramp;
+      ctx.fillText(name, W / 2, ny);
 
-      // One quiet line beneath.
-      ctx.fillStyle = '#8a8880';
+      ctx.fillStyle = 'rgba(244,241,234,.62)';
       ctx.font = '500 ' + Math.round(W * 0.036) + 'px -apple-system, system-ui, sans-serif';
-      ctx.fillText(T ? '很快見。裡面見。' : 'See you soon. And inside.',
-                   W / 2, hy + W * 0.085);
+      ctx.fillText(T ? '已為你保留。' : 'is reserved for you.', W / 2, ny + W * 0.075);
 
-      ctx.fillStyle = '#b8b5ad';
-      ctx.font = '600 ' + Math.round(W * 0.034) + 'px -apple-system, system-ui, sans-serif';
+      ctx.fillStyle = 'rgba(244,241,234,.45)';
+      ctx.font = '600 ' + Math.round(W * 0.032) + 'px -apple-system, system-ui, sans-serif';
       ctx.fillText('withimoney.com', W / 2, H - W * 0.10);
 
       return cv;
