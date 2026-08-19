@@ -121,9 +121,23 @@
       body { position: relative; }
       body::after {
         background-image: url(/assets/smoke-v.jpg?v=1);
-        position: absolute; height: 62svh; bottom: -4svh; --smoke-o: .20;
+        position: absolute; height: 62svh; bottom: -4svh; --smoke-o: .22;
         -webkit-mask-image: linear-gradient(to top, black 0%, black 32%, transparent 88%);
         mask-image: linear-gradient(to top, black 0%, black 32%, transparent 88%);
+      }
+      /* First-glance wisps: a second, VIEWPORT-pinned whisper, because the
+         page-anchored bank's dense base lives a whole scroll below the
+         fold. This one rises from behind the domain bar on the first
+         screen; the bank still owns the descent. */
+      body::before {
+        content: ""; position: fixed; left: -8%; right: -8%;
+        bottom: -8svh; height: 50svh; pointer-events: none; z-index: 2;
+        background: url(/assets/smoke-v.jpg?v=1) bottom center / cover no-repeat;
+        --smoke-o: .15; opacity: var(--smoke-o); mix-blend-mode: screen;
+        -webkit-mask-image: linear-gradient(to top, black 0%, black 30%, transparent 84%);
+        mask-image: linear-gradient(to top, black 0%, black 30%, transparent 84%);
+        animation: smoke-rise 26s linear infinite;
+        animation-delay: -13s;
       }
       /* Premium type whispers: the phone page steps everything down a
          size and lets the card carry the weight. */
