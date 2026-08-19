@@ -332,18 +332,26 @@
     // nobody types their own name twice.
     const wanted = new URLSearchParams(location.search).get('h');
 
-    // A quiet demo door: ?demo=ev (optionally &no=1) shows the finished
-    // card without any account — for recording the spin, IG stories,
-    // design checks. It only renders pixels; it can reserve nothing and
-    // reads nothing, so there is nothing here to abuse.
-    const demoName = (new URLSearchParams(location.search).get('demo') || '')
-                     .trim().toLowerCase().replace(/^@/, '');
-    const DEMO = /^[a-z0-9_]{2,20}$/.test(demoName);
-    if (DEMO) {
-      const dn = parseInt(new URLSearchParams(location.search).get('no'), 10);
-      renderCard(demoName, Number.isFinite(dn) ? dn : null);
+    // A locked demo door: ?demo=ev&no=1&key=… shows the finished card
+    // without any account — for recording the spin, IG stories, design
+    // checks. The key never appears here, only its SHA-256, so reading
+    // this source doesn't open the door. Render-only either way: it can
+    // reserve nothing and reads nothing.
+    const DEMO_LOCK = 'f24521a5e8f55eb39ef3364917f9afd49c81430ceee0d5b11cf9b59306aade7e';
+    let DEMO = false;
+    const demoGate = async () => {
+      const qp = new URLSearchParams(location.search);
+      const name = (qp.get('demo') || '').trim().toLowerCase().replace(/^@/, '');
+      if (!/^[a-z0-9_]{2,20}$/.test(name)) return;
+      const buf = await crypto.subtle.digest('SHA-256',
+        new TextEncoder().encode(qp.get('key') || ''));
+      const hex = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+      if (hex !== DEMO_LOCK) return;
+      DEMO = true;
+      const dn = parseInt(qp.get('no'), 10);
+      renderCard(name, Number.isFinite(dn) ? dn : null);
       show('done');
-    }
+    };
 
     async function refresh() {
       if (DEMO) return;   // the demo card is the whole page
@@ -548,6 +556,9 @@
       requestAnimationFrame(tick);
     })();
 
+    // The demo gate settles first (module scripts may await at top level),
+    // so a keyed demo link never flashes the sign-in step underneath.
+    await demoGate();
     // Fires on load AND after the OAuth redirect drops the session in.
     sb.auth.onAuthStateChange(() => refresh());
     refresh();
