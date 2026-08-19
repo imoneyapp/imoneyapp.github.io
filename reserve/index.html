@@ -501,15 +501,6 @@
       seam.addColorStop(1,   'rgba(255,255,255,0)');
       ctx.fillStyle = seam; ctx.fillRect(cx, cy, cw, ch);
 
-      // The dusk, glancing off the metal — the arch's ramp, thin.
-      const dusk = ctx.createLinearGradient(cx, cy, cx + cw * 0.9, cy + ch);
-      dusk.addColorStop(0,    'rgba(242,107,41,.18)');
-      dusk.addColorStop(0.28, 'rgba(255,230,230,.22)');
-      dusk.addColorStop(0.5,  'rgba(247,168,204,.20)');
-      dusk.addColorStop(0.75, 'rgba(56,133,204,.20)');
-      dusk.addColorStop(1,    'rgba(38,36,72,.18)');
-      ctx.fillStyle = dusk; ctx.fillRect(cx, cy, cw, ch);
-
       // Grain — the same tooth as the live card.
       const gt = document.createElement('canvas');
       gt.width = gt.height = 128;
@@ -561,12 +552,14 @@
       }
       ctx.save();
       ctx.shadowColor = 'rgba(255,255,255,.4)'; ctx.shadowOffsetY = 1; ctx.shadowBlur = 0;
-      ctx.fillStyle = '#4a4842';
-      ctx.font = '700 ' + Math.round(cw * 0.030) + 'px ui-monospace, Menlo, monospace';
+      // Identical engraving to the NO. in the opposite corner: same size,
+      // same weight, same ink.
+      ctx.fillStyle = '#45433e';
+      ctx.font = '600 ' + Math.round(cw * 0.026) + 'px ui-monospace, Menlo, monospace';
       ctx.textAlign = 'right';
       const dd = new Date();
       ctx.fillText((dd.toLocaleDateString('en-US', { month: 'short' }) + '. ' + dd.getFullYear())
-                   .toUpperCase(), cx + cw - pad, cy + pad + cw * 0.030);
+                   .toUpperCase(), cx + cw - pad, cy + pad + cw * 0.026);
       ctx.restore();
 
       ctx.textAlign = 'left';
