@@ -103,8 +103,8 @@
 
     @media (prefers-reduced-motion: reduce) { .cosmos-mark { animation: none; } }
 
-    /* The foot of the page: what iMoney is, then where the legal lives.
-       Both are quiet — a reviewer needs to find them, the planet still
+    /* The legal line, and only that: a reviewer has to be able to reach the
+       privacy policy from the front door. Dim enough that the planet still
        owns the frame. */
     .cosmos-foot {
       /* Under the mark, not under the middle of the frame: dead-centre puts
@@ -112,26 +112,15 @@
          27vw column as .cosmos-inner, so it reads as one lockup. */
       position: absolute; left: 27vw; transform: translateX(-50%);
       bottom: calc(22px + env(safe-area-inset-bottom));
-      display: flex; flex-direction: column; align-items: center; gap: 9px;
-      font-size: 12px; letter-spacing: .1px; text-align: center;
+      display: flex; gap: 15px; white-space: nowrap;
+      font-size: 12px; letter-spacing: .1px;
     }
-    /* The line wraps on a narrow phone rather than running off the edge.
-       Between ~700 and ~1100px the planet's limb crosses this column, so
-       both rows carry a shadow: invisible against black, and the only
-       thing keeping 38% bone readable over the lit edge. */
-    .cosmos-say { margin: 0; color: var(--bone); opacity: .38;
-                  /* width, not max-width: align-items:center shrink-to-fits
-                     the box, so max-width alone left it at 188px and broke
-                     the second sentence in half. */
-                  width: min(86vw, 360px); line-height: 1.5; }
-    /* One line on a desktop, two on a phone — and the break lands between
-       the sentences, never mid-thought with "Addictive." stranded alone. */
-    .cosmos-say span { display: inline-block; }
-    .cosmos-say, .cosmos-links a { text-shadow: 0 1px 4px rgba(0,0,0,.7); }
-    .cosmos-links { display: flex; gap: 15px; white-space: nowrap; }
-    .cosmos-links a { color: var(--bone); opacity: .38; text-decoration: none;
-                      transition: opacity .25s; }
-    .cosmos-links a:hover { opacity: .85; }
+    .cosmos-foot a { color: var(--bone); opacity: .38; text-decoration: none;
+                     transition: opacity .25s;
+                     /* Between ~700 and ~1100px the planet's limb crosses this
+                        column. Invisible on black, readable over the lit edge. */
+                     text-shadow: 0 1px 4px rgba(0,0,0,.7); }
+    .cosmos-foot a:hover { opacity: .85; }
     /* Must come AFTER the base rule: same specificity, so source order is
        the only thing deciding it. Up in the other 700px block, .cosmos-foot
        kept the 27vw column and ran off the left edge of a phone. */
@@ -148,14 +137,11 @@
       </button>
       <a class="cosmos-cta" href="/zh/claim/"><span class="cta-text">開放預留 @使用者名稱</span><span class="cta-enter" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v5a2 2 0 0 1-2 2H3.5"/><path d="M6 7 3 10l3 3"/></svg></span></a>
     </div>
-    <div class="cosmos-foot">
-      <p class="cosmos-say"><span>一款普通的記帳 App。</span><span>極簡。社交。莫名上癮。</span></p>
-      <nav class="cosmos-links" aria-label="法律資訊">
-        <a href="/privacy/zh/">隱私權政策</a>
-        <a href="/terms/zh/">服務條款</a>
-        <a href="/support/zh/">支援</a>
-      </nav>
-    </div>
+    <nav class="cosmos-foot" aria-label="法律資訊">
+      <a href="/privacy/zh/">隱私權政策</a>
+      <a href="/terms/zh/">服務條款</a>
+      <a href="/support/zh/">支援</a>
+    </nav>
   </section>
 
   <script>
