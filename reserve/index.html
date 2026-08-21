@@ -152,6 +152,24 @@
              color: var(--bone); border: 1px solid var(--hairline); }
     .oauth.primary { background: var(--bone); color: var(--ink); border-color: transparent; }
     .oauth svg { width: 18px; height: 18px; flex: 0 0 auto; }
+    /* These had no feedback at all — no hover, no press, and the global
+       tap-highlight reset removes the phone's default too, so a tap looked
+       like nothing happened right at the moment of committing an account.
+       Same ladder the homepage's enter key uses: one step on hover, one
+       more on press, plus a hair of scale so touch gets it as well. */
+    .oauth { transition: background .18s, border-color .18s, transform .12s; }
+    .oauth:active { transform: scale(.985); }
+    .oauth:active { background: #232325; }
+    .oauth.primary:active { background: #d8d4cc; }
+    /* Hover only where a pointer really hovers: on a phone :hover sticks
+       after the tap and the button stays lit until you touch elsewhere. */
+    @media (hover: hover) {
+      .oauth:hover { background: #1d1d1f; border-color: rgba(244,241,234,.22); }
+      .oauth.primary:hover { background: #e6e2da; border-color: transparent; }
+    }
+    /* Keyboard users get a ring the mouse never sees. Without this the only
+       focus cue was the UA default, which is invisible on the bone button. */
+    .oauth:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
     .note { font-size: 13px; color: var(--bone-faint); margin-top: 14px; }
     /* The consent line: quieter than .note, and never louder than the
        buttons it sits under — but present at the moment of sign-in, which
