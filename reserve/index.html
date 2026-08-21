@@ -153,6 +153,13 @@
     .oauth.primary { background: var(--bone); color: var(--ink); border-color: transparent; }
     .oauth svg { width: 18px; height: 18px; flex: 0 0 auto; }
     .note { font-size: 13px; color: var(--bone-faint); margin-top: 14px; }
+    /* The consent line: quieter than .note, and never louder than the
+       buttons it sits under — but present at the moment of sign-in, which
+       is where Apple and Google both expect to find it. */
+    .consent { font-size: 12px; line-height: 1.5; color: var(--bone-faint);
+               margin: 18px auto 0; max-width: 300px; }
+    .consent a { color: var(--bone-dim); text-decoration: underline;
+                 text-underline-offset: 2px; }
     /* The name in the title wears the planet, like the done page. */
     #pick-handle {
       background: linear-gradient(104deg,
@@ -211,6 +218,8 @@
         </svg>
         Continue with Google
       </button>
+      <p class="consent" id="consent">By continuing you agree to our
+        <a href="/terms/">Terms</a> and <a href="/privacy/">Privacy Policy</a>.</p>
     </section>
 
     <!-- 2. Signed in, choosing -->
@@ -295,7 +304,9 @@
       isYours: '已為你保留。',
       bad: '只能用 2–20 個 a–z、0–9、_。',
       taken: '這個名字已經有人用了，換一個？',
-      failed: '預約失敗，再試一次？', checking: '檢查中…'
+      failed: '預約失敗，再試一次？', checking: '檢查中…',
+      consent: '繼續即表示你同意我們的<a href="/terms/zh/">服務條款</a>'
+             + '與<a href="/privacy/zh/">隱私權政策</a>。'
     } : null;
 
     const $ = id => document.getElementById(id);
@@ -660,6 +671,7 @@
       set('#have-sub', T.haveSub);
       set('#have-note', T.haveNote);
       set('#have-signout', T.haveSwitch);
+      $('consent').innerHTML = T.consent;
 
     }
 

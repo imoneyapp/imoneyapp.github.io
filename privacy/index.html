@@ -17,7 +17,7 @@
 <main>
   <header class="site"><a href="/">iMoney</a></header>
   <h1>Privacy Policy</h1>
-  <p class="updated">Last updated: August 17, 2026</p>
+  <p class="updated">Last updated: August 21, 2026</p>
 
   <p class="lede">Anything you'd rather not share, <strong>iMoney</strong>
   never asks for. What it hopes to give you is an honest look at your own
@@ -46,7 +46,7 @@
 
     <details>
       <summary>2. What we collect</summary>
-      <p>Only what you give the app directly:</p>
+      <p>Only what you give the app or the website directly:</p>
       <ul>
         <li><strong>Name + email</strong> — from Apple or Google sign-in</li>
         <li><strong>Transactions</strong> — amount, currency, category, date, payment method</li>
@@ -108,7 +108,77 @@
     </details>
 
     <details>
-      <summary>6. Where it's stored, how it's secured</summary>
+      <summary>6. Sign in with Apple and Google</summary>
+      <p>iMoney lets you sign in with Apple or Google instead of keeping a
+      password with us. We never see, receive, or store your Apple or Google
+      password — the sign-in happens on their pages, and they hand us back a
+      token, not a credential.</p>
+
+      <p><strong>What Google gives us.</strong> When you tap &ldquo;Continue with
+      Google&rdquo;, iMoney requests three basic, non-sensitive permissions —
+      <strong>openid</strong>, <strong>email</strong> and <strong>profile</strong>
+      — and receives only:</p>
+      <ul>
+        <li>Your <strong>email address</strong>, and whether Google has verified it</li>
+        <li>Your <strong>name</strong>, as it appears on your Google profile</li>
+        <li>Your <strong>profile picture</strong></li>
+        <li>Your <strong>Google account ID</strong> — a number that lets us recognise you next time you sign in</li>
+      </ul>
+      <p>iMoney does <strong>not</strong> request, and cannot access, your Gmail,
+      Google Drive, Contacts, Calendar, Photos, or any other Google service.</p>
+
+      <p><strong>What Apple gives us.</strong> The same three things: your name,
+      your email address, and an Apple user identifier. If you choose Apple&rsquo;s
+      <strong>Hide My Email</strong>, we receive a private relay address instead
+      of your real one — iMoney works perfectly that way, and we never try to
+      resolve it.</p>
+
+      <p><strong>What we do with it.</strong> Your email address and account
+      identifier are what let you sign back into the same account. Your name and
+      picture pre-fill your iMoney display name and avatar, and you can change or
+      remove both at any time. That is the whole use. Sign-in data is never used
+      for advertising, never sold, and never shared beyond the sub-processors
+      listed in section 5.</p>
+
+      <p><strong>Where it&rsquo;s stored.</strong> In our Supabase database,
+      alongside the rest of your account, under the same encryption and
+      row-level security described in section 8.</p>
+
+      <p><strong>Limited Use.</strong> iMoney&rsquo;s use and transfer of
+      information received from Google APIs to any other app will adhere to the
+      <a href="https://developers.google.com/terms/api-services-user-data-policy">Google
+      API Services User Data Policy</a>, including the Limited Use requirements.</p>
+
+      <p><strong>Disconnecting.</strong> You can revoke iMoney&rsquo;s access to
+      your Google account at any time at
+      <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a>,
+      or to your Apple account at iPhone Settings &rarr; your name &rarr; Sign in
+      with Apple. Revoking access stops future sign-ins, but it does not delete
+      your iMoney account or its data — for that, use Settings &rarr; Delete
+      account, or email us at <strong>upappco@gmail.com</strong>.</p>
+    </details>
+
+    <details>
+      <summary>7. The website (withimoney.com)</summary>
+      <p>Before iMoney launches, you can reserve an <strong>@handle</strong> on
+      our website. That flow collects:</p>
+      <ul>
+        <li>Everything in section 6, from the Apple or Google sign-in you use</li>
+        <li>The <strong>@handle</strong> you choose</li>
+        <li>Your <strong>reservation number</strong> and the date you reserved</li>
+      </ul>
+      <p>Your <strong>@handle</strong> and <strong>avatar</strong> are public by
+      design — that is what a handle is for, and it is how friends will find you.
+      Your email address is never shown to other users.</p>
+      <p>The website runs <strong>no advertising, no analytics, and no
+      third-party tracking</strong> of any kind. The only thing it keeps in your
+      browser is the session that remembers you&rsquo;re signed in.</p>
+      <p>To release a handle you&rsquo;ve reserved and delete the account behind
+      it, email <strong>upappco@gmail.com</strong>.</p>
+    </details>
+
+    <details>
+      <summary>8. Where it's stored, how it's secured</summary>
       <ul>
         <li>Data is <strong>encrypted in transit</strong> (HTTPS / TLS for every request) and <strong>encrypted at rest</strong> by the underlying storage.</li>
         <li><strong>Row-level security</strong> is enforced in the database: a user can only read their own profile and their own transactions. Friend-graph rows are visible to both ends of the friendship, by design.</li>
@@ -116,7 +186,7 @@
     </details>
 
     <details>
-      <summary>7. What friends can see</summary>
+      <summary>9. What friends can see</summary>
       <p>The only place data flows between iMoney users is the <strong>friend
       graph</strong>:</p>
       <ul>
@@ -128,7 +198,7 @@
     </details>
 
     <details>
-      <summary>8. Purchases</summary>
+      <summary>10. Purchases</summary>
       <p>iMoney comes in a free and a paid (<strong>iMoney Pro</strong>) version.
       Subscribe through Apple as it suits you, and manage or cancel anytime in
       iPhone Settings → your name → Subscriptions. Payment is handled by Apple —
@@ -136,7 +206,7 @@
     </details>
 
     <details>
-      <summary>9. How long we keep your data</summary>
+      <summary>11. How long we keep your data</summary>
       <ul>
         <li><strong>Active accounts</strong>: data is kept as long as your account exists.</li>
         <li><strong>Deleted accounts</strong>: when you tap Settings → Delete account, we immediately remove your profile, transactions, friends, and budgets from the live database. <strong>Encrypted backups may take up to 30 days to roll off</strong> — after which everything is gone for good.</li>
@@ -144,7 +214,7 @@
     </details>
 
     <details>
-      <summary>10. Your rights</summary>
+      <summary>12. Your rights</summary>
       <ul>
         <li><strong>Access</strong> — everything iMoney knows about you is already visible in the app.</li>
         <li><strong>Correct</strong> — edit any field directly in the app.</li>
@@ -156,13 +226,13 @@
     </details>
 
     <details>
-      <summary>11. Children</summary>
+      <summary>13. Children</summary>
       <p>iMoney is intended for ages <strong>13 and up</strong>. We don't
       knowingly collect data from children under 13.</p>
     </details>
 
     <details>
-      <summary>12. Changes to this policy</summary>
+      <summary>14. Changes to this policy</summary>
       <p>When we materially change this policy, we'll bump the "Last updated"
       date at the top and — for changes that affect what data we collect or who
       we share it with — surface an in-app notice the next time you open the
@@ -170,13 +240,13 @@
     </details>
 
     <details>
-      <summary>13. Contact</summary>
+      <summary>15. Contact</summary>
       <p>Questions, deletion requests, GDPR / CCPA requests, anything else:
       <strong>upappco@gmail.com</strong>. We respond within 30 days.</p>
     </details>
   </div>
 
-  <footer><a href="../privacy/">Privacy</a> · <a href="../support/">Support</a><br>Copyright © 2026 iMoney. All rights reserved.</footer>
+  <footer><a href="../privacy/">Privacy</a> · <a href="../terms/">Terms</a> · <a href="../support/">Support</a><br>Copyright © 2026 iMoney. All rights reserved.</footer>
 </main>
 </body>
 </html>

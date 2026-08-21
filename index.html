@@ -92,6 +92,7 @@
     @media (max-width: 700px) {
       .cosmos { background: #000 url(/assets/planetfull.jpg) center / cover no-repeat; }
       .cosmos-inner { left: 50%; transform: translate(-50%, -50%); }
+      .cosmos-foot { left: 50%; }
     }
     /* On a phone the words are a title, not a button: only the enter key
        takes you in. The anchor goes inert and the key alone stays live —
@@ -105,6 +106,22 @@
     }
 
     @media (prefers-reduced-motion: reduce) { .cosmos-mark { animation: none; } }
+
+    /* The legal line. Apple, Google and any reviewer looks for it at the
+       front door, so it lives on the page — pinned to the bottom edge and
+       dim enough that the planet still owns the frame. */
+    .cosmos-foot {
+      /* Under the mark, not under the middle of the frame: dead-centre puts
+         the links on the planet's lit limb, where 38% bone is unreadable.
+         Same 27vw column as .cosmos-inner, so it reads as one lockup. */
+      position: absolute; left: 27vw; transform: translateX(-50%);
+      bottom: calc(22px + env(safe-area-inset-bottom));
+      display: flex; gap: 15px; white-space: nowrap;
+      font-size: 12px; letter-spacing: .1px;
+    }
+    .cosmos-foot a { color: var(--bone); opacity: .38; text-decoration: none;
+                     transition: opacity .25s; }
+    .cosmos-foot a:hover { opacity: .85; }
   </style>
 </head>
 <body>
@@ -117,6 +134,11 @@
       </button>
       <a class="cosmos-cta" href="/claim/"><span class="cta-text">Reserve @yourname</span><span class="cta-enter" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v5a2 2 0 0 1-2 2H3.5"/><path d="M6 7 3 10l3 3"/></svg></span></a>
     </div>
+    <nav class="cosmos-foot" aria-label="Legal">
+      <a href="/privacy/">Privacy</a>
+      <a href="/terms/">Terms</a>
+      <a href="/support/">Support</a>
+    </nav>
   </section>
 
   <script>
