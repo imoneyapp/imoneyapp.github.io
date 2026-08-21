@@ -158,9 +158,12 @@
        Same ladder the homepage's enter key uses: one step on hover, one
        more on press, plus a hair of scale so touch gets it as well. */
     .oauth { transition: background .18s, border-color .18s, transform .12s; }
-    .oauth:active { transform: scale(.985); }
-    .oauth:active { background: #232325; }
-    .oauth.primary:active { background: #d8d4cc; }
+    /* A tap can be shorter than the transition, so the press lands with no
+       duration and only eases on release. Without this the state fades in
+       just as the finger lifts and reads as nothing at all. */
+    .oauth:active { transition-duration: 0s; transform: scale(.97); }
+    .oauth:active { background: #2c2c30; border-color: rgba(244,241,234,.28); }
+    .oauth.primary:active { background: #cbc7bf; }
     /* Hover only where a pointer really hovers: on a phone :hover sticks
        after the tap and the button stays lit until you touch elsewhere. */
     @media (hover: hover) {
@@ -326,6 +329,12 @@
       consent: '繼續即表示你同意我們的<a href="/terms/zh/">服務條款</a>'
              + '與<a href="/privacy/zh/">隱私權政策</a>。'
     } : null;
+
+    // iOS Safari refuses to apply :active on tap unless the document has a
+    // touch listener bound — .onclick does not qualify. An empty passive
+    // one costs nothing and is the difference between the press state
+    // working and the button looking dead on every iPhone.
+    document.addEventListener('touchstart', () => {}, { passive: true });
 
     const $ = id => document.getElementById(id);
     const show = name => {
