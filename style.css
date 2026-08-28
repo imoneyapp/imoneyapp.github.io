@@ -195,17 +195,53 @@ body.statement h1 {
   font-size: clamp(44px, 12vw, 92px);
   letter-spacing: -2px;
   margin: 0;
+  text-shadow: 0 2px 40px rgba(0,0,0,.5);
 }
 /* The wordmark IS the way home — a separate header link next to it made the
    page say "iMoney" twice, which is the one thing a one-word page can't do. */
 /* Links on this site wear a gold underline; the wordmark must not. */
 body.statement h1 a { color: inherit; text-decoration: none; border-bottom: 0; }
 body.statement p.statement {
-  color: var(--bone-dim);
-  font-size: clamp(17px, 4.6vw, 22px);
-  line-height: 1.6;
-  margin: 18px 0 0;
-  max-width: 22ch;
+  color: var(--bone);
+  /* ONE line, always. Sized in vw rather than px so the sentence scales with
+     the viewport instead of wrapping on a narrow phone — a line that breaks
+     after "your" turns a statement into a paragraph. */
+  white-space: nowrap;
+  font-size: min(4.6vw, 26px);
+  line-height: 1.5;
+  margin: 20px 0 0;
+  text-shadow: 0 1px 24px rgba(0,0,0,.55);
 }
 /* The footer sits at the edge rather than in the centred stack. */
 body.statement footer { position: absolute; bottom: 0; left: 0; right: 0; }
+
+/* The statement page's photograph, veiled so type stays the subject. Same
+   recipe as the business page: a dark gradient over the image rather than a
+   flat overlay, so the corners keep some of the picture. */
+body.statement {
+  background:
+    /* Light veil, and lighter still across the middle: the photograph is a
+       dark stage with one warm glow, and a flat scrim just turned the whole
+       thing black. The type sits over the glow, so it carries a shadow of its
+       own rather than asking the picture to dim for it. */
+    linear-gradient(rgba(11,11,12,.80), rgba(11,11,12,.58) 46%, rgba(11,11,12,.88)),
+    #0b0b0c url(/assets/about.jpg?v=2) center / cover no-repeat;
+  background-attachment: fixed;
+}
+/* Film grain over the whole page. An inline SVG turbulence rather than an
+   image file: it costs no request, tiles seamlessly, and can't 404. Fixed
+   position so it doesn't scroll against the photograph underneath. */
+body.statement::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .30;
+  mix-blend-mode: overlay;
+  background-size: 200px 200px;
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>\
+<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/>\
+<feColorMatrix type='saturate' values='0'/></filter>\
+<rect width='200' height='200' filter='url(%23n)' opacity='0.55'/></svg>");
+}
