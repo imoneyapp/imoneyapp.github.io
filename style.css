@@ -192,42 +192,82 @@ body.statement main {
   text-align: center;
 }
 body.statement h1 {
-  font-size: clamp(44px, 12vw, 92px);
-  letter-spacing: -2px;
+  /* Much smaller, and capped early. The wordmark was sized like a poster,
+     which reads as shouting on a desktop viewport where there's nothing else
+     on the page to balance it. */
+  font-size: clamp(30px, 6vw, 46px);
+  letter-spacing: -1.2px;
   margin: 0;
-  text-shadow: 0 2px 40px rgba(0,0,0,.5);
+  text-shadow: 0 2px 30px rgba(0,0,0,.5);
 }
 /* The wordmark IS the way home — a separate header link next to it made the
    page say "iMoney" twice, which is the one thing a one-word page can't do. */
 /* Links on this site wear a gold underline; the wordmark must not. */
 body.statement h1 a { color: inherit; text-decoration: none; border-bottom: 0; }
 body.statement p.statement {
-  color: var(--bone);
-  /* ONE line, always. Sized in vw rather than px so the sentence scales with
-     the viewport instead of wrapping on a narrow phone — a line that breaks
-     after "your" turns a statement into a paragraph. */
+  color: var(--bone-dim);
+  /* ONE line, always. Sized in vw so it scales with the viewport rather than
+     wrapping on a narrow phone — a line that breaks after "your" turns a
+     statement into a paragraph. Capped small: the sentence is the quiet half
+     of the pair, and letting it grow with the screen made it compete. */
   white-space: nowrap;
-  font-size: min(4.6vw, 26px);
+  font-size: min(3.9vw, 16px);
+  letter-spacing: .2px;
   line-height: 1.5;
-  margin: 20px 0 0;
-  text-shadow: 0 1px 24px rgba(0,0,0,.55);
+  margin: 14px 0 0;
+  text-shadow: 0 1px 20px rgba(0,0,0,.6);
 }
 /* The footer sits at the edge rather than in the centred stack. */
 body.statement footer { position: absolute; bottom: 0; left: 0; right: 0; }
 
-/* The statement page's photograph, veiled so type stays the subject. Same
-   recipe as the business page: a dark gradient over the image rather than a
-   flat overlay, so the corners keep some of the picture. */
-body.statement {
-  background:
-    /* Light veil, and lighter still across the middle: the photograph is a
-       dark stage with one warm glow, and a flat scrim just turned the whole
-       thing black. The type sits over the glow, so it carries a shadow of its
-       own rather than asking the picture to dim for it. */
-    linear-gradient(rgba(11,11,12,.80), rgba(11,11,12,.58) 46%, rgba(11,11,12,.88)),
-    #0b0b0c url(/assets/about.jpg?v=2) center / cover no-repeat;
-  background-attachment: fixed;
+/* The statement page's photograph.
+   
+   Deliberately blurred, not accidentally soft. The source is 736x489, so any
+   full-bleed use is an upscale — at desktop width it read as a JPEG someone
+   forgot to replace. Blurring it hard turns the same pixels into what they
+   were always standing in for: warm stage light behind the wordmark. A
+   viewer reads intentional bokeh as a choice and a 2x upscale as a mistake,
+   and the pixels are identical.
+
+   Three fixed layers, bottom to top: the blurred image, a vignette that holds
+   the light in the middle and drops the corners to ink, then grain. */
+body.statement { background: #0b0b0c; }
+body.statement::before {
+  content: "";
+  position: fixed;
+  /* Over-inset and scaled so the blur never pulls the frame's own edge into
+     view as a soft grey band. */
+  inset: -8%;
+  z-index: -2;
+  background: url(/assets/about.jpg?v=3) center / cover no-repeat;
+  filter: blur(30px) saturate(.92);
+  transform: scale(1.08);
+  opacity: .72;
 }
+body.statement main::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(105% 70% at 50% 50%,
+                              rgba(11,11,12,.38) 0%,
+                              rgba(11,11,12,.74) 42%,
+                              rgba(11,11,12,.97) 76%);
+}
+/* A phone is much taller than the picture is wide, so `cover` crops hard and
+   the glow ends up filling most of the screen. Pull it in on narrow viewports
+   so the light stays a halo behind the type rather than a wash across it. */
+@media (max-width: 700px) {
+  body.statement::before { opacity: .58; }
+  body.statement main::before {
+    background: radial-gradient(78% 42% at 50% 50%,
+                                rgba(11,11,12,.34) 0%,
+                                rgba(11,11,12,.80) 48%,
+                                rgba(11,11,12,.98) 80%);
+  }
+}
+
 /* Film grain over the whole page. An inline SVG turbulence rather than an
    image file: it costs no request, tiles seamlessly, and can't 404. Fixed
    position so it doesn't scroll against the photograph underneath. */
@@ -236,7 +276,7 @@ body.statement::after {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: .30;
+  opacity: .24;
   mix-blend-mode: overlay;
   background-size: 200px 200px;
   background-image: url("data:image/svg+xml;utf8,\
