@@ -115,8 +115,18 @@
          27vw column as .cosmos-inner, so it reads as one lockup. */
       position: absolute; left: 27vw; transform: translateX(-50%);
       bottom: calc(22px + env(safe-area-inset-bottom));
-      display: flex; gap: 15px; white-space: nowrap;
-      font-size: 12px; letter-spacing: .1px;
+      /* Column now: the links ride on one row, the copyright sits under
+         them. Anchored at the bottom, so the second line grows UPWARD and
+         nothing moves off the safe area. */
+      display: flex; flex-direction: column; align-items: center; gap: 7px;
+      white-space: nowrap; font-size: 12px; letter-spacing: .1px;
+    }
+    .cosmos-foot .links { display: flex; gap: 15px; }
+    .cosmos-foot .copy {
+      color: var(--bone); opacity: .26; font-size: 11px;
+      /* Same reason as the links: between ~700 and ~1100px the planet's
+         lit limb passes under this column. */
+      text-shadow: 0 1px 4px rgba(0,0,0,.7);
     }
     .cosmos-foot a { color: var(--bone); opacity: .38; text-decoration: none;
                      transition: opacity .25s;
@@ -140,12 +150,15 @@
       </button>
       <a class="cosmos-cta" href="https://apps.apple.com/app/id6786223859"><span class="cta-text">Download iMoney</span><span class="cta-enter" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v5a2 2 0 0 1-2 2H3.5"/><path d="M6 7 3 10l3 3"/></svg></span></a>
     </div>
-    <nav class="cosmos-foot" aria-label="Footer">
-      <a href="/privacy/">Privacy</a>
-      <a href="/terms/">Terms</a>
-      <a href="/support/">Support</a>
-      <a href="/business/">Business</a>
-    </nav>
+    <div class="cosmos-foot">
+      <nav class="links" aria-label="Footer">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/support/">Support</a>
+        <a href="/business/">For Business</a>
+      </nav>
+      <small class="copy">Copyright © 2026 iMoney. All rights reserved.</small>
+    </div>
   </section>
 
   <script>
