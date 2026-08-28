@@ -17,7 +17,7 @@
 <main>
   <header class="site"><a href="/">iMoney</a></header>
   <h1>Privacy Policy</h1>
-  <p class="updated">Last updated: August 21, 2026</p>
+  <p class="updated">Last updated: August 29, 2026</p>
 
   <p class="lede">Anything you'd rather not share, <strong>iMoney</strong>
   never asks for. What it hopes to give you is an honest look at your own
@@ -57,6 +57,7 @@
         <li><strong>Support messages</strong> — what you send via Settings → Contact</li>
         <li><strong>Push token</strong> — so notifications reach your phone</li>
         <li><strong>Crash + performance reports</strong> — for debugging; never your transactions or personal data</li>
+        <li><strong>Usage analytics</strong> — which features you open, plus your country and language from device settings. Opt out any time</li>
       </ul>
     </details>
 
@@ -95,7 +96,43 @@
     </details>
 
     <details>
-      <summary>5. Third parties (sub-processors)</summary>
+      <summary>5. Usage analytics</summary>
+      <p>iMoney records a small amount of first-party usage data. It lives in
+      iMoney's own database — it is not sent to an analytics company, and it is
+      never sold.</p>
+      <ul>
+        <li><strong>Events</strong> — that the app was opened, that a feature was used (recap, split, share profile), that onboarding finished, and that the Pro paywall was shown, tapped, or purchased.</li>
+        <li><strong>Device and locale</strong> — your country and language from your device's Region and Language settings, your app version, your iOS version, and whether you've allowed notifications.</li>
+        <li><strong>Last active</strong> — the date you last opened the app.</li>
+      </ul>
+      <p>What is never included: <strong>amounts, categories, descriptions, or
+      anything else from your ledger</strong>. Your country comes from your
+      device's own Region setting — not from GPS, and not from your IP address.</p>
+      <p>To turn it off, open <strong>Settings → Privacy Policy</strong> in the
+      app and switch off <strong>Share usage data</strong>. Once it's off,
+      nothing is recorded at all.</p>
+    </details>
+
+    <details>
+      <summary>6. Push notifications</summary>
+      <p>If you allow notifications, Apple gives iMoney a <strong>device
+      token</strong> — an identifier for your phone, not for you. We store it so
+      we know where to send a notification, and we delete it when you delete
+      your account.</p>
+      <p>We send a push when a friend tags you on a split, reminds you about a
+      payment, confirms or denies one, adds you to a group event, or accepts
+      your friend request. We also send occasional notices about iMoney itself.
+      Notification text may contain a friend's name and the amount of the split
+      it refers to, because that's what makes the notification useful.</p>
+      <p>Notifications travel through <strong>Apple's Push Notification
+      Service</strong>, so Apple handles the message on its way to your phone.
+      Turn them off any time in <strong>iPhone Settings → Notifications →
+      iMoney</strong>, or per-type in the app's own notification settings. The
+      app works fully with notifications off.</p>
+    </details>
+
+    <details>
+      <summary>7. Third parties (sub-processors)</summary>
       <table>
         <tr><th>Service</th><th>What we send them</th><th>Why</th></tr>
         <tr><td><strong>Supabase</strong></td><td>Everything in section 2</td><td>Database + file storage + auth</td></tr>
@@ -103,12 +140,13 @@
         <tr><td><strong>Google</strong> (Sign in with Google)</td><td>Your Google auth token</td><td>Sign-in (optional)</td></tr>
         <tr><td><strong>Anthropic</strong> (Claude API)</td><td>Only the <strong>description text</strong> you type on a new transaction (e.g. "starbucks latte")</td><td>Suggests a category.</td></tr>
         <tr><td><strong>Apple Push Notification Service (APNs)</strong></td><td>Notification text + your device token</td><td>Delivering pushes to your phone</td></tr>
+        <tr><td><strong>Resend</strong></td><td>Your email address and the contents of the email itself</td><td>Sending your monthly report and account notices</td></tr>
       </table>
       <p>No other third-party SDKs, analytics, or ad networks.</p>
     </details>
 
     <details>
-      <summary>6. Sign in with Apple and Google</summary>
+      <summary>8. Sign in with Apple and Google</summary>
       <p>iMoney lets you sign in with Apple or Google instead of keeping a
       password with us. We never see, receive, or store your Apple or Google
       password — the sign-in happens on their pages, and they hand us back a
@@ -138,11 +176,11 @@
       picture pre-fill your iMoney display name and avatar, and you can change or
       remove both at any time. That is the whole use. Sign-in data is never used
       for advertising, never sold, and never shared beyond the sub-processors
-      listed in section 5.</p>
+      listed in section 7.</p>
 
       <p><strong>Where it&rsquo;s stored.</strong> In our Supabase database,
       alongside the rest of your account, under the same encryption and
-      row-level security described in section 8.</p>
+      row-level security described in section 10.</p>
 
       <p><strong>Limited Use.</strong> iMoney&rsquo;s use and transfer of
       information received from Google APIs to any other app will adhere to the
@@ -159,11 +197,11 @@
     </details>
 
     <details>
-      <summary>7. The website (withimoney.com)</summary>
+      <summary>9. The website (withimoney.com)</summary>
       <p>Before iMoney launches, you can reserve an <strong>@handle</strong> on
       our website. That flow collects:</p>
       <ul>
-        <li>Everything in section 6, from the Apple or Google sign-in you use</li>
+        <li>Everything in section 8, from the Apple or Google sign-in you use</li>
         <li>The <strong>@handle</strong> you choose</li>
         <li>Your <strong>reservation number</strong> and the date you reserved</li>
       </ul>
@@ -178,7 +216,7 @@
     </details>
 
     <details>
-      <summary>8. Where it's stored, how it's secured</summary>
+      <summary>10. Where it's stored, how it's secured</summary>
       <ul>
         <li>Data is <strong>encrypted in transit</strong> (HTTPS / TLS for every request) and <strong>encrypted at rest</strong> by the underlying storage.</li>
         <li><strong>Row-level security</strong> is enforced in the database: a user can only read their own profile and their own transactions. Friend-graph rows are visible to both ends of the friendship, by design.</li>
@@ -186,7 +224,27 @@
     </details>
 
     <details>
-      <summary>9. What friends can see</summary>
+      <summary>11. International data transfers</summary>
+      <p>iMoney is operated from the <strong>United States</strong>. Its database
+      and file storage run on <strong>Supabase in Tokyo, Japan</strong>
+      (AWS ap-northeast-1). So wherever you are, your data is stored in Japan
+      and administered from the United States.</p>
+      <p>Some of the services in section 7 process data elsewhere — Anthropic
+      and our email provider in the United States, and Apple and Google in the
+      regions they operate. That means your information crosses borders in the
+      ordinary course of running the app.</p>
+      <p>If you're in the EEA, the UK, or Switzerland, these transfers rely on
+      the European Commission's <strong>Standard Contractual Clauses</strong>,
+      which our providers incorporate into their terms. If you're in Taiwan or
+      elsewhere in Asia, your data is held in Japan under the same protections
+      described in "Where it's stored, how it's secured".</p>
+      <p>Whatever the country, the rules in this policy don't change: we don't
+      sell your data, we don't hand it to advertisers, and you can delete all of
+      it from the app.</p>
+    </details>
+
+    <details>
+      <summary>12. What friends can see</summary>
       <p>The only place data flows between iMoney users is the <strong>friend
       graph</strong>:</p>
       <ul>
@@ -198,7 +256,7 @@
     </details>
 
     <details>
-      <summary>10. Purchases</summary>
+      <summary>13. Purchases</summary>
       <p>iMoney comes in a free and a paid (<strong>iMoney Pro</strong>) version.
       Subscribe through Apple as it suits you, and manage or cancel anytime in
       iPhone Settings → your name → Subscriptions. Payment is handled by Apple —
@@ -206,7 +264,7 @@
     </details>
 
     <details>
-      <summary>11. How long we keep your data</summary>
+      <summary>14. How long we keep your data</summary>
       <ul>
         <li><strong>Active accounts</strong>: data is kept as long as your account exists.</li>
         <li><strong>Deleted accounts</strong>: when you tap Settings → Delete account, we immediately remove your profile, transactions, friends, and budgets from the live database. <strong>Encrypted backups may take up to 30 days to roll off</strong> — after which everything is gone for good.</li>
@@ -214,7 +272,7 @@
     </details>
 
     <details>
-      <summary>12. Your rights</summary>
+      <summary>15. Your rights</summary>
       <ul>
         <li><strong>Access</strong> — everything iMoney knows about you is already visible in the app.</li>
         <li><strong>Correct</strong> — edit any field directly in the app.</li>
@@ -226,13 +284,13 @@
     </details>
 
     <details>
-      <summary>13. Children</summary>
+      <summary>16. Children</summary>
       <p>iMoney is intended for ages <strong>13 and up</strong>. We don't
       knowingly collect data from children under 13.</p>
     </details>
 
     <details>
-      <summary>14. Changes to this policy</summary>
+      <summary>17. Changes to this policy</summary>
       <p>When we materially change this policy, we'll bump the "Last updated"
       date at the top and — for changes that affect what data we collect or who
       we share it with — surface an in-app notice the next time you open the
@@ -240,7 +298,7 @@
     </details>
 
     <details>
-      <summary>15. Contact</summary>
+      <summary>18. Contact</summary>
       <p>Questions, deletion requests, GDPR / CCPA requests, anything else:
       <strong>upappco@gmail.com</strong>. We respond within 30 days.</p>
     </details>

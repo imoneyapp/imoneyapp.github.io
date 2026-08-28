@@ -14,7 +14,7 @@
 <main>
   <header class="site"><a href="/">iMoney</a></header>
   <h1>隱私權政策</h1>
-  <p class="updated">最後更新：2026 年 8 月 21 日</p>
+  <p class="updated">最後更新：2026 年 8 月 29 日</p>
 
   <p class="lede">你不想提供的，<strong>iMoney</strong> 就不會向你要。
   我們希望能帶給你的，是對自己生活習慣的正視和了解。</p>
@@ -51,6 +51,7 @@
         <li><strong>客服訊息</strong>——你透過「設定 → 聯絡我們」傳來的內容</li>
         <li><strong>推播代碼</strong>——讓通知送得到你的手機</li>
         <li><strong>當機與效能回報</strong>——用來除錯；不含你的帳目或個人資料</li>
+        <li><strong>使用分析</strong>——你開啟了哪些功能，以及裝置設定中的國家與語言。可隨時關閉</li>
       </ul>
     </details>
 
@@ -86,7 +87,36 @@
     </details>
 
     <details>
-      <summary>5. 第三方服務（資料處理者）</summary>
+      <summary>5. 使用分析</summary>
+      <p>iMoney 會記錄少量第一方使用資料。這些資料存放在 iMoney 自己的資料庫，
+      不會送給任何分析公司，也絕不販售。</p>
+      <ul>
+        <li><strong>事件</strong>——App 被開啟、某項功能被使用（回顧、分帳、分享名片）、完成新手引導，以及 Pro 付費頁被顯示、點擊或完成購買。</li>
+        <li><strong>裝置與語系</strong>——來自你裝置「地區」與「語言」設定的國家與語言、App 版本、iOS 版本，以及你是否允許通知。</li>
+        <li><strong>最後活躍</strong>——你最後一次開啟 App 的日期。</li>
+      </ul>
+      <p>絕不包含的：<strong>金額、分類、說明，或帳本裡的任何內容</strong>。
+      國家來自你裝置本身的「地區」設定——不是 GPS，也不是你的 IP 位址。</p>
+      <p>要關閉的話，在 App 裡打開<strong>「設定 → 隱私權政策」</strong>，
+      關掉<strong>「分享使用資料」</strong>。關閉之後，什麼都不會被記錄。</p>
+    </details>
+
+    <details>
+      <summary>6. 推播通知</summary>
+      <p>如果你允許通知，Apple 會給 iMoney 一組<strong>裝置代碼</strong>
+      ——那是你手機的識別碼，不是你的。我們保存它，才知道要把通知送到哪裡；
+      你刪除帳號時它也會一併刪除。</p>
+      <p>以下情況我們會發送推播：好友在分帳中標記你、提醒你付款、確認或否認一筆付款、
+      把你加入群組活動，或接受你的好友邀請。我們也會偶爾發送與 iMoney 本身有關的通知。
+      通知內容可能包含好友的名字與該筆分帳的金額，因為那正是通知有用的原因。</p>
+      <p>通知會經過 <strong>Apple 推播通知服務（APNs）</strong>，
+      因此訊息在送達你手機的路上會由 Apple 處理。你可以隨時在
+      <strong>「iPhone 設定 → 通知 → iMoney」</strong>關閉，
+      或在 App 自己的通知設定裡逐項關閉。關掉通知後，App 的功能完全不受影響。</p>
+    </details>
+
+    <details>
+      <summary>7. 第三方服務（資料處理者）</summary>
       <table>
         <tr><th>服務</th><th>傳送什麼</th><th>用途</th></tr>
         <tr><td><strong>Supabase</strong></td><td>第 2 節所列的全部資料</td><td>資料庫＋檔案儲存＋登入驗證</td></tr>
@@ -94,12 +124,13 @@
         <tr><td><strong>Google</strong>（使用 Google 登入）</td><td>你的 Google 驗證憑證</td><td>登入（選用）</td></tr>
         <tr><td><strong>Anthropic</strong>（Claude API）</td><td>只有你在新帳目輸入的<strong>描述文字</strong>（例如「星巴克拿鐵」）</td><td>建議分類。</td></tr>
         <tr><td><strong>Apple 推播服務（APNs）</strong></td><td>通知文字＋你的裝置代碼</td><td>把推播送到你的手機</td></tr>
+        <tr><td><strong>Resend</strong></td><td>你的電子郵件地址與信件本身的內容</td><td>寄送每月報表與帳號通知</td></tr>
       </table>
       <p>沒有其他第三方 SDK、分析工具或廣告網路。</p>
     </details>
 
     <details>
-      <summary>6. 使用 Apple 與 Google 登入</summary>
+      <summary>8. 使用 Apple 與 Google 登入</summary>
       <p>iMoney 讓你用 Apple 或 Google 登入，不必再記一組密碼。我們從來沒有、
       也無法取得你的 Apple 或 Google 密碼——登入是在他們的頁面上完成的，
       回傳給我們的是一組憑證代碼，不是你的密碼。</p>
@@ -124,10 +155,10 @@
       <p><strong>我們拿這些資料做什麼。</strong>電子郵件與帳號識別碼，是讓你下次
       能登入同一個帳號的依據；姓名與大頭貼則用來預先填好你的 iMoney 顯示名稱和
       頭像，兩者你隨時可以更改或移除。用途就這些。登入資料絕不用於廣告、
-      絕不販售，也絕不提供給第 5 節所列以外的任何對象。</p>
+      絕不販售，也絕不提供給第 7 節所列以外的任何對象。</p>
 
       <p><strong>存放在哪裡。</strong>存在我們的 Supabase 資料庫，與你帳號的其他
-      資料放在一起，適用第 8 節所述的同一套加密與列層級安全機制。</p>
+      資料放在一起，適用第 10 節所述的同一套加密與列層級安全機制。</p>
 
       <p><strong>有限使用（Limited Use）。</strong>iMoney 對於自 Google API 取得
       之資訊的使用與傳輸，皆遵守
@@ -143,11 +174,11 @@
     </details>
 
     <details>
-      <summary>7. 關於本網站（withimoney.com）</summary>
+      <summary>9. 關於本網站（withimoney.com）</summary>
       <p>在 iMoney 正式上線前，你可以在我們的網站上預先保留一個
       <strong>@帳號</strong>。這個流程會收集：</p>
       <ul>
-        <li>第 6 節所列的全部內容，來自你使用的 Apple 或 Google 登入</li>
+        <li>第 8 節所列的全部內容，來自你使用的 Apple 或 Google 登入</li>
         <li>你選擇的 <strong>@帳號</strong></li>
         <li>你的<strong>保留序號</strong>與保留日期</li>
       </ul>
@@ -160,7 +191,7 @@
     </details>
 
     <details>
-      <summary>8. 資料存放在哪裡、如何保護</summary>
+      <summary>10. 資料存放在哪裡、如何保護</summary>
       <ul>
         <li>資料<strong>傳輸全程加密</strong>（每個請求都走 HTTPS／TLS），<strong>儲存時也由底層系統加密</strong>。</li>
         <li>資料庫強制執行<strong>列層級安全（Row-Level Security）</strong>：每個使用者只能讀取自己的個人資料與帳目。好友關係的資料則設計為關係兩端都能看到。</li>
@@ -168,7 +199,22 @@
     </details>
 
     <details>
-      <summary>9. 好友看得到什麼</summary>
+      <summary>11. 國際資料傳輸</summary>
+      <p>iMoney 由位於<strong>美國</strong>的團隊營運，資料庫與檔案儲存則運行在
+      <strong>日本東京的 Supabase</strong>（AWS ap-northeast-1）。
+      也就是說，不論你在哪裡，你的資料都存放在日本，並由美國管理。</p>
+      <p>第 7 節裡的部分服務會在其他地區處理資料——Anthropic 與我們的電子郵件服務在美國，
+      Apple 與 Google 則在各自營運的地區。因此在 App 的日常運作中，你的資料會跨越國界。</p>
+      <p>若你位於歐洲經濟區、英國或瑞士，這些傳輸依據歐盟執委會的
+      <strong>標準契約條款（SCCs）</strong>進行，我們的服務供應商已將其納入條款之中。
+      若你在台灣或亞洲其他地區，你的資料存放於日本，受到「資料存放在哪裡、如何保護」
+      一節所述的相同保護。</p>
+      <p>無論在哪個國家，本政策的規則都不會改變：我們不販售你的資料、
+      不交給廣告商，而你隨時可以在 App 裡刪除全部內容。</p>
+    </details>
+
+    <details>
+      <summary>12. 好友看得到什麼</summary>
       <p>iMoney 使用者之間唯一的資料流動就是<strong>好友關係</strong>：</p>
       <ul>
         <li>你加入的好友可以看到你的 <strong>@帳號</strong>、<strong>顯示名稱</strong>和<strong>頭像</strong>（這些本來就是任何使用者搜尋得到的公開資訊）。</li>
@@ -179,7 +225,7 @@
     </details>
 
     <details>
-      <summary>10. 付費項目</summary>
+      <summary>13. 付費項目</summary>
       <p>iMoney 提供免費與付費（<strong>iMoney Pro</strong>）兩個版本，
       可以根據自己的需求透過官方 Apple 訂閱選購，並隨時在 iPhone 的
       設定 → 你的名字 → 訂閱項目中管理或取消。付款由 Apple 處理，
@@ -187,7 +233,7 @@
     </details>
 
     <details>
-      <summary>11. 資料保留多久</summary>
+      <summary>14. 資料保留多久</summary>
       <ul>
         <li><strong>使用中的帳號</strong>：只要帳號存在，資料就會保留。</li>
         <li><strong>已刪除的帳號</strong>：當你按下「設定 → 刪除帳號」，你的個人資料、帳目、好友與預算會立即從線上資料庫移除。<strong>加密備份最長需要 30 天輪替到期</strong>——之後所有資料就永久消失。</li>
@@ -195,7 +241,7 @@
     </details>
 
     <details>
-      <summary>12. 你的權利</summary>
+      <summary>15. 你的權利</summary>
       <ul>
         <li><strong>查閱</strong>——iMoney 知道的關於你的一切，都已經顯示在 App 裡。</li>
         <li><strong>更正</strong>——直接在 App 內編輯任何欄位。</li>
@@ -207,19 +253,19 @@
     </details>
 
     <details>
-      <summary>13. 兒童</summary>
+      <summary>16. 兒童</summary>
       <p>iMoney 適用於 <strong>13 歲以上</strong>的使用者，不會刻意收集
       13 歲以下兒童的資料。</p>
     </details>
 
     <details>
-      <summary>14. 政策變更</summary>
+      <summary>17. 政策變更</summary>
       <p>當本政策有重大變更時，頁面頂端的「最後更新」日期會更新；
       若變更涉及收集的資料項目或分享對象，你下次打開 App 時會看到應用程式內通知。</p>
     </details>
 
     <details>
-      <summary>15. 聯絡我們</summary>
+      <summary>18. 聯絡我們</summary>
       <p>任何問題、刪除請求、GDPR／CCPA 請求，或其他事項：
       <strong>upappco@gmail.com</strong>。30 天內回覆。</p>
     </details>
