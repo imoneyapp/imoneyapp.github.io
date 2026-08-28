@@ -66,12 +66,9 @@ p.fine { font-size: 14.5px; color: var(--bone-faint); }
 
 h2 { font-size: 23px; font-weight: 650; letter-spacing: -.4px; line-height: 1.3;
      margin: clamp(44px, 7vh, 68px) 0 14px; }
-/* A hairline above each section does the work a heavier heading would, and
-   keeps a long policy scannable without shouting. */
-h2::before {
-  content: ""; display: block; width: 28px; height: 1px;
-  background: var(--accent); opacity: .55; margin-bottom: 18px;
-}
+/* No rule above headings. The gold hairline was doing decoration's job, not
+   structure's — the margin above an h2 already separates sections, and a
+   coloured tick on every one of them read as ornament the pages didn't need. */
 
 p.lede + p.lede { margin-top: 14px; }
 p, li { color: var(--bone-dim); font-size: 17.5px; }
@@ -178,3 +175,37 @@ footer a:hover { color: var(--bone-dim); }
 .tldr li::before { content: ""; position: absolute; left: 0; top: .5em;
                    width: 5px; height: 5px; border-radius: 50%;
                    background: var(--bone-faint); }
+
+/* ---------------------------------------------------------------------------
+   Statement page — one line, centred in the viewport.
+
+   Used by /about/. The page used to be a full FAQ; it says one thing now, and
+   a single sentence stranded at the top of a tall page reads as a page that
+   failed to load. Centring it makes the brevity deliberate.
+   --------------------------------------------------------------------------- */
+body.statement main {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+body.statement h1 {
+  font-size: clamp(44px, 12vw, 92px);
+  letter-spacing: -2px;
+  margin: 0;
+}
+/* The wordmark IS the way home — a separate header link next to it made the
+   page say "iMoney" twice, which is the one thing a one-word page can't do. */
+/* Links on this site wear a gold underline; the wordmark must not. */
+body.statement h1 a { color: inherit; text-decoration: none; border-bottom: 0; }
+body.statement p.statement {
+  color: var(--bone-dim);
+  font-size: clamp(17px, 4.6vw, 22px);
+  line-height: 1.6;
+  margin: 18px 0 0;
+  max-width: 22ch;
+}
+/* The footer sits at the edge rather than in the centred stack. */
+body.statement footer { position: absolute; bottom: 0; left: 0; right: 0; }
