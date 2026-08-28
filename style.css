@@ -184,6 +184,8 @@ footer a:hover { color: var(--bone-dim); }
    failed to load. Centring it makes the brevity deliberate.
    --------------------------------------------------------------------------- */
 body.statement main {
+  /* Exactly the viewport: the component is centred against the screen, not
+     against the screen plus a footer. */
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -191,19 +193,21 @@ body.statement main {
   align-items: center;
   text-align: center;
 }
-body.statement h1 {
-  /* Much smaller, and capped early. The wordmark was sized like a poster,
-     which reads as shouting on a desktop viewport where there's nothing else
-     on the page to balance it. */
-  font-size: clamp(30px, 6vw, 46px);
-  letter-spacing: -1.2px;
-  margin: 0;
-  text-shadow: 0 2px 30px rgba(0,0,0,.5);
+/* The mark, not the word. h1 is just a wrapper around the image now, so the
+   page keeps its heading semantics and the alt text keeps "iMoney" readable
+   to a screen reader and to search. */
+body.statement h1 { margin: 0; line-height: 0; font-size: 0; }
+body.statement h1 a { display: inline-block; border-bottom: 0; }
+body.statement .mark {
+  display: block;
+  /* The intrinsic file is 480px square; without an explicit width the img
+     renders at that and swallows a phone screen. */
+  width: clamp(104px, 22vw, 152px);
+  height: auto;
+  /* The silver star is the only bright thing in the mark — a soft drop keeps
+     it from dissolving into the glow behind it. */
+  filter: drop-shadow(0 2px 26px rgba(0,0,0,.55));
 }
-/* The wordmark IS the way home — a separate header link next to it made the
-   page say "iMoney" twice, which is the one thing a one-word page can't do. */
-/* Links on this site wear a gold underline; the wordmark must not. */
-body.statement h1 a { color: inherit; text-decoration: none; border-bottom: 0; }
 body.statement p.statement {
   color: var(--bone-dim);
   /* ONE line, always. Sized in vw so it scales with the viewport rather than
@@ -214,11 +218,20 @@ body.statement p.statement {
   font-size: min(3.9vw, 16px);
   letter-spacing: .2px;
   line-height: 1.5;
-  margin: 14px 0 0;
+  margin: 22px 0 0;
   text-shadow: 0 1px 20px rgba(0,0,0,.6);
 }
-/* The footer sits at the edge rather than in the centred stack. */
-body.statement footer { position: absolute; bottom: 0; left: 0; right: 0; }
+/* The footer lives OUTSIDE main now, in normal flow. main holds the viewport
+   on its own, so the mark and its line sit dead centre of the screen and the
+   footer waits below the fold — the page has somewhere to scroll to instead
+   of pinning the links against the bottom edge. */
+body.statement footer {
+  position: static;
+  margin: 0;
+  padding: clamp(56px, 12vh, 110px) 20px clamp(40px, 9vh, 76px);
+  text-align: center;
+  border-top: 0;
+}
 
 /* The statement page's photograph.
    
