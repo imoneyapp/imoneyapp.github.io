@@ -71,6 +71,14 @@
     @keyframes cta-caret { 50% { opacity: 0; } }
     .cosmos-cta .cta-enter { opacity: 0; transition: opacity .45s; }
     .cosmos-cta.typed .cta-enter { opacity: 1; }
+    /* The badge sits under the typed line, in the same centred column.
+       Apple's asset has its own padding baked in, so it needs air above
+       rather than a box around it. Opacity, not colour: the badge artwork
+       is fixed and must not be recoloured. */
+    .appstore { display: block; margin-top: 26px; line-height: 0;
+                opacity: .92; transition: opacity .25s, transform .25s; }
+    .appstore:hover { opacity: 1; transform: translateY(-1px); }
+    .appstore img { width: clamp(132px, 16vw, 166px); height: auto; }
     .cta-enter {
       position: absolute; left: calc(100% + 5px); top: 50%;
       transform: translateY(-50%);
@@ -148,7 +156,14 @@
       <button class="mark-btn" onclick="location.reload()" aria-label="Restart">
         <img class="cosmos-mark" src="/assets/logo-mark.png" alt="">
       </button>
-      <a class="cosmos-cta" href="https://apps.apple.com/app/id6786223859"><span class="cta-text">Download iMoney</span><span class="cta-enter" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3v5a2 2 0 0 1-2 2H3.5"/><path d="M6 7 3 10l3 3"/></svg></span></a>
+      <span class="cosmos-cta"><span class="cta-text"></span></span>
+      <!-- Apple's own badge, and the only thing on this page that
+           takes you off it. The typewriter above says the name;
+           the badge says where to get it, in the mark people
+           already recognise. -->
+      <a class="appstore" href="https://apps.apple.com/app/id6786223859" aria-label="Download on the App Store">
+        <img src="/assets/appstore.png" alt="Download on the App Store" width="166" height="56">
+      </a>
     </div>
     <div class="cosmos-foot">
       <nav class="links" aria-label="Footer">
@@ -171,7 +186,7 @@
       const cta = document.querySelector('.cosmos-cta');
       const el = cta && cta.querySelector('.cta-text');
       if (!el) return;
-      const ACTS = ['Welcome to @iMoney', 'Download iMoney'];
+      const ACTS = ['Welcome to @iMoney', 'iMoney'];
       // The key parks 5px off the LAST GLYPH, not off the frozen box —
       // the box holds the widest act's width, and when the final line is
       // narrower than that (zh: the reserve act is longest), a box-edge
