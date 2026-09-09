@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "co.up.imoney",
+      "sha256_cert_fingerprints": [
+        "8B:2E:65:50:E5:12:AF:0E:A9:C0:6F:85:38:2E:0F:A7:70:77:EA:35:DC:AA:E5:BF:B3:9E:4C:5F:A4:03:EC:2B",
+        "A9:39:71:66:C2:7D:F3:44:11:C3:C1:8C:6B:4E:51:7B:32:B0:91:F5:BD:60:72:A0:9D:8D:4E:C7:BC:9B:DE:0B"
+      ]
+    }
+  }
+]
