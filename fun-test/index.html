@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Money Personality Quiz — iMoney</title>
+  <meta name="description" content="Meet your money personality. A 30-question everyday money quiz in English and Traditional Chinese.">
+  <link rel="canonical" href="https://withimoney.com/fun-test/">
+  <link rel="stylesheet" href="quiz.css?v=1">
+  <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png?v=2">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="lang" role="group" aria-label="Language">
+  <button id="lang-en" aria-pressed="true">EN</button>
+  <button id="lang-zh" aria-pressed="false">中文</button>
+</div>
+
+<header class="hero">
+  <!-- Muted + playsinline or iOS refuses to autoplay and shows a black
+       rectangle where the dawn should be. -->
+  <video src="/assets/moneytest.mp4" autoplay muted loop playsinline
+         poster="/assets/moneytest.png" aria-hidden="true"></video>
+  <div class="hero-inner">
+    <img class="mark" src="/assets/moneytest2.png" alt="iMoney">
+    <h1 data-en="Money Personality" data-zh="金錢性格">Money Personality</h1>
+    <p data-en="Thirty small choices. One honest picture of how you spend."
+       data-zh="三十個小選擇，一張誠實的金錢性格圖。">Thirty small choices. One honest picture of how you spend.</p>
+    <button class="cta" id="start"
+            data-en="Take the quiz" data-zh="開始測驗">Take the quiz</button>
+  </div>
+</header>
+
+<main>
+  <!-- The cast, shown before the quiz: knowing what you might get is half
+       the reason to start. -->
+  <section id="cast-section">
+    <p class="section-label" data-en="The six" data-zh="六種性格">The six</p>
+    <h2 class="section-title" data-en="Who you might be" data-zh="你可能是誰">Who you might be</h2>
+    <div class="cast" id="cast"></div>
+  </section>
+
+  <section class="quiz" id="quiz" aria-live="polite">
+    <div class="progress"><i id="bar" style="width:0%"></i></div>
+    <p class="q-count" id="count"></p>
+    <p class="q-text" id="question"></p>
+    <div class="options">
+      <button class="option" id="opt-a"></button>
+      <button class="option" id="opt-b"></button>
+    </div>
+  </section>
+
+  <section class="result" id="result">
+    <div class="portrait" id="portrait"></div>
+    <h2 id="r-name"></h2>
+    <p class="role" id="r-title"></p>
+    <p class="quote" id="r-quote"></p>
+    <p class="desc" id="r-desc"></p>
+    <div class="traits">
+      <div class="trait"><b data-en="Strength" data-zh="天賦">Strength</b><span id="r-strength"></span></div>
+      <div class="trait"><b data-en="Blind spot" data-zh="盲點">Blind spot</b><span id="r-blind"></span></div>
+      <div class="trait"><b data-en="Try this" data-zh="試試看">Try this</b><span id="r-tip"></span></div>
+    </div>
+    <button class="again" id="again" data-en="Take it again" data-zh="再測一次">Take it again</button>
+  </section>
+</main>
+
+<footer>
+  <a href="/">iMoney</a> · <a href="/privacy/">Privacy</a> · <a href="/support/">Support</a><br>
+  Copyright © 2026 iMoney. All rights reserved.
+</footer>
+
+<script src="quiz-data.js?v=1"></script>
+<script src="quiz.js?v=1"></script>
+</body>
+</html>
