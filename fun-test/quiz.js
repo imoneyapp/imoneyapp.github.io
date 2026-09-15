@@ -22,63 +22,16 @@
 
   var $ = function (id) { return document.getElementById(id); };
 
-  /* A mark per character — a soft grainy pebble, not a logo.
+  /* The characters are ILLUSTRATED — one 3x2 sprite sheet, sliced by index.
    *
-   * The first pass drew each one as a radar polygon of its trait vector.
-   * Honest, and unreadable: six small shards that looked like broken glass
-   * rather than six personalities. These are organic blobs instead — the
-   * silhouette still comes from the character's own numbers, so no two are
-   * the same shape, but the family resemblance is the point.
-   *
-   * Built as one SVG with its own grain filter so it stays crisp at any
-   * size and needs no image. The highlight sits upper-left and the shadow
-   * lower-right, which is what makes a flat shape read as a thing you
-   * could pick up. */
-  function glyph(i, size) {
-    var v = C[i].v, c = C[i].hue, cx = size / 2, cy = size / 2;
-    var r = size * 0.40;
-
-    // A closed Catmull-ish blob: six radii from the trait vector, smoothed
-    // so the outline is a pebble rather than a polygon.
-    var pts = v.map(function (val, k) {
-      var a = (Math.PI * 2 * k) / 6 - Math.PI / 2;
-      var len = r * (0.82 + 0.30 * ((val + 1) / 2));
-      return [cx + Math.cos(a) * len, cy + Math.sin(a) * len];
-    });
-    var d = '';
-    for (var k = 0; k < pts.length; k++) {
-      var p0 = pts[k], p1 = pts[(k + 1) % pts.length];
-      var mx = (p0[0] + p1[0]) / 2, my = (p0[1] + p1[1]) / 2;
-      d += (k ? '' : 'M' + mx.toFixed(1) + ' ' + my.toFixed(1));
-      var n0 = pts[(k + 1) % pts.length], n1 = pts[(k + 2) % pts.length];
-      var nx = (n0[0] + n1[0]) / 2, ny = (n0[1] + n1[1]) / 2;
-      d += 'Q' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1) + ' ' +
-           nx.toFixed(1) + ' ' + ny.toFixed(1);
-    }
-    d += 'Z';
-
-    var u = 'g' + i + '-' + size;
-    return '<svg viewBox="0 0 ' + size + ' ' + size + '" width="' + size +
-      '" height="' + size + '" aria-hidden="true">' +
-      '<defs>' +
-        '<radialGradient id="f' + u + '" cx="34%" cy="28%" r="78%">' +
-          '<stop offset="0" stop-color="#fff" stop-opacity=".92"/>' +
-          '<stop offset="42%" stop-color="' + c[0] + '"/>' +
-          '<stop offset="100%" stop-color="' + c[1] + '"/>' +
-        '</radialGradient>' +
-        '<filter id="n' + u + '">' +
-          '<feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="3" result="t"/>' +
-          '<feColorMatrix in="t" type="saturate" values="0" result="d"/>' +
-          '<feComposite in="d" in2="SourceAlpha" operator="in" result="m"/>' +
-          '<feBlend in="SourceGraphic" in2="m" mode="multiply"/>' +
-        '</filter>' +
-      '</defs>' +
-      '<path d="' + d + '" fill="url(#f' + u + ')" filter="url(#n' + u + ')"/>' +
-      // A second, tighter highlight — the wet look the chrome wordmark has.
-      '<ellipse cx="' + (cx - r * 0.30).toFixed(1) + '" cy="' + (cy - r * 0.38).toFixed(1) +
-        '" rx="' + (r * 0.30).toFixed(1) + '" ry="' + (r * 0.20).toFixed(1) +
-        '" fill="#fff" opacity=".55" transform="rotate(-24 ' + cx + ' ' + cy + ')"/>' +
-      '</svg>';
+   * I first drew them as generated shapes, which was the wrong instinct
+   * twice over: it threw away artwork that already exists, and no
+   * procedural blob is going to out-act a jelly creature holding a pearl.
+   * Each one matches its archetype — Sol guards something precious, Neo has
+   * a tree growing inside, Zen is asleep and content — and that is the
+   * quiz's whole personality. */
+  function portraitStyle(i) {
+    return 'background-position:' + (i % 3) * 50 + '% ' + Math.floor(i / 3) * 100 + '%';
   }
 
   /* Fisher–Yates. The question ORDER varies but the set never does — every
@@ -95,7 +48,7 @@
   function paintCast() {
     $('cast').innerHTML = C.map(function (c, i) {
       return '<article class="card" style="--c1:' + c.hue[0] + '33;--c2:' + c.hue[1] + '2e">' +
-        '<div class="glyph">' + glyph(i, 68) + '</div>' +
+        '<div class="portrait sm" style="' + portraitStyle(i) + '"></div>' +
         '<h3>' + c.name[lang] + '</h3>' +
         '<p class="role">' + c.title[lang] + '</p>' +
         '<p class="quote">“' + c.quote[lang] + '”</p>' +
@@ -133,7 +86,8 @@
     var best = 0;
     scores.forEach(function (s, i) { if (s > scores[best]) best = i; });
     var c = C[best];
-    $('portrait').innerHTML = glyph(best, 132);
+    $('portrait').className = 'portrait lg';
+    $('portrait').setAttribute('style', portraitStyle(best));
     $('r-name').textContent = c.name[lang];
     $('r-title').textContent = c.title[lang];
     $('r-quote').textContent = '“' + c.quote[lang] + '”';
