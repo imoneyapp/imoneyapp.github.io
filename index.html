@@ -38,7 +38,7 @@
       /* Centred in the dark: the planet's lit limb starts ~55% across the
          photo, so the column sits at half of that — the middle of the
          blank space, not hugging the corner. */
-      position: absolute; top: 50%; left: 27vw;
+      position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       display: flex; flex-direction: column; align-items: center; gap: 16px;
     }
@@ -141,7 +141,7 @@
     .topnav { display: flex; align-items: center; gap: clamp(16px, 3vw, 28px); }
     .topnav a {
       color: var(--bone); text-decoration: none; font-size: 14px;
-      font-weight: 500; letter-spacing: -.1px; opacity: .72;
+      font-weight: 500; letter-spacing: -.1px; opacity: .88;
       transition: opacity .2s; white-space: nowrap;
     }
     .topnav a:hover { opacity: 1; }
@@ -151,11 +151,22 @@
       .topnav { gap: 14px; }
       .topnav a { font-size: 13px; }
     }
+
+    /* Centred type lands near the planet's lit edge, where bone at 38%
+       disappears. A soft pool of dark under the column — wide, no edge —
+       so the words read wherever the limb happens to fall. */
+    .cosmos::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background:
+        radial-gradient(46% 38% at 50% 50%, #05070bd9 0%, #05070b8f 45%, transparent 78%),
+        linear-gradient(0deg, #05070bcc 0%, transparent 26%);
+    }
+    .cosmos-inner, .cosmos-foot, .topbar { z-index: 2; }
     .cosmos-foot {
       /* Under the mark, not under the middle of the frame: dead-centre puts
          this on the planet's lit limb, where 38% bone is unreadable. Same
          27vw column as .cosmos-inner, so it reads as one lockup. */
-      position: absolute; left: 27vw; transform: translateX(-50%);
+      position: absolute; left: 50%; transform: translateX(-50%);
       bottom: calc(22px + env(safe-area-inset-bottom));
       /* Column now: the links ride on one row, the copyright sits under
          them. Anchored at the bottom, so the second line grows UPWARD and
