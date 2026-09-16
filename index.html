@@ -75,10 +75,10 @@
        Apple's asset has its own padding baked in, so it needs air above
        rather than a box around it. Opacity, not colour: the badge artwork
        is fixed and must not be recoloured. */
-    .appstore { display: block; margin-top: 26px; line-height: 0;
+    .appstore { display: block; margin-top: 22px; line-height: 0;
                 opacity: .92; transition: opacity .25s, transform .25s; }
     .appstore:hover { opacity: 1; transform: translateY(-1px); }
-    .appstore img { width: clamp(132px, 16vw, 166px); height: auto; }
+    .appstore img { width: clamp(112px, 13vw, 136px); height: auto; }
     .cta-enter {
       position: absolute; left: calc(100% + 5px); top: 50%;
       transform: translateY(-50%);
@@ -117,6 +117,40 @@
     /* The legal line, and only that: a reviewer has to be able to reach the
        privacy policy from the front door. Dim enough that the planet still
        owns the frame. */
+
+    /* THE HEADER.
+       The page is a photograph with one column of type on it, so the bar
+       has no surface of its own — it sits on the planet, absolute, and
+       scrolls with the document. Wordmark left, two links right; the same
+       22/14 pairing as the quiz, because a 26px mark beside a 12px link
+       reads as a headline with a footnote rather than one row. */
+    .topbar {
+      position: absolute; z-index: 3; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px clamp(20px, 4vw, 40px);
+      padding-top: calc(20px + env(safe-area-inset-top));
+    }
+    .topbar .brand {
+      color: var(--bone); text-decoration: none; font-weight: 700;
+      font-size: 22px; letter-spacing: -.5px; line-height: 1;
+      font-family: ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", system-ui, sans-serif;
+      /* Same 1px as the quiz header: with the boxes centred, the mark's cap
+         band still sits above the links'. */
+      position: relative; top: 1px;
+    }
+    .topnav { display: flex; align-items: center; gap: clamp(16px, 3vw, 28px); }
+    .topnav a {
+      color: var(--bone); text-decoration: none; font-size: 14px;
+      font-weight: 500; letter-spacing: -.1px; opacity: .72;
+      transition: opacity .2s; white-space: nowrap;
+    }
+    .topnav a:hover { opacity: 1; }
+    @media (max-width: 420px) {
+      .topbar { padding-inline: 20px; }
+      .topbar .brand { font-size: 20px; }
+      .topnav { gap: 14px; }
+      .topnav a { font-size: 13px; }
+    }
     .cosmos-foot {
       /* Under the mark, not under the middle of the frame: dead-centre puts
          this on the planet's lit limb, where 38% bone is unreadable. Same
@@ -149,6 +183,13 @@
   </style>
 </head>
 <body>
+  <header class="topbar">
+    <a class="brand" href="/">iMoney</a>
+    <nav class="topnav" aria-label="Site">
+      <a href="/quiz/">Personality Test</a>
+      <a href="https://apps.apple.com/app/id6786223859" target=_blank rel=noopener>Download</a>
+    </nav>
+  </header>
   <section class="cosmos" aria-label="iMoney">
     <div class="cosmos-inner">
       <!-- The mark is the reset switch: press it, the page (and the
@@ -167,7 +208,6 @@
     </div>
     <div class="cosmos-foot">
       <nav class="links" aria-label="Footer">
-        <a href="/quiz/">Money Personality</a>
         <a href="/privacy/">Privacy</a>
         <a href="/terms/">Terms</a>
         <a href="/support/">Support</a>
